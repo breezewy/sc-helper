@@ -158,6 +158,27 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/query',
+    component: Layout,
+    redirect: "/query/show",
+    name: "Query",
+    meta: { title: "线下信息查询", icon: 'search' },
+    children: [
+      {
+        path: 'show',
+        component: () => import('@/views/query/show'),
+        name: 'show',
+        meta: { title: '线下场次' }
+      },
+      {
+        path: 'order',
+        component: () => import('@/views/query/order'),
+        name: 'order',
+        meta: { title: '订单查询' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

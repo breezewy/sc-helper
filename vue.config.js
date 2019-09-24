@@ -16,7 +16,7 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 
 // const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
-const port = 21013
+const port = 22013
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `http://127.0.0.1:${port}/mock`,
-        target: `http://192.168.11.85:${port}`,
+        target: `http://nat.dmqwl.com:${port}`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

@@ -5,16 +5,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import { mapGetters } from "vuex";
+import { getNavList } from "../../api/nav";
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   computed: {
-    ...mapGetters([
-      'name'
-    ])
+    ...mapGetters(["name"])
+  },
+  created() {
+    let navs = getNavList();
+    console.log(navs);
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
