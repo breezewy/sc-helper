@@ -7,3 +7,11 @@ export function getNavList() {
         method: 'get'
     })
 }
+
+
+export function getMenuSelect() {
+    return request({
+        url: '/menu/select',
+        method: 'get'
+    })
+}
