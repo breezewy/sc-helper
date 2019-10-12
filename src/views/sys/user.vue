@@ -27,7 +27,12 @@
           <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
           <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>
           <el-table-column prop="type" label="登录身份" align="center"></el-table-column>
-          <el-table-column prop="status" label="状态" align="center"></el-table-column>
+          <el-table-column prop="status" label="状态" align="center">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.status== 1" type="success">正常</el-tag>
+              <el-tag v-if="scope.row.status== 0" type="danger">停用</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
           <el-table-column prop="name" label="操作" align="center">
             <template slot-scope="scope">
@@ -41,17 +46,17 @@
 
     <!-- 点击新增后出现的编辑区域 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog">
-      <el-form ref="userForm" :model="userForm" :rules="userFormRules" label-width="100px">
-        <el-form-item label="用户名">
+      <el-form ref="addUserForm" :model="userForm" :rules="userFormRules" label-width="100px" prop>
+        <el-form-item label="用户名" prop="username">
           <el-input v-model="userForm.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input v-model="userForm.password" type="password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input v-model="confirmPassword" type="password" autocomplete="off"></el-input>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input v-model="userForm.confirmPassword" type="password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="真实姓名">
+        <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="userForm.realName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="头像">
@@ -62,10 +67,10 @@
           <el-radio v-model="userForm.gender" :label="1">女</el-radio>
           <el-radio v-model="userForm.gender" :label="2">保密</el-radio>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="userForm.email" type="email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机号">
+        <el-form-item label="手机号" prop="mobile">
           <el-input v-model="userForm.mobile" type="number" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色配置" class="role-list">
@@ -90,28 +95,33 @@
 
     <!-- 点击修改后出现的编辑模块 -->
     <el-dialog title="修改" :visible.sync="updateVisible" class="dislog">
-      <el-form :model="updateUserForm" label-width="80px">
-        <el-form-item label="用户名">
+      <el-form
+        ref="updateUserForm"
+        :model="updateUserForm"
+        :rules="updateUserFormRules"
+        label-width="80px"
+      >
+        <el-form-item label="用户名" prop="username">
           <el-input v-model="updateUserForm.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input v-model="updateUserForm.password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input v-model="confirmPassword" autocomplete="off"></el-input>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input v-model="updateUserForm.confirmPassword" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="真实姓名">
+        <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="updateUserForm.realName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="gender">
           <el-radio v-model="updateUserForm.gender" :label="0">男</el-radio>
           <el-radio v-model="updateUserForm.gender" :label="1">女</el-radio>
           <el-radio v-model="updateUserForm.gender" :label="2">保密</el-radio>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="updateUserForm.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机号">
+        <el-form-item label="手机号" prop="mobile">
           <el-input v-model="updateUserForm.mobile" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色配置" class="role-list">
@@ -119,7 +129,7 @@
             <el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio v-model="updateUserForm.status" :label="0">停用</el-radio>
           <el-radio v-model="updateUserForm.status" :label="1">正常</el-radio>
         </el-form-item>
@@ -142,8 +152,27 @@ import {
   updateUser
 } from "../../api/sys";
 
+import { isEmail, isMobile } from "@/utils/validate";
 export default {
   data() {
+    var validateEmail = (rule, value, callback) => {
+      if (!isEmail(value)) {
+        return callback(new Error("邮箱格式错误"));
+      }
+      callback();
+    };
+    var validateMobile = (rule, value, callback) => {
+      if (!isMobile(value)) {
+        return callback(new Error("手机号格式错误"));
+      }
+      callback();
+    };
+    var validateConfirePassword = (rule, value, callback) => {
+      if (this.userForm.password != value) {
+        return callback(new Error("两次密码输入不一致"));
+      }
+      callback();
+    };
     return {
       userList: [], //用户列表
       username: "", //用户名
@@ -160,6 +189,7 @@ export default {
         headUrl: "",
         mobile: "",
         password: "",
+        confirmPassword: "",
         realName: "",
         roleIdList: [],
         status: 1,
@@ -172,22 +202,27 @@ export default {
         gender: 0,
         mobile: "",
         password: "",
+        confirmPassword: "",
         realName: "",
         roleIdList: [],
         status: 1,
         username: ""
       },
-      confirmPassword: "",
       userFormRules: {
-        email: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+        email: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { validator: validateEmail, trigger: "blur" }
+        ],
         mobile: [
-          { required: true, message: "必填项不能为空", trigger: "blur" }
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { validator: validateMobile, trigger: "blur" }
         ],
         password: [
           { required: true, message: "必填项不能为空", trigger: "blur" }
         ],
         confirmPassword: [
-          { required: true, message: "必填项不能为空", trigger: "blur" }
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { validator: validateConfirePassword, trigger: "blur" }
         ],
         realName: [
           { required: true, message: "必填项不能为空", trigger: "blur" }
@@ -195,6 +230,13 @@ export default {
         username: [
           { required: true, message: "必填项不能为空", trigger: "blur" }
         ]
+      },
+      updateUserFormRules: {
+        email: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { validator: validateEmail, trigger: "blur" }
+        ],
+        mobile: [{ validator: validateMobile, trigger: "blur" }]
       },
       roleList: [],
       rowIdList: [],
@@ -227,6 +269,7 @@ export default {
         headUrl: "",
         mobile: "",
         password: "",
+        confirmPassword: "",
         realName: "",
         roleIdList: [],
         status: 1,
@@ -242,7 +285,7 @@ export default {
     },
     //新增用户确定按钮
     onSubmit() {
-      this.$refs.userForm.validate(valid => {
+      this.$refs.addUserForm.validate(valid => {
         if (valid) {
           let _this = this;
           addNewUser(this.userForm).then(res => {
@@ -313,7 +356,6 @@ export default {
     //点击修改按钮
     handleUpdate(id) {
       this.updateVisible = true;
-      this.confirmPassword = "";
       getUserInfo(id)
         .then(res => {
           if (res.code != 200) {
@@ -328,17 +370,24 @@ export default {
     },
     //修改区域确定按钮
     handleSubmit() {
-      let _this = this;
-      updateUser(this.updateUserForm).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+      this.$refs.updateUserForm.validate(valid => {
+        if (valid) {
+          let _this = this;
+          updateUser(this.updateUserForm).then(res => {
+            if (res.code != 200) {
+              return this.$message.error(res.error);
+            }
+            _this.init();
+            this.updateVisible = false;
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
         }
-        _this.init();
-        this.updateVisible = false;
-        this.$message({
-          message: "操作成功",
-          type: "success"
-        });
       });
     },
     //修改区域取消按钮

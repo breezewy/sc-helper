@@ -42,11 +42,11 @@
       点击新增后出现的编辑模块
     -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog">
-      <el-form :model="roleForm" label-width="80px">
-        <el-form-item label="名称">
+      <el-form ref="roleForm" :model="roleForm" :rules="roleFormRules" label-width="80px">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="roleForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="备注">
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="roleForm.remark" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -72,11 +72,16 @@
       点击修改后出现的编辑模块 
     -->
     <el-dialog title="修改" :visible.sync="updateVisible" class="dislog">
-      <el-form :model="updateRoleForm" label-width="80px">
-        <el-form-item label="名称">
+      <el-form
+        ref="updateRoleForm"
+        :model="updateRoleForm"
+        :rules="updateRoleFormRules"
+        label-width="80px"
+      >
+        <el-form-item label="名称" prop="name">
           <el-input v-model="updateRoleForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="备注">
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="updateRoleForm.remark" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -126,12 +131,20 @@ export default {
         remark: "",
         menuIdList: []
       },
+      roleFormRules: {
+        name: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+        remark: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
+      },
       //修改角色的参数
       updateRoleForm: {
         id: "",
         name: "",
         remark: "",
         menuIdList: []
+      },
+      updateRoleFormRules: {
+        name: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+        remark: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
       },
       dialogFormVisible: false,
       updateVisible: false,
@@ -181,38 +194,52 @@ export default {
       };
     },
     onSubmit() {
-      this.roleForm.menuIdList = this.$refs.menuListTree.getCheckedKeys();
-      let _this = this;
-      //点击确认后，发起新增请求
-      addRole(this.roleForm)
-        .then(res => {
-          if (res.code != 200) {
-            return this.$message.error(res.error);
-          }
-          this.dialogFormVisible = false;
-          _this.getRoleList();
-          this.$message({
-            message: "操作成功",
-            type: "success"
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.$refs.roleForm.validate(valid => {
+        if (valid) {
+          this.roleForm.menuIdList = this.$refs.menuListTree.getCheckedKeys();
+          let _this = this;
+          //点击确认后，发起新增请求
+          addRole(this.roleForm)
+            .then(res => {
+              if (res.code != 200) {
+                return this.$message.error(res.error);
+              }
+              this.dialogFormVisible = false;
+              _this.getRoleList();
+              this.$message({
+                message: "操作成功",
+                type: "success"
+              });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     //修改
     handleSubmit() {
-      let _this = this;
-      updateRole(this.updateRoleForm).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+      this.$refs.updateRoleForm.validate(valid => {
+        if (valid) {
+          let _this = this;
+          updateRole(this.updateRoleForm).then(res => {
+            if (res.code != 200) {
+              return this.$message.error(res.error);
+            }
+            _this.getRoleList();
+            this.updateVisible = false;
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
         }
-        _this.getRoleList();
-        this.updateVisible = false;
-        this.$message({
-          message: "操作成功",
-          type: "success"
-        });
       });
     },
     onCancel() {
