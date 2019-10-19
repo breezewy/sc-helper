@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function getParkList(params) {
+export function getParkList() {
     return request({
         url: '/park/list',
-        method: 'post',
-        params
+        method: 'post'
     })
 }
 

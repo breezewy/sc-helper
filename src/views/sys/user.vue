@@ -45,7 +45,7 @@
     </div>
 
     <!-- 点击新增后出现的编辑区域 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dialog">
       <el-form ref="addUserForm" :model="userForm" :rules="userFormRules" label-width="100px" prop>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="userForm.username" autocomplete="off"></el-input>
@@ -94,7 +94,7 @@
     </el-dialog>
 
     <!-- 点击修改后出现的编辑模块 -->
-    <el-dialog title="修改" :visible.sync="updateVisible" class="dislog">
+    <el-dialog title="修改" :visible.sync="updateVisible" class="dialog">
       <el-form
         ref="updateUserForm"
         :model="updateUserForm"
@@ -312,11 +312,9 @@ export default {
     //table表格全选点击
     handleSelectionChange(selection) {
       this.rowIdList = [];
-      console.log(selection);
       for (let i = 0; i < selection.length; i++) {
         this.rowIdList.push(selection[i].id);
       }
-      console.log(this.rowIdList);
     },
     //头部删除按钮
     handleDeleteMore() {
@@ -417,7 +415,7 @@ export default {
   .tableContainer {
     margin-top: 30px;
   }
-  .dislog {
+  .dialog {
     width: 90%;
     margin: -80px auto;
   }

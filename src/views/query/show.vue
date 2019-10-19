@@ -41,6 +41,16 @@
         <el-table-column prop="auditFlag" label="审核标志" align="center"></el-table-column>
         <el-table-column prop="sceneId" label="场次ID" align="center"></el-table-column>
       </el-table>
+      <!-- <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 50, 100]"
+        :page-size="10"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>-->
     </div>
   </div>
 </template>
@@ -61,6 +71,8 @@ export default {
       startStr: "", //起始时间字符串
       endStr: "", //结束时间字符串
       perFormTable: null,
+      total: 0,
+      currentPage: 1,
       pickerOptions: {
         shortcuts: [
           {
@@ -136,13 +148,24 @@ export default {
       }
       this.getPerForm();
     },
-
     //选择时间，获取查询时间段
     getDateRange(date) {
       this.perFormTable = null;
       this.dateArr = date;
       this.getPerForm();
     }
+    // 分页功能
+    // //选择列表不同页面
+    // handleSizeChange(val) {
+    //   this.paramForm.page.pageSize = val;
+    //   this.getTicketList(this.paramForm);
+    // },
+    // //选择列表每页多少条数据
+    // handleCurrentChange(val) {
+    //   this.currentPage = val;
+    //   this.paramForm.page.pageNum = this.currentPage - 1;
+    //   this.getTicketList(this.paramForm);
+    // }
   }
 };
 </script>

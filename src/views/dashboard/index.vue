@@ -9,12 +9,19 @@ import { mapGetters } from "vuex";
 import { getNavList } from "../../api/nav";
 export default {
   name: "Dashboard",
+  data() {
+    return {
+      navs: []
+    };
+  },
   computed: {
     ...mapGetters(["name"])
   },
   created() {
-    let navs = getNavList();
-    console.log(navs);
+    getNavList().then(res => {
+      this.navs = res.data;
+      console.log(this.navs);
+    });
   }
 };
 </script>
