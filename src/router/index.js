@@ -93,6 +93,18 @@ export const constantRoutes = [
         component: () => import('@/views/reOrder/ticket'),
         name: 'ticket',
         meta: { title: '后台票型' }
+      },
+      {
+        path: 'orderList',
+        component: () => import('@/views/reOrder/orderList'),
+        name: 'orderList',
+        meta: { title: '订单列表' }
+      },
+      {
+        path: 'childOrderList',
+        component: () => import('@/views/reOrder/childOrderList'),
+        name: 'childOrderList',
+        meta: { title: '子订单列表' }
       }
     ]
   },

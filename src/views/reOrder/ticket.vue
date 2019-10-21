@@ -23,7 +23,7 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" align="center"></el-table-column>
-          <el-table-column type="index" width="50"></el-table-column>
+          <el-table-column type="index" width="50" align="center"></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
           <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
           <el-table-column prop="buyToday" label="是否可当天购买" align="center" width="150">
@@ -60,7 +60,12 @@
       </template>
     </div>
     <!-- 点击新增出现编辑区域 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog">
+    <el-dialog
+      title="新增"
+      :visible.sync="dialogFormVisible"
+      class="dislog"
+      :close-on-click-modal="false"
+    >
       <el-form ref="addTicketForm" :model="ticketForm" label-width="120px" prop>
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketForm.code" type="text" autocomplete="off"></el-input>
@@ -102,7 +107,12 @@
     </el-dialog>
 
     <!--点击修改出现编辑区域  -->
-    <el-dialog title="修改" :visible.sync="updatedialogFormVisible" class="dislog">
+    <el-dialog
+      title="修改"
+      :visible.sync="updatedialogFormVisible"
+      class="dislog"
+      :close-on-click-modal="false"
+    >
       <el-form ref="updateTicketForm" :model="ticketDetial" label-width="120px" prop>
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketDetial.code" type="text" autocomplete="off"></el-input>

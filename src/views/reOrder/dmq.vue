@@ -24,7 +24,7 @@
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="55" align="center"></el-table-column>
-            <el-table-column type="index" width="50"></el-table-column>
+            <el-table-column type="index" width="50" align="center"></el-table-column>
             <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
             <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
             <el-table-column prop="number" label="最大可购买份数" align="center" width="100"></el-table-column>
@@ -49,7 +49,12 @@
         </template>
       </div>
       <!-- 点击新增出现编辑区域 -->
-      <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog">
+      <el-dialog
+        title="新增"
+        :visible.sync="dialogFormVisible"
+        class="dislog"
+        :close-on-click-modal="false"
+      >
         <el-form ref="addDmqForm" :model="dmqForm" label-width="120px" prop>
           <el-form-item label="票型编码" prop="code">
             <el-input v-model="dmqForm.code" type="text" autocomplete="off"></el-input>
@@ -68,7 +73,12 @@
       </el-dialog>
 
       <!--点击修改出现编辑区域  -->
-      <el-dialog title="修改" :visible.sync="updatedialogFormVisible" class="dislog">
+      <el-dialog
+        title="修改"
+        :visible.sync="updatedialogFormVisible"
+        class="dislog"
+        :close-on-click-modal="false"
+      >
         <el-form ref="updateDmqForm" :model="dmqTicketDetial" label-width="120px" prop>
           <el-form-item label="票型编码" prop="code">
             <el-input v-model="dmqTicketDetial.code" type="text" autocomplete="off"></el-input>
@@ -99,7 +109,7 @@ import {
   updateDmqTicket
 } from "../../api/reOrder";
 
-import Controller from "./controller";
+import Controller from "./components/controller";
 export default {
   data() {
     return {

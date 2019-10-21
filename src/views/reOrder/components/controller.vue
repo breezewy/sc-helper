@@ -15,7 +15,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column type="index" width="50"></el-table-column>
+      <el-table-column type="index" width="50" align="center"></el-table-column>
       <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
       <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
       <el-table-column prop="buyToday" label="是否可当天购买" align="center" width="150">
@@ -90,7 +90,7 @@ import {
   getByDmqTicketId,
   getControlTicketList,
   addReTicketDmq
-} from "../../api/reOrder";
+} from "../../../api/reOrder";
 export default {
   name: "Controller",
   props: ["id"],

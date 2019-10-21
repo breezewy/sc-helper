@@ -133,3 +133,24 @@ export function getControlTicketList(data) {
     })
 }
 
+
+///////////////
+//订单列表
+export function getOrderList(data) {
+    return request({
+        url: '/reOrder/list',
+        method: 'post',
+        data
+    })
+}
+
+//关联子订单
+export function getReChildOrder(data) {
+    return request({
+        url: '/reChildOrder/getList',
+        method: 'post',
+        data
+    })
+}
+
+
