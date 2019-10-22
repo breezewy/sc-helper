@@ -55,14 +55,21 @@
         class="dislog"
         :close-on-click-modal="false"
       >
-        <el-form ref="addDmqForm" :model="dmqForm" label-width="120px" prop>
+        <el-form ref="addDmqForm" :model="dmqForm" :rules="dmqFormRules" label-width="120px" prop >
           <el-form-item label="票型编码" prop="code">
             <el-input v-model="dmqForm.code" type="text" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="票型名称" prop="name">
             <el-input v-model="dmqForm.name" type="text" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="最大可购买份数" prop="number">
+          <el-form-item label="票型类型" prop="type">
+            <el-radio-group v-model="dmqForm.type" @change="change">
+              <el-radio :label="1">单票</el-radio>
+              <el-radio :label="2">多选票</el-radio>
+              <el-radio :label="3">通玩票</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="最大可购买份数" prop="number" v-if="showNumber">
             <el-input-number v-model="dmqForm.number" :min="1"></el-input-number>
           </el-form-item>
           <el-form-item>
@@ -86,7 +93,14 @@
           <el-form-item label="票型名称" prop="name">
             <el-input v-model="dmqTicketDetial.name" type="text" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="最大可购买份数" prop="number">
+           <el-form-item label="票型类型" prop="type">
+            <el-radio-group v-model="dmqTicketDetial.type" @change="updateChange">
+              <el-radio :label="1">单票</el-radio>
+              <el-radio :label="2">多选票</el-radio>
+              <el-radio :label="3">通玩票</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="最大可购买份数" prop="number" v-if="showUpdateNumber">
             <el-input-number v-model="dmqTicketDetial.number" :min="1"></el-input-number>
           </el-form-item>
           <el-form-item>
@@ -120,6 +134,7 @@ export default {
       dmqForm: {
         code: "",
         name: "",
+        type: 1,
         number: 1
       },
       dmqTicketDetial: {},
@@ -133,7 +148,23 @@ export default {
       rowIdList: [],
       total: 0,
       currentPage: 1,
-      dmqId: ""
+      dmqId: "",
+      showNumber:false,
+      showUpdateNumber:false,
+      dmqFormRules: {
+        code: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+        ],
+        name: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+        ],
+        type: [
+          { required: true, message: "必选项不能为空", trigger: "blur" }
+        ],
+        number: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+        ]
+      },
     };
   },
   components: {
@@ -149,7 +180,8 @@ export default {
       this.dmqForm = {
         code: "",
         name: "",
-        number: 1
+        number: 1,
+        type:1
       };
     },
     //获取票型列表
@@ -164,15 +196,26 @@ export default {
     },
     //确定添加
     handleSubmit() {
-      let _this = this;
-      addDmqTicket(this.dmqForm).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+      this.$refs.addDmqForm.validate(valid=>{
+        if(valid){
+          let _this = this;
+          if(this.dmqForm.type != 2){
+            delete this.dmqForm.number
+          }
+          addDmqTicket(this.dmqForm).then(res => {
+          if (res.code != 200) {
+            return this.$message.error(res.error);
+          }
+          _this.getTicketList(this.paramForm);
+          this.$message.success("添加成功");
+          this.dialogFormVisible = false;
+          });
+        }else{
+          console.log("error submit!!");
+          return false;
         }
-        _this.getTicketList(this.paramForm);
-        this.$message.success("添加成功");
-        this.dialogFormVisible = false;
-      });
+      })
+     
     },
     //取消添加
     handleCancel() {
@@ -248,6 +291,9 @@ export default {
     },
     //修改区域确定按钮
     handleUpdateSubmit() {
+      if(this.dmqTicketDetial.type != 2){
+        delete this.dmqTicketDetial.number
+      }
       updateDmqTicket(this.dmqTicketDetial).then(res => {
         if (res.code != 200) {
           return this.$message.error(res.error);
@@ -268,6 +314,21 @@ export default {
     handleController(id) {
       this.dmqId = id;
       this.hideController = false;
+    },
+    change(value){
+      console.log(this.dmqForm.type)
+      if(value != 2){
+        this.showNumber = false
+        return 
+      }
+      this.showNumber = true
+    },
+    updateChange(value){
+      if(value != 2){
+        this.showUpdateNumber = false
+        return 
+      }
+      this.showUpdateNumber = true
     }
   }
 };

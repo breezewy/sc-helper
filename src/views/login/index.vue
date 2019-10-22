@@ -181,7 +181,7 @@ export default {
     },
     getCaptcha() {
       this.loginForm.uuid = getUUID();
-      this.captchaPath = `/dev-api/auth/captcha?uuid=${this.loginForm.uuid}`;
+      this.captchaPath = `/auth/captcha?uuid=${this.loginForm.uuid}`;
     }
   }
 };
