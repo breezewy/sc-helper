@@ -84,6 +84,7 @@
 <script>
 // import { validUsername } from "@/utils/validate";
 import { getUUID } from "@/utils/index";
+import { getCaptcha } from "@/api/login";
 
 export default {
   name: "Login",
@@ -181,7 +182,15 @@ export default {
     },
     getCaptcha() {
       this.loginForm.uuid = getUUID();
-      this.captchaPath = `/auth/captcha?uuid=${this.loginForm.uuid}`;
+      getCaptcha(this.loginForm.uuid).then(res=>{
+        var binaryData = [];
+        binaryData.push(res.data);
+        this.captchaPath=  window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+        console.log(this.captchaPath)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
     }
   }
 };
