@@ -34,8 +34,8 @@ const actions = {
         uuid: uuid
       }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        commit('SET_TOKEN', data.data.token)
+        setToken(data.data.token)
         resolve()
       }).catch(error => {
         reject(error)

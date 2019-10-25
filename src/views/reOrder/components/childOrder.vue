@@ -107,8 +107,8 @@ export default {
         delete data.playTime;
       }
       getReChildOrder(data).then(res => {
-        this.childOrderList = res.data.data;
-        this.total = res.data.totalCount;
+        this.childOrderList = res.data.data.data;
+        this.total = res.data.data.totalCount;
       });
     },
     //选择列表不同页面

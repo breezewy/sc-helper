@@ -47,6 +47,15 @@ export function updateDmqTicket(data) {
 }
 
 
+//修改之前先验证
+export function checkOrder(data) {
+    return request({
+        url: '/reDmqTicket/beforeUpdate',
+        method: 'post',
+        data
+    })
+}
+
 
 
 // // //   // // // // // 
@@ -141,6 +150,14 @@ export function getOrderList(data) {
         url: '/reOrder/list',
         method: 'post',
         data
+    })
+}
+
+//双击订单列表某一行调用
+export function getTicket(id) {
+    return request({
+        url: `/reOrder/getTicket/${id}`,
+        method: 'get'
     })
 }
 

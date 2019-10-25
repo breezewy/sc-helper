@@ -23,3 +23,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getCaptcha(id) {
+  return request({
+      url: `/auth/captcha?uuid=${id}`,
+      method: 'get',
+      responseType: "arraybuffer"
+  })
+}

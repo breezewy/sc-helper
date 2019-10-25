@@ -48,11 +48,20 @@
             tooltip-effect="dark"
             style="width: 100%"
             border
+            @row-dblclick="handleDBclick"
           >
             <el-table-column type="index" width="50" align="center"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
             <el-table-column prop="mobile" label="电话" align="center" width="200"></el-table-column>
-            <el-table-column prop="count" label="购买数量" align="center" width="100"></el-table-column>
+            <el-table-column prop="orderCount" label="订单数量" align="center" width="100"></el-table-column>
+            <!-- <el-table-column prop="orderCount" label="原始订单数量" align="center" width="150"></el-table-column> -->
+            <el-table-column prop="productType" label="票型" align="center">
+               <template slot-scope="scope">
+                <el-tag v-if="scope.row.productType==1" >单选票</el-tag>
+                <el-tag v-if="scope.row.productType==2" type="warning">多选票</el-tag>
+                <el-tag v-if="scope.row.productType==3" type="success">通玩票</el-tag>
+              </template>
+            </el-table-column>
             <el-table-column prop="idCard" label="证件号" align="center"></el-table-column>
             <el-table-column prop="dmqOrderId" label="独木桥订单号" align="center"></el-table-column>
             <el-table-column prop="certificateType" label="证件类型" align="center">
@@ -82,13 +91,39 @@
         </template>
       </div>
     </div>
-
     <child-order v-else :id="reOrderId"></child-order>
+
+    <!-- 双击某一行出现的区域 -->
+      <el-dialog title="订单详情" :visible.sync="dialogVisible" class="dialog">
+        <div class="totalCount" v-if="dbData.type == 2">
+            <span class="title">总数量:</span><span class="number">{{dbData.number}}</span>
+        </div>
+      <el-table
+        ref="multipleTable"
+        :data="dbData.list"
+        empty-text="暂无数据"
+        tooltip-effect="dark"
+        style="width: 100%"
+        border
+      >
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
+        <el-table-column prop="id" label="票型id" align="center"></el-table-column>
+        <el-table-column prop="containShow" label="是否包含演出票" align="center" width="150">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.containShow== true" type="success">是</el-tag>
+            <el-tag v-if="scope.row.containShow== false" type="danger">否</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="number" label="已购数量" align="center" v-if="dbData.type == 2"></el-table-column>
+        <el-table-column prop="number" label="剩余数量" align="center" v-else></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getOrderList, getReChildOrder } from "../../api/reOrder";
+import { getOrderList, getReChildOrder,getTicket } from "../../api/reOrder";
 import ChildOrder from "./components/childOrder";
 export default {
   data() {
@@ -109,7 +144,9 @@ export default {
         }
       },
       hideChildOrder: true,
-      reOrderId: ""
+      reOrderId: "",
+      dbData:{},
+      dialogVisible:false
     };
   },
   components: {
@@ -136,11 +173,12 @@ export default {
         delete data.orderNo;
       }
       getOrderList(data).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+
+        if (res.data.code!= 200) {
+          return this.$message.error(res.data.error);
         }
-        this.orderList = res.data.data;
-        this.total = res.data.totalCount;
+        this.orderList = res.data.data.data;
+        this.total = res.data.data.totalCount;
       });
     },
     search() {
@@ -160,6 +198,16 @@ export default {
     getReChildOrder(data) {
       this.hideChildOrder = false;
       this.reOrderId = data.id;
+    },
+    handleDBclick(row, column, event){
+      getTicket(row.id).then(res=>{
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
+        }
+        this.dialogVisible = true;
+        this.dbData = res.data.data
+        console.log(this.dbList )
+      })
     }
   }
 };
@@ -179,6 +227,13 @@ export default {
     .el-pagination {
       padding: 20px 50px;
       text-align: right;
+    }
+  }
+  .totalCount{
+    padding:0 0  20px;
+    font-size: 16px;
+    .title{
+      margin-right:10px;
     }
   }
 }

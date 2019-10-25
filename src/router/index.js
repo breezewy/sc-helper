@@ -86,13 +86,13 @@ export const constantRoutes = [
         path: 'dmq',
         component: () => import('@/views/reOrder/dmq'),
         name: 'dmq',
-        meta: { title: '独木桥票型' }
+        meta: { title: '预约票型映射' }
       },
       {
         path: 'ticket',
         component: () => import('@/views/reOrder/ticket'),
         name: 'ticket',
-        meta: { title: '后台票型' }
+        meta: { title: 'OTA票型' }
       },
       {
         path: 'orderList',

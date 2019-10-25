@@ -84,7 +84,7 @@
 <script>
 // import { validUsername } from "@/utils/validate";
 import { getUUID } from "@/utils/index";
-import { getCaptcha } from "@/api/login";
+import { getCaptcha } from "@/api/user";
 
 export default {
   name: "Login",
@@ -171,7 +171,6 @@ export default {
             })
             .catch(() => {
               this.getCaptcha();
-              console.log("bbb");
               this.loading = false;
             });
         } else {
@@ -186,7 +185,6 @@ export default {
         var binaryData = [];
         binaryData.push(res.data);
         this.captchaPath=  window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
-        console.log(this.captchaPath)
       })
       .catch(err=>{
         console.log(err)

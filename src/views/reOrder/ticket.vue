@@ -26,7 +26,7 @@
           <el-table-column type="index" width="50" align="center"></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
           <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
-          <el-table-column prop="buyToday" label="是否可当天购买" align="center" width="150">
+          <el-table-column prop="buyToday" label="当天是否可预约" align="center" width="150">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.buyToday== true" type="success">是</el-tag>
               <el-tag v-if="scope.row.buyToday== false" type="danger">否</el-tag>
@@ -212,8 +212,8 @@ export default {
         delete data.code;
       }
       getTicketList(data).then(res => {
-        this.ticketList = res.data.data;
-        this.total = res.data.totalCount;
+        this.ticketList = res.data.data.data
+        this.total = res.data.data.totalCount;
       });
     },
     //确定添加
