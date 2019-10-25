@@ -254,7 +254,7 @@ export default {
         page: this.page
       };
       getUserList(dataFrom).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
         this.userList = res.data.data;
@@ -277,8 +277,8 @@ export default {
         username: ""
       };
       getRole().then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         this.roleList = res.data;
       });
@@ -289,8 +289,8 @@ export default {
         if (valid) {
           let _this = this;
           addNewUser(this.userForm).then(res => {
-            if (res.code != 200) {
-              return this.$message.error(res.error);
+            if (res.data.code != 200) {
+              return this.$message.error(res.data.error);
             }
             _this.init();
             this.dialogFormVisible = false;
@@ -327,8 +327,8 @@ export default {
         return;
       }
       deleteUser(this.rowIdList).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         _this.init();
         this.$message({
@@ -341,8 +341,8 @@ export default {
     handleDeleteSingle(id) {
       let _this = this;
       deleteUser([id]).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         _this.init();
         this.$message({
@@ -356,8 +356,8 @@ export default {
       this.updateVisible = true;
       getUserInfo(id)
         .then(res => {
-          if (res.code != 200) {
-            return this.$message.error(res.error);
+          if (res.data.code != 200) {
+            return this.$message.error(res.data.error);
           }
           this.updateUserForm = res.data;
           this.updateUserForm.id = res.data.id;
@@ -372,8 +372,8 @@ export default {
         if (valid) {
           let _this = this;
           updateUser(this.updateUserForm).then(res => {
-            if (res.code != 200) {
-              return this.$message.error(res.error);
+            if (res.data.code != 200) {
+              return this.$message.error(res.data.error);
             }
             _this.init();
             this.updateVisible = false;

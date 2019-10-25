@@ -220,7 +220,7 @@ export default {
     handleSubmit() {
       let _this = this;
       addReTicket(this.ticketForm).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
         _this.getTicketList(this.paramForm);
@@ -247,8 +247,8 @@ export default {
         return;
       }
       deleteTicket(this.rowIdList).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         _this.getTicketList(this.paramForm);
         this.$message({
@@ -268,8 +268,8 @@ export default {
     handleDeleteSingle(id) {
       let _this = this;
       deleteTicket([id]).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         _this.getTicketList(this.paramForm);
         this.$message({
@@ -281,11 +281,12 @@ export default {
     //每行的修改按钮
     handleUpdate(id) {
       getTicketDetail(id).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        console.log(res)
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         this.updatedialogFormVisible = true;
-        this.ticketDetial = res.data;
+        this.ticketDetial = res.data.data;
       });
     },
     //选择列表每页多少条数据
@@ -302,7 +303,7 @@ export default {
     //修改区域确定按钮
     handleUpdateSubmit() {
       updateTicket(this.ticketDetial).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
         this.updatedialogFormVisible = false;

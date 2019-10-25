@@ -197,8 +197,11 @@ export default {
         delete data.code;
       }
       getDmqTicketList(data).then(res => {
+        if(res.data.code != 200){
+            return this.$message.error(res.data.error);
+        }
         this.ticketList = res.data.data.data;
-        this.total = res.data.totalCount;
+        this.total = res.data.data.totalCount;
       });
     },
     //确定添加
@@ -210,8 +213,8 @@ export default {
             delete this.dmqForm.number
           }
           addDmqTicket(this.dmqForm).then(res => {
-          if (res.code != 200) {
-            return this.$message.error(res.error);
+          if (res.data.code != 200) {
+            return this.$message.error(res.data.error);
           }
           _this.getTicketList(this.paramForm);
           this.$message.success("添加成功");
@@ -243,8 +246,8 @@ export default {
         return;
       }
       deleteDmqTicket(this.rowIdList).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         _this.getTicketList(this.paramForm);
         this.$message({
@@ -264,8 +267,8 @@ export default {
     handleDeleteSingle(id) {
       let _this = this;
       deleteDmqTicket([id]).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
         _this.getTicketList(this.paramForm);
         this.$message({

@@ -171,7 +171,7 @@ export default {
     getRoleList() {
       getRoleList(this.roleDate)
         .then(res => {
-          if (res.code != 200) {
+          if (res.data.code != 200) {
             return this.$message.error(res.error);
           }
           this.roleList = res.data.data;
@@ -201,7 +201,7 @@ export default {
           //点击确认后，发起新增请求
           addRole(this.roleForm)
             .then(res => {
-              if (res.code != 200) {
+              if (res.data.code != 200) {
                 return this.$message.error(res.error);
               }
               this.dialogFormVisible = false;
@@ -226,8 +226,8 @@ export default {
         if (valid) {
           let _this = this;
           updateRole(this.updateRoleForm).then(res => {
-            if (res.code != 200) {
-              return this.$message.error(res.error);
+            if (red.data.code != 200) {
+              return this.$message.error(res.data.error);
             }
             _this.getRoleList();
             this.updateVisible = false;
@@ -252,10 +252,10 @@ export default {
       this.updateVisible = true;
       getRoleInfo(id)
         .then(res => {
-          if (res.code != 200) {
-            return this.$message.error(res.error);
+          if (res.data.code != 200) {
+            return this.$message.error(res.data.error);
           }
-          this.updateRoleForm = res.data;
+          this.updateRoleForm = res.data.data;
         })
         .catch(err => {
           console.log(err);
@@ -265,8 +265,8 @@ export default {
     handleDeleteSingle(id) {
       let _this = this;
       deleteRole([id]).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code!= 200) {
+          return this.$message.error(res.data.error);
         }
         _this.getRoleList();
         this.$message({
@@ -286,7 +286,7 @@ export default {
         return;
       }
       deleteRole(this.rowIdList).then(res => {
-        if (res.code != 200) {
+        if (res.data.code!= 200) {
           return this.$message.error(res.error);
         }
         _this.getRoleList();

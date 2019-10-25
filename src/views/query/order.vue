@@ -137,10 +137,10 @@ export default {
   methods: {
     init() {
       getParkList().then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           console.log(res);
         }
-        this.parkList = res.data;
+        this.parkList = res.data.data;
         this.value = this.parkList[0].name;
         this.dataForm.parkId = this.parkList[0].id;
       });
@@ -156,18 +156,18 @@ export default {
     },
     handleClick() {
       getOfflineOrderList(this.dataForm).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           console.log(res);
         }
-        this.orderList = res.data;
+        this.orderList = res.data.data;
       });
     },
     handleRowClick(row, column, event) {
       getOfflineOrderDetail(this.dataForm.parkId, row.billno).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           console.log(res);
         }
-        this.orderDetail = res.data;
+        this.orderDetail = res.data.data;
       });
     }
   }

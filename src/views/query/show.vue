@@ -112,10 +112,10 @@ export default {
   methods: {
     init() {
       getParkList().then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           console.log(res);
         }
-        this.parkList = res.data;
+        this.parkList = res.data.data;
         this.value = this.parkList[0].name;
         this.parkId = this.parkList[0].id;
         this.getPerForm();
@@ -130,10 +130,10 @@ export default {
         startDate: this.startStr
       };
       getPerformList(dataForm).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           console.log(res);
         }
-        this.perFormTable = res.data;
+        this.perFormTable = res.data.data;
       });
     },
 

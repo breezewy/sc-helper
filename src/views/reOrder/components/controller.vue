@@ -119,10 +119,10 @@ export default {
   methods: {
     init(id) {
       getByDmqTicketId(id).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
-        this.tableList = res.data;
+        this.tableList = res.data.data;
       });
     },
     //列表全选按钮
@@ -149,7 +149,7 @@ export default {
         return;
       }
       deleteReTicketDmq(this.rowIdList).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
         _this.init(this.dmqId);
@@ -162,7 +162,7 @@ export default {
     handleDeleteSingle(id) {
       let _this = this;
       deleteReTicketDmq([id]).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
         _this.init(this.dmqId);
@@ -178,11 +178,11 @@ export default {
     },
     getTicketList(data) {
       getControlTicketList(data).then(res => {
-        if (res.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
         }
-        this.ticketList = res.data.data;
-        this.total = res.data.totalCount;
+        this.ticketList = res.data.data.data;
+        this.total = res.data.data.totalCount;
       });
     },
     //选择列表每页多少条数据
@@ -202,7 +202,7 @@ export default {
         ticketId: this.addIdList
       };
       addReTicketDmq(data).then(res => {
-        if (res.code != 200) {
+        if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
         this.dialogVisible = false;
