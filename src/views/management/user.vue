@@ -150,7 +150,7 @@ import {
   deleteUser,
   getUserInfo,
   updateUser
-} from "../../api/sys";
+} from "../../api/management";
 
 import { isEmail, isMobile } from "@/utils/validate";
 export default {

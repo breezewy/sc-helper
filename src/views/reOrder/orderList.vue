@@ -52,7 +52,7 @@
           >
             <el-table-column type="index" width="50" align="center"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
-            <el-table-column prop="mobile" label="电话" align="center" width="200"></el-table-column>
+            <el-table-column prop="mobile" label="手机号" align="center" width="200"></el-table-column>
             <el-table-column prop="orderCount" label="订单数量" align="center" width="100"></el-table-column>
             <!-- <el-table-column prop="orderCount" label="原始订单数量" align="center" width="150"></el-table-column> -->
             <el-table-column prop="productType" label="票型" align="center">

@@ -42,12 +42,12 @@
           border
         >
           <el-table-column type="index" width="50" align="center"></el-table-column>
-          <el-table-column prop="name" label="票型名称" align="center" width="100"></el-table-column>
+          <el-table-column prop="name" label="票型名称" align="center" ></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center" width="200"></el-table-column>
           <el-table-column prop="number" label="预约数量" align="center" width="100"></el-table-column>
           <el-table-column prop="playTime" label="游玩日期" align="center"></el-table-column>
           <el-table-column prop="showTime" label="演出场次" align="center"></el-table-column>
-          <el-table-column prop="dmqOrderId" label="独木桥ID" align="center"></el-table-column>
+          <el-table-column prop="dmqOrderId" label="独木桥订单号" align="center"></el-table-column>
         </el-table>
         <el-pagination
           @size-change="handleSizeChange"

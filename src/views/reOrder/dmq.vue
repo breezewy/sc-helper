@@ -106,7 +106,7 @@
               <el-radio :label="3">通玩票</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="最大可购买份数" prop="number" v-if="showUpdateNumber">
+          <el-form-item label="最大可预约数量" prop="number" v-if="showUpdateNumber">
             <el-input-number v-model="dmqTicketDetial.number" :min="1"></el-input-number>
           </el-form-item>
           <el-form-item>

@@ -112,7 +112,7 @@ import {
   deleteRole,
   updateRole,
   getRoleInfo
-} from "../../api/sys";
+} from "../../api/management";
 import { getMenuSelect } from "../../api/nav";
 export default {
   data() {

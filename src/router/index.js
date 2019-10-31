@@ -32,23 +32,39 @@ export const constantRoutes = [
   },
 
   {
-    path: '/sys',
+    path: '/management',
     component: Layout,
-    redirect: "/sys/user",
-    name: "Sys",
+    redirect: "/management/user",
+    name: "Management",
     meta: { title: "权限管理", icon: 'lock' },
     children: [
       {
         path: 'user',
-        component: () => import('@/views/sys/user'),
+        component: () => import('@/views/management/user'),
         name: 'user',
         meta: { title: '用户管理' }
       },
       {
         path: 'role',
-        component: () => import('@/views/sys/role'),
+        component: () => import('@/views/management/role'),
         name: 'role',
         meta: { title: '角色管理' }
+      }
+    ]
+  },
+
+  {
+    path: '/sys',
+    component: Layout,
+    redirect: "/sys/menu",
+    name: "Sys",
+    meta: { title: "系统设置", icon: 'table' },
+    children: [
+      {
+        path: 'menu',
+        component: () => import('@/views/sys/menu'),
+        name: 'Menu',
+        meta: { title: '菜单管理' }
       }
     ]
   },
@@ -74,6 +90,35 @@ export const constantRoutes = [
       }
     ]
   },
+
+  {
+    path: '/park',
+    component: Layout,
+    redirect: "/park/parkManagement",
+    name: "Park",
+    meta: { title: "景区管理", icon: 'form' },
+    children: [
+      {
+        path: 'parkManagement',
+        component: () => import('@/views/park/parkManagement'),
+        name: 'parkManagement',
+        meta: { title: '景区管理' }
+      },
+      {
+        path: 'seatManagement',
+        component: () => import('@/views/park/seatManagement'),
+        name: 'seatManagement',
+        meta: { title: '席位管理' }
+      },
+      {
+        path: 'theaterManagement',
+        component: () => import('@/views/park/theaterManagement'),
+        name: 'theaterManagement',
+        meta: { title: '剧院管理' }
+      }
+    ]
+  },
+  
 
   {
     path: '/reOrder',

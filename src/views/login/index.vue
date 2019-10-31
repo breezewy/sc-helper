@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">宋城信息管理后台</h3>
+        <h3 class="title">宋城小助手管理后台</h3>
       </div>
 
       <el-form-item prop="username">
@@ -112,8 +112,8 @@ export default {
     };
     return {
       loginForm: {
-        username: "admin",
-        password: "888888",
+        username: "",
+        password: "",
         captcha: "", //验证码
         userType: "admin", //用户类型
         loginType: "username", //登录方式
@@ -169,7 +169,8 @@ export default {
               this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
             })
-            .catch(() => {
+            .catch((error) => {
+              console.log(error)
               this.getCaptcha();
               this.loading = false;
             });
