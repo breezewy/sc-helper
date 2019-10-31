@@ -120,13 +120,13 @@ export default {
     //选择列表不同页面
     handleSizeChange(val) {
       this.paramData.page.pageSize = val;
-      this.getOrderList(this.paramData);
+      this.getChildOrder(this.paramData);
     },
     //选择列表每页多少条数据
     handleCurrentChange(val) {
       this.currentPage = val;
       this.paramData.page.pageNum = this.currentPage - 1;
-      this.getOrderList(this.paramData);
+      this.getChildOrder(this.paramData);
     },
     search() {
       this.getChildOrder(this.paramData);
