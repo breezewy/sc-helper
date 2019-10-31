@@ -4,6 +4,7 @@
             title="新增景区" 
             :visible.sync="dialogFormVisible"
             @close="closeDialog"
+            :close-on-click-modal="false"
             >
             <el-form 
                 :model="form" 
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import {appendPark} from '../../../api/park'
+import {appendPark} from '@/api/park'
 export default {
     name:"AppendPark",
     props:{
@@ -70,7 +71,7 @@ export default {
                         return this.$message.error(res.data.error);
                     }
                         this.$message.success('操作成功');
-                        this.$emit('handleSuccess')
+                        this.$emit('handleAppendSuccess')
                         this.dialogFormVisible = false
                     })
                 }else{

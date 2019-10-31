@@ -36,13 +36,23 @@
                 </el-table>
         </template>
         </div>
-        <append-park :show="showAppendForm" @changeAppendShow="changeAppendShow" @handleSuccess="refresh"></append-park>
-        <update-park :show="showUpdateForm" @changeUpdateShow="changeUpdateShow" :parkInfo="parkInfo"></update-park>
+        <append-park 
+            :show="showAppendForm" 
+            @changeAppendShow="changeAppendShow" 
+            @handleAppendSuccess="refresh"
+        ></append-park>
+        <update-park 
+            :show="showUpdateForm" 
+            @changeUpdateShow="changeUpdateShow" 
+            @handleUpdateSuccess="refresh" 
+            :parkInfo="parkInfo"
+        ></update-park>
     </div>
 </template>
 
 <script>
-import{ getParkList,getParkById } from'@/api/query'
+import { getParkList,getParkById} from'@/api/query'
+import { deletePark } from '@/api/park'
 import AppendPark from './components/appendPark'
 import UpdatePark from './components/updatePark'
 export default {
@@ -52,6 +62,7 @@ export default {
             parkId:"",
             parkList:[],
             parkInfo:{},
+            rowIdList:[],
             showAppendForm:false,
             showUpdateForm:false
         }
@@ -90,33 +101,79 @@ export default {
         },
         //点击头部删除按钮
         deleteAllPark(){
-
+            if (this.rowIdList.length === 0) {
+                this.$message({
+                message: "请选择删除项",
+                type: "warning"
+                });
+                return;
+            }
+            this.$confirm('确定要删除吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+            }).then(() => {
+                this.deletePark(this.rowIdList);
+            }).catch(() => {
+                return          
+            }); 
         },
         //点击全选
-        handleSelectionChange(){
-
+        handleSelectionChange(selection){
+            this.rowIdList = [];
+            for (let i = 0; i < selection.length; i++) {
+                this.rowIdList.push(selection[i].id);
+            }
+            console.log(this.rowIdList)
         },
         //点击修改执行
         handleUpdate(id){
             this.showUpdateForm = true;
-             getParkById(id).then(res=>{
+            getParkById(id).then(res=>{
                 if(res.data.code !== 200){
                     return this.$message.error(res.data.error);
                 }
                 this.parkInfo = res.data.data
             })
         },
-        handleDeleteSingle(){
-
+        //每行的删除按钮
+        handleDeleteSingle(id){
+            this.$confirm('确定要删除吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+            }).then((id) => {
+                this.deletePark([id])
+            }).catch(() => {
+                return          
+            }); 
+           
         },
+        //关闭新增框
         changeAppendShow(){
             this.showAppendForm = false
         },
+        //关闭修改框
         changeUpdateShow(){
             this.showUpdateForm = false
         },
+        //刷新列表
         refresh(){
             this.getParkList();
+        },
+        //删除景区
+        deletePark(idList){
+            deletePark(idList).then(res=>{
+                console.log(res)
+                if (res.data.code != 200) {
+                    return this.$message.error(res.data.error);
+                }
+                this.getParkList();
+                this.$message({
+                    message: "操作成功",
+                    type: "success"
+                });
+            })
         }
     }
 }

@@ -4,6 +4,7 @@
             title="修改景区" 
             :visible.sync="dialogFormVisible"
             @close="closeDialog"
+            :close-on-click-modal="false"
             >
             <el-form 
                 :model="parkInfo" 
@@ -25,18 +26,19 @@
 </template>
 
 <script>
+import {updatePark} from '@/api/park'
 export default {
     name:'UpdatePark',
     props:{
         parkInfo:Object,
         show:Boolean
     },
-    date(){
+    data(){
         return {
             dialogFormVisible:false
         }
     },
-    created(){
+    mounted(){
         this.dialogFormVisible = this.show
     },
     watch:{
@@ -49,7 +51,19 @@ export default {
             this.$emit('changeUpdateShow')
         },
         handleSubmit(){
-
+            let data = {
+                id: this.parkInfo.id,
+                name: this.parkInfo.name,
+                url:this.parkInfo.url
+            }
+            updatePark(data).then(res=>{
+                if(res.data.code != 200){
+                    return this.$message.error(res.data.error);
+                }
+                this.$message.success('操作成功');
+                this.$emit('handleUpdateSuccess')
+                this.dialogFormVisible = false
+            })
         },
         close(){
             this.dialogFormVisible = false
