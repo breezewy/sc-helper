@@ -36,7 +36,8 @@
                 </el-table>
         </template>
         </div>
-        <append-park :show="showAppendForm" @changeShow="changeShow" @handleSuccess="refresh"></append-park>
+        <append-park :show="showAppendForm" @changeAppendShow="changeAppendShow" @handleSuccess="refresh"></append-park>
+        <update-park :show="showUpdateForm" @changeUpdateShow="changeUpdateShow" :parkInfo="parkInfo"></update-park>
     </div>
 </template>
 
@@ -49,10 +50,10 @@ export default {
     data(){
         return {
             parkId:"",
-            park:{},
             parkList:[],
-            parkDetail:{},
-            showAppendForm:false
+            parkInfo:{},
+            showAppendForm:false,
+            showUpdateForm:false
         }
     },
     components:{
@@ -63,6 +64,7 @@ export default {
         this.getParkList();
     },
     methods:{
+        //获取景区列表
         getParkList(){
             getParkList().then(res=>{
                 if(res.data.code !== 200){
@@ -71,33 +73,47 @@ export default {
                 this.parkList = res.data.data
             })
         },
+        //点击搜索执行
         search(){
             getParkById(parseInt(this.parkId)).then(res=>{
                 this.parkList = [];
                 if(res.data.code !== 200){
                         return this.$message.error(res.data.error);
                 }
-                this.park = res.data.data
-                this.parkList.push (this.park)
+                this.parkInfo = res.data.data
+                this.parkList.push (this.parkInfo)
             })
         },
+        //点击新增按钮
         appendPark(){
             this.showAppendForm = true;
         },
+        //点击头部删除按钮
         deleteAllPark(){
 
         },
+        //点击全选
         handleSelectionChange(){
 
         },
+        //点击修改执行
         handleUpdate(id){
-
+            this.showUpdateForm = true;
+             getParkById(id).then(res=>{
+                if(res.data.code !== 200){
+                    return this.$message.error(res.data.error);
+                }
+                this.parkInfo = res.data.data
+            })
         },
         handleDeleteSingle(){
 
         },
-        changeShow(){
+        changeAppendShow(){
             this.showAppendForm = false
+        },
+        changeUpdateShow(){
+            this.showUpdateForm = false
         },
         refresh(){
             this.getParkList();

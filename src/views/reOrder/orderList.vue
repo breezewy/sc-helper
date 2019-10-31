@@ -54,12 +54,10 @@
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
             <el-table-column prop="mobile" label="手机号" align="center" width="200"></el-table-column>
             <el-table-column prop="orderCount" label="订单数量" align="center" width="100"></el-table-column>
-            <!-- <el-table-column prop="orderCount" label="原始订单数量" align="center" width="150"></el-table-column> -->
-            <el-table-column prop="productType" label="票型" align="center">
-               <template slot-scope="scope">
-                <el-tag v-if="scope.row.productType==1" >单选票</el-tag>
-                <el-tag v-if="scope.row.productType==2" type="warning">多选票</el-tag>
-                <el-tag v-if="scope.row.productType==3" type="success">通玩票</el-tag>
+            <el-table-column prop="orderStatus" label="订单状态" align="center" width="100">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.orderStatus==3" type="info">已退单</el-tag>
+                <el-tag v-else type="success">已预约</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="idCard" label="证件号" align="center"></el-table-column>
@@ -70,6 +68,13 @@
                 <span v-if="scope.row.certificateType == 1">护照</span>
                 <span v-if="scope.row.certificateType == 2">港澳通行证</span>
                 <span v-if="scope.row.certificateType == 3">台湾通行证</span>
+              </template>
+            </el-table-column>
+             <el-table-column prop="productType" label="票型" align="center">
+               <template slot-scope="scope">
+                <el-tag v-if="scope.row.productType==1" >单选票</el-tag>
+                <el-tag v-if="scope.row.productType==2" type="warning">多选票</el-tag>
+                <el-tag v-if="scope.row.productType==3" type="success">通玩票</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center" width="300">
@@ -108,7 +113,7 @@
       >
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
-        <el-table-column prop="id" label="票型id" align="center"></el-table-column>
+        <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
         <el-table-column prop="containShow" label="是否包含演出票" align="center" width="150">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.containShow== true" type="success">是</el-tag>

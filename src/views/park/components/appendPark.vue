@@ -60,7 +60,7 @@ export default {
     },
     methods:{
         closeDialog(){
-            this.$emit('changeShow')
+            this.$emit('changeAppendShow')
         },
         handleSubmit(){
             this.$refs.appendForm.validate(valid=>{

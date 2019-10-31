@@ -35,7 +35,6 @@ service.interceptors.response.use(
   response => {
     let res = response
     let status = res.status
-    
     if (status != 200) {
       Message({
         message: res.statusText || 'Error',
