@@ -1,5 +1,5 @@
 <template>
-    <div class="append">
+    <div class="appendPark">
         <el-dialog 
             title="新增景区" 
             :visible.sync="dialogFormVisible"

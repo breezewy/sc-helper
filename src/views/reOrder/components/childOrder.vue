@@ -44,6 +44,12 @@
           <el-table-column type="index" width="50" align="center"></el-table-column>
           <el-table-column prop="name" label="票型名称" align="center" width="100"></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center" width="200"></el-table-column>
+          <el-table-column prop="orderStatus" label="订单状态" align="center" width="100">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.orderStatus==3" type="info">已退单</el-tag>
+                <el-tag v-else type="success">已预约</el-tag>
+              </template>
+          </el-table-column>
           <el-table-column prop="number" label="购买数量" align="center" width="100"></el-table-column>
           <el-table-column prop="playTime" label="游玩日期" align="center"></el-table-column>
           <el-table-column prop="showTime" label="演出场次" align="center"></el-table-column>
