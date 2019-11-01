@@ -123,8 +123,8 @@ export default {
       value: "",
       dataForm: {
         idCard: "",
-        orderNum: "",
-        phoneMum: "",
+        orderId: "",
+        mobile: "",
         parkId: ""
       },
       orderList: [],
