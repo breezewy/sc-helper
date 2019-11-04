@@ -39,6 +39,10 @@ export default {
     watch:{
         show(newVal,oldVal){
             this.dialogFormVisible = newVal
+            this.form= {
+                    name:"",
+                    url:""
+            }
         }
     },
     data(){

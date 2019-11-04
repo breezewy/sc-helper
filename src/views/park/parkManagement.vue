@@ -124,7 +124,6 @@ export default {
             for (let i = 0; i < selection.length; i++) {
                 this.rowIdList.push(selection[i].id);
             }
-            console.log(this.rowIdList)
         },
         //点击修改执行
         handleUpdate(id){

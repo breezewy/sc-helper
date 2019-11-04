@@ -1,7 +1,7 @@
 <template>
-    <div class="appendSeat">
+    <div class="appendTheater">
         <el-dialog 
-            title="新增席位" 
+            title="新增剧院" 
             :visible.sync="dialogFormVisible"
             @close="closeDialog"
             :close-on-click-modal="false"
@@ -11,22 +11,18 @@
                 :rules="formRules"
                 ref="appendForm"
                 >
-                <el-form-item label="席位编码" :label-width="formLabelWidth" prop="code">
+                <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="code">
                     <el-input v-model="form.code" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="席位名称" :label-width="formLabelWidth" prop="name">
+                <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="name">
                     <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="theaterCode">
-                    <el-input v-model="form.theaterCode" autocomplete="off"></el-input>
+                <el-form-item label="景区名称" :label-width="formLabelWidth" prop="parkName">
+                    <el-input v-model="form.parkName" autocomplete="off"></el-input>
                 </el-form-item>
-                 <el-form-item label="剧院ID" :label-width="formLabelWidth" prop="theaterCode">
-                    <el-input v-model="form.theaterId" autocomplete="off"></el-input>
+                <el-form-item label="景区ID" :label-width="formLabelWidth" prop="parkId">
+                    <el-input v-model="form.parkId" autocomplete="off"></el-input>
                 </el-form-item>
-                 <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="theaterName">
-                    <el-input v-model="form.theaterName" autocomplete="off"></el-input>
-                </el-form-item>
-              
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -36,44 +32,38 @@
     </div>
 </template>
 
-
 <script>
-import {appendSeat} from '@/api/seat' 
+import {appendTheater} from '@/api/theater'
 export default {
-    name:'AppendSeat',
-    props:{
-        show:Boolean
-    },
+    name:"appendTheater",
     data(){
         return {
-            formLabelWidth:"100px",
+            dialogFormVisible:false,
             form:{
                 code:"",
                 name:"",
-                id:"",
-                theaterCode:"",
-                theaterId:"",
-                theaterName:""
+                parkId:"",
+                parkName:""
             },
             formRules: {
-                code: [
-                { required: true, message: "必填项不能为空", trigger: "blur" },
-                ],
                 name: [
                 { required: true, message: "必填项不能为空", trigger: "blur" },
                 ],
-                theaterCode: [
+                code: [
                 { required: true, message: "必填项不能为空", trigger: "blur" },
                 ],
-                theaterId: [
+                parkId: [
                 { required: true, message: "必填项不能为空", trigger: "blur" },
                 ],
-                theaterName: [
+                parkName: [
                 { required: true, message: "必填项不能为空", trigger: "blur" },
                 ]
             },
-            dialogFormVisible:false
+            formLabelWidth:"100px",
         }
+    },
+    props:{
+        show:Boolean
     },
     created(){
         this.dialogFormVisible = this.show
@@ -81,12 +71,11 @@ export default {
     watch:{
         show(newVal,oldVal){
             this.dialogFormVisible = newVal
-            this. form = {
+            this.form ={
                 code:"",
                 name:"",
-                theaterCode:"",
-                theaterId:"",
-                theaterName:""
+                parkId:"",
+                parkName:""
             }
         }
     },
@@ -97,7 +86,7 @@ export default {
         handleSubmit(){
             this.$refs.appendForm.validate(valid=>{
                 if(valid){
-                    appendSeat(this.form).then(res=>{
+                    appendTheater(this.form).then(res=>{
                     if(res.data.code != 200){
                         return this.$message.error(res.data.error);
                     }
@@ -114,3 +103,7 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    
+</style>
