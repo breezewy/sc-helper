@@ -32,21 +32,21 @@ export const constantRoutes = [
   },
 
   {
-    path: '/management',
+    path: '/authority',
     component: Layout,
-    redirect: "/management/user",
-    name: "Management",
+    redirect: "/authority/user",
+    name: "Authority",
     meta: { title: "权限管理", icon: 'lock' },
     children: [
       {
         path: 'user',
-        component: () => import('@/views/management/user'),
+        component: () => import('@/views/authority/user'),
         name: 'user',
         meta: { title: '用户管理' }
       },
       {
         path: 'role',
-        component: () => import('@/views/management/role'),
+        component: () => import('@/views/authority/role'),
         name: 'role',
         meta: { title: '角色管理' }
       }

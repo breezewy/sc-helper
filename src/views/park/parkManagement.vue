@@ -12,7 +12,6 @@
             <el-button type="danger" @click="deleteAllPark">删除</el-button>
         </div>
         <div class="parkList-table">
-            <template>
                 <el-table
                     ref="multipleTable"
                     :data="parkList"
@@ -34,7 +33,6 @@
                         </template>
                     </el-table-column>
                 </el-table>
-        </template>
         </div>
         <append-park 
             :show="showAppendForm" 

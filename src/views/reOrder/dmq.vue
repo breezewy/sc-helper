@@ -100,13 +100,13 @@
             <el-input v-model="dmqTicketDetial.name" type="text" autocomplete="off"></el-input>
           </el-form-item>
            <el-form-item label="票型类型" prop="type">
-            <el-radio-group v-model="dmqTicketDetial.type" @change="updateChange">
+            <el-radio-group v-model="dmqTicketDetial.type">
               <el-radio :label="1">单票</el-radio>
               <el-radio :label="2">多选票</el-radio>
               <el-radio :label="3">通玩票</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="最大可预约数量" prop="number" v-if="showUpdateNumber">
+          <el-form-item label="最大可预约数量" prop="number" v-if="dmqTicketDetial.type == 2">
             <el-input-number v-model="dmqTicketDetial.number" :min="1"></el-input-number>
           </el-form-item>
           <el-form-item>
@@ -157,7 +157,6 @@ export default {
       currentPage: 1,
       dmqId: "",
       showNumber:false,
-      showUpdateNumber:false,
       dmqFormRules: {
         code: [
           { required: true, message: "必填项不能为空", trigger: "blur" },
@@ -317,13 +316,6 @@ export default {
         return 
       }
       this.showNumber = true
-    },
-    updateChange(value){
-      if(value != 2){
-        this.showUpdateNumber = false
-        return 
-      }
-      this.showUpdateNumber = true
     },
     //点击修改后先验证
     checkOrder(item){
