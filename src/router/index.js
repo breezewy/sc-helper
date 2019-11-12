@@ -58,7 +58,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/sys/menu",
     name: "Sys",
-    meta: { title: "系统设置", icon: 'table' },
+    meta: { title: "系统设置", icon: 'tree-table' },
     children: [
       {
         path: 'menu',
@@ -74,7 +74,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/query/show",
     name: "Query",
-    meta: { title: "线下信息查询", icon: 'form' },
+    meta: { title: "线下信息查询", icon: 'search' },
     children: [
       {
         path: 'show',
@@ -96,7 +96,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/park/parkManagement",
     name: "Park",
-    meta: { title: "景区管理", icon: 'form' },
+    meta: { title: "景区管理", icon: 'table' },
     children: [
       {
         path: 'parkManagement',
