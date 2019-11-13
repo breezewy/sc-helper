@@ -174,7 +174,7 @@ export default {
           if (res.data.code != 200) {
             return this.$message.error(res.error);
           }
-          this.roleList = res.data.data;
+          this.roleList = res.data.data.data;
         })
         .catch(err => {
           console.log(err);
@@ -182,7 +182,7 @@ export default {
     },
     getMenuSelect() {
       getMenuSelect().then(res => {
-        this.menuList = res.data;
+        this.menuList = res.data.data;
       });
     },
     addRole() {

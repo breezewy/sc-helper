@@ -257,7 +257,7 @@ export default {
         if (res.data.code != 200) {
           return this.$message.error(res.error);
         }
-        this.userList = res.data.data;
+        this.userList = res.data.data.data;
       });
     },
     //点击新增按钮
@@ -359,8 +359,8 @@ export default {
           if (res.data.code != 200) {
             return this.$message.error(res.data.error);
           }
-          this.updateUserForm = res.data;
-          this.updateUserForm.id = res.data.id;
+          this.updateUserForm = res.data.data;
+          this.updateUserForm.id = res.data.data.id;
         })
         .catch(err => {
           console.log(err);
