@@ -87,6 +87,12 @@ export const constantRoutes = [
         component: () => import('@/views/query/order'),
         name: 'order',
         meta: { title: '订单查询' }
+      },
+      {
+        path: 'seat',
+        component: () => import('@/views/query/seat'),
+        name: 'seat',
+        meta: { title: '座位查询' }
       }
     ]
   },

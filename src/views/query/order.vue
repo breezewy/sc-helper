@@ -8,7 +8,7 @@
           placeholder="所属片区"
           clearable
           class="filter-item"
-          style="width: 180px"
+          style="width: 220px"
           @change="getParkItem"
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
@@ -26,11 +26,11 @@
       </div>
 
       <div class="idCardInput">
-        <span class="title">身份证：</span>
-        <el-input placeholder="请输入身份证号" v-model="dataForm.idCard" clearable></el-input>
+        <span class="title">证件号：</span>
+        <el-input placeholder="请输入证件号" v-model="dataForm.idCard" clearable></el-input>
       </div>
 
-      <el-button type="primary" @click="handleClick">搜索</el-button>
+      <el-button type="primary" @click="handleClick">查询</el-button>
     </div>
 
     <div class="orderTable">
@@ -44,19 +44,16 @@
       >
         <el-table-column prop="billoutno" label="订单号" align="center" width="200"></el-table-column>
         <el-table-column prop="createTime" label="订单日期" align="center" width="200"></el-table-column>
-        <el-table-column prop="billstatus" label="检票状态" align="center" width="120">
+        <el-table-column prop="billstatus" label="订单状态" align="center" width="120">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.billstatus===0" type="danger">未检票入园</el-tag>
-            <el-tag v-if="scope.row.billstatus===1" type="success">已入园</el-tag>
+            <el-tag v-if="scope.row.billstatus===1" type="success">已出票</el-tag>
+            <el-tag v-else type="danger">未出票</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="webbillstatus" label="订单状态" align="center" width="120">
+        <el-table-column prop="webbillstatus" label="退票标识" align="center" width="120">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.webbillstatus== 0">初始有效</el-tag>
-            <el-tag v-if="scope.row.webbillstatus== 1" type="success">订单成功</el-tag>
-            <el-tag v-if="scope.row.webbillstatus== 2" type="danger">订单失败</el-tag>
-            <el-tag v-if="scope.row.webbillstatus== 3" type="info">已退单</el-tag>
-            <el-tag v-if="scope.row.webbillstatus== 4" type="warning">待审核</el-tag>
+            <span v-if="scope.row.webbillstatus== 1">正常</span>
+            <span v-else>已退单</span>
           </template>
         </el-table-column>
         <el-table-column prop="traveldate" label="游玩日期" align="center" width="120"></el-table-column>
@@ -138,12 +135,12 @@ export default {
     init() {
       getParkList().then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+          return this.$message.error(res.data.msg)
         }
         this.parkList = res.data.data;
         this.value = this.parkList[0].name;
         this.dataForm.parkId = this.parkList[0].id;
-      });
+      })
     },
     getParkItem(value) {
       for (let i = 0; i < this.parkList.length; i++) {
@@ -152,12 +149,11 @@ export default {
           this.dataForm.parkId = this.parkList[i].id;
         }
       }
-      console.log(this.parkId);
     },
     handleClick() {
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+            return this.$message.error(res.data.msg)
         }
         this.orderList = res.data.data;
       });
@@ -165,7 +161,7 @@ export default {
     handleRowClick(row, column, event) {
       getOfflineOrderDetail(this.dataForm.parkId, row.billno).then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+           return this.$message.error(res.data.msg)
         }
         this.orderDetail = res.data.data;
       });

@@ -1,5 +1,5 @@
 <template>
-  <div id="orderContainer">
+  <div id="showContainer">
     <div class="filter">
       <div class="park">
         <span class="title">演出片区：</span>
@@ -8,7 +8,7 @@
           placeholder="演出片区"
           clearable
           class="filter-item"
-          style="width: 180px"
+          style="width: 220px"
           @change="getParkItem"
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
@@ -21,7 +21,7 @@
           type="daterange"
           align="right"
           unlink-panels
-          range-separator="to"
+          range-separator="——"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
@@ -113,7 +113,7 @@ export default {
     init() {
       getParkList().then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+           return this.$message.error(res.data.msg)
         }
         this.parkList = res.data.data;
         this.value = this.parkList[0].name;
@@ -131,10 +131,10 @@ export default {
       };
       getPerformList(dataForm).then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+          return this.$message.error(res.data.msg)
         }
         this.perFormTable = res.data.data;
-      });
+      })
     },
 
     //选择景区，获取景区ID
@@ -172,7 +172,7 @@ export default {
 
 
 <style scoped lang="scss">
-#orderContainer {
+#showContainer {
   padding: 30px;
   .filter {
     display: flex;
