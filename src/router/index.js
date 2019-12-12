@@ -30,8 +30,7 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: true,
+    name: '首页',
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
@@ -52,12 +51,6 @@ export function resetRouter() {
   router.matcher = newRouter.matcher // reset router
 }
 
-
-// export default new Router({
-//  //  mode: 'history', //后端支持可开
-//   scrollBehavior: () => ({ y: 0 }),
-//   routes: constantRouterMap
-// })
 
 
 export default router

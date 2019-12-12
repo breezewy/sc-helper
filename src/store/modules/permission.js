@@ -4,7 +4,7 @@ import { getNavList } from '@/api/nav'
 
 const permission = {
     state: {
-      routers: constantRouterMap,
+      routers: [],
       addRouters: []
     },
     mutations: {
