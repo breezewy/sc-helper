@@ -8,7 +8,7 @@
           placeholder="所属片区"
           clearable
           class="filter-item"
-          style="width: 180px"
+          style="width: 240px"
           @change="getParkItem"
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
@@ -138,7 +138,7 @@ export default {
     init() {
       getParkList().then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+          return this.$message.error(res.data.error)
         }
         this.parkList = res.data.data;
         this.value = this.parkList[0].name;
@@ -152,12 +152,11 @@ export default {
           this.dataForm.parkId = this.parkList[i].id;
         }
       }
-      console.log(this.parkId);
     },
     handleClick() {
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+          return this.$message.error(res.data.error)
         }
         this.orderList = res.data.data;
       });
@@ -165,7 +164,7 @@ export default {
     handleRowClick(row, column, event) {
       getOfflineOrderDetail(this.dataForm.parkId, row.billno).then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+          return this.$message.error(res.data.error)
         }
         this.orderDetail = res.data.data;
       });

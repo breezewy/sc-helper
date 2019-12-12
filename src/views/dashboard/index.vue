@@ -6,7 +6,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getNavList } from "../../api/nav";
 export default {
   name: "Dashboard",
   data() {
@@ -16,12 +15,6 @@ export default {
   },
   computed: {
     ...mapGetters(["name"])
-  },
-  created() {
-    getNavList().then(res => {
-      this.navs = res.data;
-      console.log(this.navs);
-    });
   }
 };
 </script>

@@ -60,6 +60,7 @@
             </el-table>
         </div>
         <append-menu 
+            v-if="showAppend"
             :show="showAppend" 
             @changeShow="changeShowAppend" 
             @refresh="refresh" 
@@ -116,11 +117,11 @@ export default {
         },
         changeShowUpdate(){
             this.showUpdate = false
-            this.show = false;
+            this.show = false
         },
         handleUpdate(id){
             this.showUpdate = true
-            this.show = true;
+            this.show = true
             this.id  = id 
         },
         handleDeleteSingle(id){

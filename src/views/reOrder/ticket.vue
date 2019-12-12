@@ -289,7 +289,6 @@ export default {
     //每行的修改按钮
     handleUpdate(id) {
       getTicketDetail(id).then(res => {
-        console.log(res)
         if (res.data.code != 200) {
           return this.$message.error(res.data.error);
         }

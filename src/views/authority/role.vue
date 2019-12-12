@@ -41,7 +41,7 @@
     <!-- 
       点击新增后出现的编辑模块
     -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog" :close-on-click-modal="false">
       <el-form ref="roleForm" :model="roleForm" :rules="roleFormRules" label-width="80px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="roleForm.name" autocomplete="off"></el-input>
@@ -71,7 +71,7 @@
     <!-- 
       点击修改后出现的编辑模块 
     -->
-    <el-dialog title="修改" :visible.sync="updateVisible" class="dislog">
+    <el-dialog title="修改" :visible.sync="updateVisible" class="dislog" :close-on-click-modal="false">
       <el-form
         ref="updateRoleForm"
         :model="updateRoleForm"

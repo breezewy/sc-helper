@@ -210,8 +210,7 @@ export default {
           return this.$message.error(res.data.error);
         }
         this.dialogVisible = true;
-        this.dbData = res.data.data
-        console.log(this.dbList )
+        this.dbData = res.data.data;
       })
     }
   }

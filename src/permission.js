@@ -37,7 +37,6 @@ router.beforeEach(async (to, from, next) => {
             initMenu(router,data)
           })
           next({ ...to, replace: true })
-          // next()
         } catch (error) {
           // 移除token 并转到登录页以重新登录
           await store.dispatch('user/resetToken')

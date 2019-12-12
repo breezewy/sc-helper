@@ -121,29 +121,12 @@ export default {
         show:Boolean
     },
     created(){
-        this.menuForm = {
-                name:"", 
-                parentName:"一级菜单", 
-                type:0, 
-                icon:"", 
-                permissions:"", 
-                pid:"0" , 
-                resourceList:[],   
-                sort:0,  
-                url:"",   
-        },
-        this.dialogFormVisible = this.show
         this.getMenuListById()
         this.iconList = getIconList();
     },
-    watch:{
-        show(newVal,oldVal){
-            this.dialogFormVisible = newVal
-        }
-    },
     data(){
         return {
-            dialogFormVisible:false,
+            dialogFormVisible:this.show,
             iconListVisible:false,
             formLabelWidth:"100px",
             radio:0,
@@ -178,12 +161,31 @@ export default {
     methods:{
         closeDialog(){
             this.$emit('changeShow')
+            this.menuForm = {
+                name:"", 
+                parentName:"一级菜单", 
+                type:0, 
+                icon:"", 
+                permissions:"", 
+                pid:"0" , 
+                resourceList:[],   
+                sort:0,  
+                url:"",   
+            }
         },
         handleSubmit(){
              this.$refs.appendForm.validate(valid=>{
                  if(valid){
+                    for(let key in this.menuForm){
+                        console.log(this.menuForm[key])
+                        if(this.menuForm[key] === '' || this.menuForm[key] == null || 
+                            this.menuForm[key] == {} || this.menuForm[key] === []
+                        )
+                        {
+                            delete this.menuForm[key]
+                        }
+                    }
                     this.appendMenu(this.menuForm);
-                    this.dialogFormVisible = false
                  }else{
                     console.log("error submit!!");
                     return false;
@@ -196,7 +198,7 @@ export default {
         handleNodeClick(data,checked){
             this.visible = false
             this.menuForm.parentName = data.name
-            this.menuForm.pid = data.pid
+            this.menuForm.pid = data.id
         },
         changeType(value){
             this.menuForm.type = value
@@ -218,6 +220,7 @@ export default {
                    return this.$message.error(res.data.error);
                 }
                 this.$message.success('操作成功')
+                this.$emit('changeShow')
                 this.$emit('refresh')
             })
         },

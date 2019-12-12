@@ -8,7 +8,7 @@
           placeholder="演出片区"
           clearable
           class="filter-item"
-          style="width: 180px"
+          style="width: 240px"
           @change="getParkItem"
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
@@ -21,7 +21,7 @@
           type="daterange"
           align="right"
           unlink-panels
-          range-separator="to"
+          range-separator="——"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
@@ -113,7 +113,7 @@ export default {
     init() {
       getParkList().then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+           return this.$message.error(res.data.error)
         }
         this.parkList = res.data.data;
         this.value = this.parkList[0].name;
@@ -131,7 +131,7 @@ export default {
       };
       getPerformList(dataForm).then(res => {
         if (res.data.code != 200) {
-          console.log(res);
+           return this.$message.error(res.data.error)
         }
         this.perFormTable = res.data.data;
       });

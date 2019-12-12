@@ -161,7 +161,6 @@ export default {
         //删除景区
         deletePark(idList){
             deletePark(idList).then(res=>{
-                console.log(res)
                 if (res.data.code != 200) {
                     return this.$message.error(res.data.error);
                 }
