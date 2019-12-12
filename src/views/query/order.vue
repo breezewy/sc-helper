@@ -8,7 +8,7 @@
           placeholder="所属片区"
           clearable
           class="filter-item"
-          style="width: 220px"
+          style="width: 240px"
           @change="getParkItem"
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
@@ -46,8 +46,8 @@
         <el-table-column prop="createTime" label="订单日期" align="center" width="200"></el-table-column>
         <el-table-column prop="billstatus" label="订单状态" align="center" width="120">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.billstatus===1" type="success">已出票</el-tag>
-            <el-tag v-else type="danger">未出票</el-tag>
+            <el-tag v-if="scope.row.billstatus===1" type="success" size="mini">已出票</el-tag>
+            <el-tag v-else type="danger" size="mini">未出票</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="webbillstatus" label="退票标识" align="center" width="120">
@@ -63,16 +63,16 @@
         <el-table-column prop="finalsum" label="最终金额" align="center"></el-table-column>
         <el-table-column prop="seatflag" label="剧院票" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.seatflag == 1" type="success">有</el-tag>
-            <el-tag v-else type="danger">无</el-tag>
+            <el-tag v-if="scope.row.seatflag == 1" type="success" size="mini">有</el-tag>
+            <el-tag v-else type="danger" size="mini">无</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="seatcount" label="座位数" align="center"></el-table-column>
         <el-table-column prop="arrangecount" label="排位数" align="center"></el-table-column>
         <el-table-column prop="payflag" label="支付状态" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.payflag == 1" type="success">已支付</el-tag>
-            <el-tag v-else type="danger">未支付</el-tag>
+            <el-tag v-if="scope.row.payflag == 1" type="success" size="mini">已支付</el-tag>
+            <el-tag v-else type="danger" size="mini">未支付</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="username" label="游客姓名" align="center"></el-table-column>
@@ -135,7 +135,7 @@ export default {
     init() {
       getParkList().then(res => {
         if (res.data.code != 200) {
-          return this.$message.error(res.data.msg)
+          return this.$message.error(res.data.error)
         }
         this.parkList = res.data.data;
         this.value = this.parkList[0].name;
@@ -153,7 +153,7 @@ export default {
     handleClick() {
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code != 200) {
-            return this.$message.error(res.data.msg)
+          return this.$message.error(res.data.error)
         }
         this.orderList = res.data.data;
       });
@@ -161,7 +161,7 @@ export default {
     handleRowClick(row, column, event) {
       getOfflineOrderDetail(this.dataForm.parkId, row.billno).then(res => {
         if (res.data.code != 200) {
-           return this.$message.error(res.data.msg)
+          return this.$message.error(res.data.error)
         }
         this.orderDetail = res.data.data;
       });

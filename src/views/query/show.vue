@@ -8,7 +8,7 @@
           placeholder="演出片区"
           clearable
           class="filter-item"
-          style="width: 220px"
+          style="width: 240px"
           @change="getParkItem"
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
@@ -113,7 +113,7 @@ export default {
     init() {
       getParkList().then(res => {
         if (res.data.code != 200) {
-           return this.$message.error(res.data.msg)
+           return this.$message.error(res.data.error)
         }
         this.parkList = res.data.data;
         this.value = this.parkList[0].name;
@@ -131,7 +131,7 @@ export default {
       };
       getPerformList(dataForm).then(res => {
         if (res.data.code != 200) {
-          return this.$message.error(res.data.msg)
+           return this.$message.error(res.data.error)
         }
         this.perFormTable = res.data.data;
       })

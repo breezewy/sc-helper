@@ -29,8 +29,8 @@
           <el-table-column prop="type" label="登录身份" align="center"></el-table-column>
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status== 1" type="success">正常</el-tag>
-              <el-tag v-if="scope.row.status== 0" type="danger">停用</el-tag>
+              <el-tag v-if="scope.row.status== 1" type="success" size="mini">正常</el-tag>
+              <el-tag v-if="scope.row.status== 0" type="danger" size="mini">停用</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
@@ -45,7 +45,7 @@
     </div>
 
     <!-- 点击新增后出现的编辑区域 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dialog">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dialog" :close-on-click-modal="false">
       <el-form ref="addUserForm" :model="userForm" :rules="userFormRules" label-width="100px" prop>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="userForm.username" autocomplete="off"></el-input>
@@ -54,7 +54,7 @@
           <el-input v-model="userForm.password" type="password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input v-model="userForm.confirmPassword" type="password" autocomplete="off"></el-input>
+          <el-input v-model="userForm.confirmPassword" type="password" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="userForm.realName" autocomplete="off"></el-input>
@@ -71,11 +71,11 @@
           <el-input v-model="userForm.email" type="email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="userForm.mobile" type="number" autocomplete="off"></el-input>
+          <el-input v-model="userForm.mobile"  autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色配置" class="role-list">
-          <el-select v-model="userForm.roleIdList" placeholder="角色配置" multiple>
-            <el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"></el-option>
+          <el-select v-model="userForm.roleIdList" placeholder="角色配置" multiple >
+            <el-option v-for="role in roleList" :key="role.id" :label="role.label" :value="role.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="超级管理员">
@@ -94,7 +94,7 @@
     </el-dialog>
 
     <!-- 点击修改后出现的编辑模块 -->
-    <el-dialog title="修改" :visible.sync="updateVisible" class="dialog">
+    <el-dialog title="修改" :visible.sync="updateVisible" class="dialog" :close-on-click-modal="false">
       <el-form
         ref="updateUserForm"
         :model="updateUserForm"
@@ -105,10 +105,10 @@
           <el-input v-model="updateUserForm.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="updateUserForm.password" autocomplete="off"></el-input>
+          <el-input v-model="updateUserForm.password" type="password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input v-model="updateUserForm.confirmPassword" autocomplete="off"></el-input>
+          <el-input v-model="updateUserForm.confirmPassword" type="password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="updateUserForm.realName" autocomplete="off"></el-input>
@@ -167,8 +167,14 @@ export default {
       }
       callback();
     };
-    var validateConfirePassword = (rule, value, callback) => {
+    var validateConfirmPassword = (rule, value, callback) => {
       if (this.userForm.password != value) {
+        return callback(new Error("两次密码输入不一致"));
+      }
+      callback();
+    };
+    var validateUpdatePassword = (rule, value, callback) => {
+      if (this.updateUserForm.password != value) {
         return callback(new Error("两次密码输入不一致"));
       }
       callback();
@@ -222,7 +228,7 @@ export default {
         ],
         confirmPassword: [
           { required: true, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateConfirePassword, trigger: "blur" }
+          { validator: validateConfirmPassword, trigger: "blur" }
         ],
         realName: [
           { required: true, message: "必填项不能为空", trigger: "blur" }
@@ -233,10 +239,17 @@ export default {
       },
       updateUserFormRules: {
         email: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { required: false, message: "必填项不能为空", trigger: "blur" },
           { validator: validateEmail, trigger: "blur" }
         ],
-        mobile: [{ validator: validateMobile, trigger: "blur" }]
+        mobile: [{ validator: validateMobile, trigger: "blur" }],
+        password: [
+          { required: false, message: "必填项不能为空", trigger: "blur" }
+        ],
+        confirmPassword: [
+          { required: false, message: "必填项不能为空", trigger: "blur" },
+          { validator: validateUpdatePassword, trigger: "blur" }
+        ],
       },
       roleList: [],
       rowIdList: [],
@@ -280,7 +293,14 @@ export default {
         if (res.data.code != 200) {
           return this.$message.error(res.data.error);
         }
-        this.roleList = res.data;
+        let data = res.data.data;
+        data.forEach(item => {
+          let role = {
+            value: item.id,
+            label:item.name
+          }
+          this.roleList.push(role)
+        })
       });
     },
     //新增用户确定按钮

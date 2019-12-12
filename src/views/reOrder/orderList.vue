@@ -72,9 +72,9 @@
             </el-table-column>
              <el-table-column prop="productType" label="票型" align="center">
                <template slot-scope="scope">
-                <el-tag v-if="scope.row.productType==1" >单选票</el-tag>
-                <el-tag v-if="scope.row.productType==2" type="warning">多选票</el-tag>
-                <el-tag v-if="scope.row.productType==3" type="success">通玩票</el-tag>
+                <el-tag v-if="scope.row.productType==1" size="mini">单选票</el-tag>
+                <el-tag v-if="scope.row.productType==2" type="warning" size="mini">多选票</el-tag>
+                <el-tag v-if="scope.row.productType==3" type="success" size="mini">通玩票</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center" width="300">
@@ -210,8 +210,7 @@ export default {
           return this.$message.error(res.data.error);
         }
         this.dialogVisible = true;
-        this.dbData = res.data.data
-        console.log(this.dbList )
+        this.dbData = res.data.data;
       })
     }
   }

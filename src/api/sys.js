@@ -6,7 +6,7 @@ import request from '@/utils/request'
 //获取菜单列表(参数id)
 export function getMenuListById(id) {
         return request({
-            url: `/menu/list/?type=${id}`,
+            url: `/menu/list?type=${id}`,
             method:'get'
         })
 }

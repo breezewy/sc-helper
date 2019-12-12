@@ -27,9 +27,9 @@
             <el-table-column type="index" width="50" align="center"></el-table-column>
             <el-table-column prop="type" label="票型" align="center">
               <template slot-scope="scope">
-                <el-tag v-if="scope.row.type==1" >单选票</el-tag>
-                <el-tag v-if="scope.row.type==2" type="warning">多选票</el-tag>
-                <el-tag v-if="scope.row.type==3" type="success">通玩票</el-tag>
+                <el-tag v-if="scope.row.type==1" size="mini">单选票</el-tag>
+                <el-tag v-if="scope.row.type==2" type="warning" size="mini">多选票</el-tag>
+                <el-tag v-if="scope.row.type==3" type="success" size="mini">通玩票</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
