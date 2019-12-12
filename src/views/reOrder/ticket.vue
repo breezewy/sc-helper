@@ -29,14 +29,14 @@
           <el-table-column prop="city" label="城市" align="center"></el-table-column>
           <el-table-column prop="buyToday" label="当天是否可预约" align="center" width="150">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.buyToday== true" type="success">是</el-tag>
-              <el-tag v-if="scope.row.buyToday== false" type="danger">否</el-tag>
+              <el-tag v-if="scope.row.buyToday== true" type="success" size="mini">是</el-tag>
+              <el-tag v-if="scope.row.buyToday== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="containShow" label="是否包含演出票" align="center">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.containShow== true" type="success">是</el-tag>
-              <el-tag v-if="scope.row.containShow== false" type="danger">否</el-tag>
+              <el-tag v-if="scope.row.containShow== true" type="success" size="mini">是</el-tag>
+              <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="useStartDate" label="使用开始时间" align="center"></el-table-column>

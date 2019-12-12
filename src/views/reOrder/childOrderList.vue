@@ -49,8 +49,8 @@
           <el-table-column prop="showTime" label="演出场次" align="center"></el-table-column>
           <el-table-column prop="orderStatus" label="订单状态" align="center" width="100">
               <template slot-scope="scope">
-                <el-tag v-if="scope.row.orderStatus==3" type="info">已退单</el-tag>
-                <el-tag v-else type="success">已预约</el-tag>
+                <el-tag v-if="scope.row.orderStatus==3" type="info" size="mini">已退单</el-tag>
+                <el-tag v-else type="success" size="mini">已预约</el-tag>
               </template>
           </el-table-column>
           <el-table-column prop="dmqOrderId" label="独木桥订单号" align="center"></el-table-column>

@@ -29,8 +29,8 @@
           <el-table-column prop="type" label="登录身份" align="center"></el-table-column>
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status== 1" type="success">正常</el-tag>
-              <el-tag v-if="scope.row.status== 0" type="danger">停用</el-tag>
+              <el-tag v-if="scope.row.status== 1" type="success" size="mini">正常</el-tag>
+              <el-tag v-if="scope.row.status== 0" type="danger" size="mini">停用</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
