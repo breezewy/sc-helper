@@ -1,6 +1,6 @@
 <template>
   <div id="childListContainer">
-    <div class="toolbar">
+    <!-- <div class="toolbar">
       <el-input
         placeholder="请输入票型编码"
         v-model="paramData.code"
@@ -30,7 +30,48 @@
         value-format="yyyy-MM-dd"
       ></el-date-picker>
       <el-button @click="search">查询</el-button>
-    </div>
+    </div> -->
+    <el-row :gutter="20">
+        <el-col :span="4">
+          <el-input
+            placeholder="请输入票型编码"
+            v-model="paramData.code"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input
+            placeholder="请输入独木桥ID"
+            v-model="paramData.dmqOrderId"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input
+            placeholder="请输入票型名称"
+            v-model="paramData.name"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-date-picker
+            v-model="paramData.playTime"
+            type="date"
+            placeholder="请选择游玩日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+          ></el-date-picker>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="search">查询</el-button>
+        </el-col>
+    </el-row>
     <div class="tableContainer">
       <template>
         <el-table

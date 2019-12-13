@@ -1,7 +1,7 @@
 <template>
   <div id="listContainer">
     <div class="list" v-if="hideChildOrder">
-      <div class="toolbar">
+      <!-- <div class="toolbar">
         <el-input
           placeholder="请输入订单id"
           v-model="paramData.id"
@@ -38,7 +38,57 @@
           clearable
         ></el-input>
         <el-button @click="search">查询</el-button>
-      </div>
+      </div> -->
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-input
+            placeholder="请输入订单id"
+            v-model="paramData.id"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input
+            placeholder="请输入证件号"
+            v-model="paramData.idCard"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input
+          placeholder="请输入电话"
+          v-model="paramData.mobile"
+          class="inputArea"
+          suffix-icon="el-icon-edit"
+          clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input
+          placeholder="请输入姓名"
+          v-model="paramData.name"
+          class="inputArea"
+          suffix-icon="el-icon-edit"
+          clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input
+          placeholder="请输入订单号"
+          v-model="paramData.orderNo"
+          class="inputArea"
+          suffix-icon="el-icon-edit"
+          clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="search">查询</el-button>
+        </el-col>
+      </el-row>
       <div class="tableContainer">
         <template>
           <el-table
