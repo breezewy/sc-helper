@@ -101,17 +101,26 @@
             @row-dblclick="handleDBclick"
           >
             <el-table-column type="index" width="50" align="center"></el-table-column>
+            <el-table-column prop="dmqOrderId" label="宋城旅游订单号" align="center" width="200"></el-table-column>
+            <el-table-column prop="productType" label="票型类型" align="center">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.productType==1" size="mini">单选票</el-tag>
+                <el-tag v-if="scope.row.productType==2" type="warning" size="mini">多选票</el-tag>
+                <el-tag v-if="scope.row.productType==3" type="success" size="mini">通玩票</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="productCode" label="票型编码" align="center" width="200"></el-table-column>
+            <el-table-column prop="productName" label="票型名称" align="center" width="200"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
-            <el-table-column prop="mobile" label="手机号" align="center" width="200"></el-table-column>
-            <el-table-column prop="orderCount" label="订单数量" align="center" width="100"></el-table-column>
-            <el-table-column prop="orderStatus" label="订单状态" align="center" width="100">
+            <el-table-column prop="mobile" label="手机号" align="center" width="120"></el-table-column>
+            <el-table-column prop="orderCount" label="订单数量" align="center" width="80"></el-table-column>
+            <el-table-column prop="orderStatus" label="订单状态" align="center" >
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.orderStatus==3" type="info">已退单</el-tag>
                 <el-tag v-else type="success">已预约</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="idCard" label="证件号" align="center"></el-table-column>
-            <el-table-column prop="dmqOrderId" label="独木桥订单号" align="center"></el-table-column>
+            <el-table-column prop="idCard" label="证件号" align="center" width="180"></el-table-column>
             <el-table-column prop="certificateType" label="证件类型" align="center">
               <template slot-scope="scope">
                 <span v-if="scope.row.certificateType == 0">身份证</span>
@@ -120,16 +129,10 @@
                 <span v-if="scope.row.certificateType == 3">台湾通行证</span>
               </template>
             </el-table-column>
-             <el-table-column prop="productType" label="票型" align="center">
-               <template slot-scope="scope">
-                <el-tag v-if="scope.row.productType==1" size="mini">单选票</el-tag>
-                <el-tag v-if="scope.row.productType==2" type="warning" size="mini">多选票</el-tag>
-                <el-tag v-if="scope.row.productType==3" type="success" size="mini">通玩票</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" width="300">
+
+            <el-table-column label="操作" align="center" fixed="right" width="120">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="getReChildOrder(scope.row)">关联</el-button>
+                <el-button type="text" size="small" @click="getReChildOrder(scope.row.id)">显示预约单</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -250,9 +253,15 @@ export default {
       this.paramData.page.pageNum = this.currentPage - 1;
       this.getOrderList(this.paramData);
     },
-    getReChildOrder(data) {
-      this.hideChildOrder = false;
-      this.reOrderId = data.id;
+    getReChildOrder(id) {
+      // this.hideChildOrder = false;
+      this.reOrderId = id;
+      this.$router.push({
+        name:'reOrder/childOrderList',
+        params:{
+          id:this.reOrderId
+        }
+      })
     },
     handleDBclick(row, column, event){
       getTicket(row.id).then(res=>{

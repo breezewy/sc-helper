@@ -1,16 +1,51 @@
 <template>
     <div class="seat">
         <div class="toolbar">
-            <el-cascader
-                :options="options"
-                :props="{ checkStrictly: true }"
-                clearable
-                class="seat-input"
-                >
-            </el-cascader>
-            <el-button @click="search">查询</el-button>
-            <el-button type="primary" @click="appendSeat">新增</el-button>
-            <el-button type="danger" @click="deleteAllSeat">删除</el-button>
+            <el-form>
+                <el-row>
+                <el-col :span="5">
+                  <el-form-item label-width="80px" label="景区名称:" class="toolbar-item">
+                    <el-select v-model="form.parkId" placeholder="请选择" @change="getParkName" style="width: 90%">
+                        <el-option
+                        v-for="item in parkList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label-width="80px" label="剧院名称:" class="toolbar-item">
+                    <el-select v-model="form.theaterId" placeholder="请选择" style="width: 90%">
+                        <el-option
+                        v-for="item in theaterList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label-width="100px" label="席位编码:" class="toolbar-item">
+                    <el-input v-model="form.code" placeholder="请输入席位编码"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label-width="100px" label="席位名称:" class="toolbar-item">
+                    <el-input v-model="form.name" placeholder="请输入席位名称"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-button @click="search">查询</el-button>
+                    <el-button type="primary" @click="appendSeat">新增</el-button>
+                    <el-button type="danger" @click="deleteAllSeat">删除</el-button>
+                </el-col>
+                </el-row>
+            </el-form>
+
+            
         </div>
          <div class="seatList-table">
             <template>
@@ -36,11 +71,23 @@
                             <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
-                </el-table>
+                    </el-table>
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="[10, 20, 30, 50, 100]"
+                        :page-size="10"
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="total"
+                    ></el-pagination>
         </template>
         </div>
         <append-seat 
+            v-if="showAppendForm"
             :show="showAppendForm" 
+            :parkList="parkList"
             @changeAppendShow="changeAppendShow"
             @handleAppendSuccess="refresh"
             >
@@ -56,7 +103,9 @@
 </template>
 
 <script>
-import {getSeatList,getSeatById, deleteSeat} from '@/api/seat'
+import {getSeatList,getSeatById, deleteSeat,searchSeat} from '@/api/seat'
+import { getParkList} from'@/api/query'
+import {getTheaterByParkId} from '@/api/theater'
 import AppendSeat from './components/appendSeat'
 import UpdateSeat from './components/updateSeat'
 export default {
@@ -69,27 +118,108 @@ export default {
         return {
             options:[],
             seatList:[],
+            theaterList:[],
+            parkList:[],
             seatInfo:{},
             rowIdList:[],
             showAppendForm:false,
-            showUpdateForm:false
+            showUpdateForm:false,
+            form:{
+                code:"",
+                name:"",
+                page:{
+                    pageNum:0,
+                    pageSize:10
+                },
+                parkId:"",
+                theaterId:""
+            },
+            total: 0,
+            currentPage: 1,
         }
     },
     mounted(){
         this.getSeatList()
+        this.getParkList()
     },
     methods:{
+        //选择列表不同页面
+        handleSizeChange(val) {
+            this.form.page.pageSize = val;
+            this.getSeatList(this.form);
+        },
+        //选择列表每页多少条数据
+        handleCurrentChange(val) {
+            this.currentPage = val;
+            this.form.page.pageNum = this.currentPage - 1;
+            this.getSeatList(this.form);
+        },
         //搜索
         search(){
+            if(this.form.parkId === ''){
+                return this.$message.error('请选择景区')
+            }
+            if(this.form.theaterId === ''){
+                return this.$message.error('请选择剧院')
+            }
 
+            searchSeat(this.form).then(res=>{
+                if(res.data.code !== 200){
+                    return this.$message.error(res.data.error);
+                }
+                this.seatList = res.data.data.data
+            })
         },
-        //获取席位列表
-        getSeatList(){
-            getSeatList().then(res=>{
+        getParkName(value){
+            this.parkList.forEach(item=>{
+                if(value == item.value){
+                    this.getTheaterListByParkId(value)
+                }
+            })
+        },
+        //获取景区列表
+        getParkList(){
+            getParkList().then(res=>{
+                if(res.data.code !== 200){
+                    return this.$message.error(res.data.error);
+                }
+                let data = res.data.data
+                data.forEach( item => {
+                    this.parkList.push({
+                        value:item.id,
+                        label:item.name
+                    })
+                })
+            })
+        },
+        //获取剧院
+        getTheaterListByParkId(id){
+            getTheaterByParkId(id).then(res=>{
                 if(res.data.code !== 200){
                         return this.$message.error(res.data.error);
                 }
-                this.seatList = res.data.data
+                let data = res.data.data
+                data.forEach( item => {
+                    this.theaterList.push({
+                        value:item.id,
+                        label:item.name
+                    })
+                })
+            })
+        },
+        //获取席位列表
+        getSeatList(){
+            for(let key in this.form){
+                if(this.form[key] === ''){
+                    delete this.form[key]
+                }
+            }
+            searchSeat(this.form).then(res=>{
+                if(res.data.code !== 200){
+                    return this.$message.error(res.data.error);
+                }
+                this.seatList = res.data.data.data
+                this.total = res.data.data.totalCount
             })
         },
         //点击全选
@@ -127,11 +257,20 @@ export default {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-            }).then((id) => {
+            }).then(() => {
                 this.deleteSeat([id])
             }).catch(() => {
                 return          
             }); 
+        },
+        deleteSeat(data){
+            deleteSeat(data).then(res=>{
+                if(res.data.code !== 200){
+                        return this.$message.error(res.data.error);
+                }
+                this.$message.success('删除成功');
+                this.refresh();
+            })
         },
         //关闭新增框
         changeAppendShow(){
@@ -164,12 +303,15 @@ export default {
 <style lang="scss" scoped>
 .seat{
     padding:30px;
-    .seat-input{
-        width:300px;
-        margin-right:20px;
+    .el-button{
+        margin-left:15px;
     }
     .seatList-table{
         margin-top:30px;
+        .el-pagination {
+            padding: 20px 50px;
+            text-align: right;
+        }
     }
 }
    

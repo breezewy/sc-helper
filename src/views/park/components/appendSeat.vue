@@ -20,11 +20,27 @@
                 <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="theaterCode">
                     <el-input v-model="form.theaterCode" autocomplete="off"></el-input>
                 </el-form-item>
-                 <el-form-item label="剧院ID" :label-width="formLabelWidth" prop="theaterCode">
-                    <el-input v-model="form.theaterId" autocomplete="off"></el-input>
+                <el-form-item label="景区名称" :label-width="formLabelWidth" prop="parkId" >
+                    <el-select v-model="form.parkId" placeholder="请选择"  @change="getParkName">
+                        <el-option
+                        v-for="item in parkList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        >
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                 <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="theaterName">
-                    <el-input v-model="form.theaterName" autocomplete="off"></el-input>
+                <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="theaterName">
+                    <el-select v-model="form.theaterId" placeholder="请选择"  @change="getTheaterName">
+                        <el-option
+                        v-for="item in theaterList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        >
+                        </el-option>
+                    </el-select>
                 </el-form-item>
               
             </el-form>
@@ -39,21 +55,28 @@
 
 <script>
 import {appendSeat} from '@/api/seat' 
+import { getParkList} from'@/api/query'
+import {getTheaterByParkId} from '@/api/theater'
+
 export default {
     name:'AppendSeat',
     props:{
-        show:Boolean
+        show:Boolean,
+        parkList:Array
     },
     data(){
         return {
             formLabelWidth:"100px",
+            theaterList:[],
             form:{
                 code:"",
                 name:"",
                 id:"",
                 theaterCode:"",
                 theaterId:"",
-                theaterName:""
+                theaterName:"",
+                parkName:"",
+                parkId:""
             },
             formRules: {
                 code: [
@@ -61,6 +84,9 @@ export default {
                 ],
                 name: [
                 { required: true, message: "必填项不能为空", trigger: "blur" },
+                ],
+                parkId:[
+                {required: true, message: "必填项不能为空", trigger: "blur"}
                 ],
                 theaterCode: [
                 { required: true, message: "必填项不能为空", trigger: "blur" },
@@ -72,25 +98,40 @@ export default {
                 { required: true, message: "必填项不能为空", trigger: "blur" },
                 ]
             },
-            dialogFormVisible:false
-        }
-    },
-    created(){
-        this.dialogFormVisible = this.show
-    },
-    watch:{
-        show(newVal,oldVal){
-            this.dialogFormVisible = newVal
-            this. form = {
-                code:"",
-                name:"",
-                theaterCode:"",
-                theaterId:"",
-                theaterName:""
-            }
+            dialogFormVisible:this.show
         }
     },
     methods:{
+        //获取剧院
+        getTheaterListByParkId(id){
+            getTheaterByParkId(id).then(res=>{
+                if(res.data.code !== 200){
+                        return this.$message.error(res.data.error);
+                }
+                let data = res.data.data
+                data.forEach( item => {
+                    this.theaterList.push({
+                        value:item.id,
+                        label:item.name
+                    })
+                })
+            })
+        },
+        getTheaterName(value){
+            this.theaterList.forEach(item=>{
+                if(value == item.value){
+                    this.form.theaterName = item.label
+                }
+            })
+        },
+        getParkName(value){
+            this.parkList.forEach(item=>{
+                if(value == item.value){
+                    this.form.parkName = item.label
+                    this.getTheaterListByParkId(value)
+                }
+            })
+        },
         closeDialog(){
             this.$emit('changeAppendShow')
         },

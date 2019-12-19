@@ -22,6 +22,7 @@ export const formatRoutes = (aMenu) => {
     aMenu.forEach(oMenu => {
         let data = {
             path: oMenu.url,
+            name: oMenu.url,
             component(resolve) {
                 let componentPath = '';
                 if (oMenu.pid == 0) {

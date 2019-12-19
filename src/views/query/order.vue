@@ -1,6 +1,40 @@
 <template>
   <div id="orderContainer">
-    <div class="filter">
+    <el-form>
+      <el-row>
+        <el-col :span="5">
+            <el-form-item label-width="80px" label="所属片区:" class="toolbar-item">
+                    <el-select v-model="value" placeholder="请选择"  style="width: 90%">
+                        <el-option
+                        v-for="item in parkList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+            </el-form-item>
+        </el-col>
+        <el-col :span="5">
+            <el-form-item label-width="80px" label="订单号:" class="toolbar-item">
+                <el-input placeholder="请输入订单号" v-model="dataForm.orderId" clearable></el-input>   
+            </el-form-item>
+        </el-col>
+        <el-col :span="5">
+            <el-form-item label-width="80px" label="手机号:" class="toolbar-item">
+                <el-input placeholder="请输入手机号" v-model="dataForm.mobile" clearable></el-input>
+            </el-form-item>
+        </el-col>
+        <el-col :span="5">
+            <el-form-item label-width="80px" label="证件号:" class="toolbar-item">
+                <el-input placeholder="请输入证件号" v-model="dataForm.idCard" clearable></el-input>
+            </el-form-item>
+        </el-col>
+        <el-col :span="4">
+            <el-button type="primary" @click="handleSearch">查询</el-button>
+        </el-col>
+      </el-row>
+    </el-form>
+    <!-- <div class="filter">
       <div class="park">
         <span class="title">所属片区：</span>
         <el-select
@@ -31,7 +65,7 @@
       </div>
 
       <el-button type="primary" @click="handleClick">查询</el-button>
-    </div>
+    </div> -->
 
     <div class="orderTable">
       <el-table
@@ -39,9 +73,17 @@
         style="width: 100%"
         border
         empty-text="暂无数据"
-        height="400"
+        height="500"
+        highlight-current-row
         @row-click="handleRowClick"
+        @current-change="handleCurrentChange"
       >
+        <el-table-column
+          type="index"
+          width="50"
+          align="center"
+        >
+        </el-table-column>
         <el-table-column prop="billoutno" label="订单号" align="center" width="200"></el-table-column>
         <el-table-column prop="createTime" label="订单日期" align="center" width="200"></el-table-column>
         <el-table-column prop="billstatus" label="订单状态" align="center" width="120">
@@ -125,7 +167,8 @@ export default {
         parkId: ""
       },
       orderList: [],
-      orderDetail: []
+      orderDetail: [],
+      currentRow:null
     };
   },
   created() {
@@ -150,7 +193,12 @@ export default {
         }
       }
     },
-    handleClick() {
+    handleSearch() {
+      for(let key in this.dataForm){
+          if(this.dataForm[key] === ''){
+              delete this.dataForm[key]
+          }
+      }
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code != 200) {
           return this.$message.error(res.data.error)
@@ -165,6 +213,9 @@ export default {
         }
         this.orderDetail = res.data.data;
       });
+    },
+    handleCurrentChange(val){
+      this.currentRow = val;
     }
   }
 };
@@ -174,30 +225,33 @@ export default {
 <style scoped lang='scss'>
 #orderContainer {
   padding: 30px;
-  .filter {
-    display: flex;
-    flex-wrap: wrap;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #dcdfe6;
-    .park {
-      margin-right: 50px;
-      .title {
-        line-height: 40px;
-      }
-    }
-    .orderInput,
-    .phoneInput,
-    .idCardInput {
-      margin-right: 50px;
-      display: flex;
-      .el-input {
-        width: 200px;
-      }
-      .title {
-        line-height: 40px;
-      }
-    }
+  .el-button{
+    margin-left:20px;
   }
+  // .filter {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   padding-bottom: 30px;
+  //   border-bottom: 1px solid #dcdfe6;
+  //   .park {
+  //     margin-right: 50px;
+  //     .title {
+  //       line-height: 40px;
+  //     }
+  //   }
+  //   .orderInput,
+  //   .phoneInput,
+  //   .idCardInput {
+  //     margin-right: 50px;
+  //     display: flex;
+  //     .el-input {
+  //       width: 200px;
+  //     }
+  //     .title {
+  //       line-height: 40px;
+  //     }
+  //   }
+  // }
   .orderTable {
     margin-top: 30px;
   }

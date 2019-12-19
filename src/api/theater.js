@@ -34,11 +34,30 @@ export function getTheaterById(id) {
     })
 }
 
+
+//根据景区ID获取剧院信息
+export function getTheaterByParkId(id) {
+    return request({
+        url: `/theater/listAllByParkId/${id}`,
+        method:'get'
+    })
+}
+
+
 //删除剧院
 export function deleteTheater(data) {
     return request({
         url: '/theater',
         method: 'delete',
+        data
+    })
+}
+
+//查询剧院
+export function searchTheater(data) {
+    return request({
+        url: '/theater/listAll',
+        method: 'post',
         data
     })
 }

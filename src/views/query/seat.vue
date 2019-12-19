@@ -4,71 +4,59 @@
             <div class="park">
                 <span class="title">所属片区：</span>
                 <el-select
-                    v-model="value"
+                    v-model="dataForm.id"
                     placeholder="所属片区"
                     clearable
                     class="filter-item"
                     style="width: 220px"
-                    @change="getParkItem"
                 >
-                <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
+                <el-option 
+                    v-for="item in parkList" 
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
                 </el-select>
             </div>
             <div class="orderInput">
                 <span class="title">订单号：</span>
-                <el-input placeholder="请输入订单号" v-model="dataForm.orderId" clearable></el-input>
+                <el-input placeholder="请输入订单号" v-model="dataForm.billNo" clearable ></el-input>
             </div>
-            <el-button type="primary" @click="handleClick">查询</el-button>
+            <div class="orderInput">
+                <span class="title">游玩日期：</span>
+                <el-date-picker
+                    v-model="dataForm.performDate"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                >
+                </el-date-picker>
+            </div>
+            <el-button type="primary" @click="searchSeat">查询</el-button>
         </div>
 
-        <div class="seatDetail">
+        <div class="seatDetail"  v-if = "showSeatDetail">
             <el-card class="box-card">
-                <h2 class="title">游客座位(10000000000)</h2>
+                <h2 class="title">游客座位</h2>
                 <div class="seatInfo">
                    <div class="seatInfo-top">
                        <ul>
                            <li class="seatInfo-item">
-                               <span class="seatInfo-item-content">联系人：陆豪</span>
-                               <span class="seatInfo-item-content">联系电话：13000000000</span>
+                               <span class="seatInfo-item-content">联系人：{{seatDetail.name}}</span>
+                               <span class="seatInfo-item-content">联系电话：{{seatDetail.telNo}}</span>
                            </li>
                            <li class="seatInfo-item">
-                               <span class="seatInfo-item-content">演出日期：2019-12-04</span>
-                               <span class="seatInfo-item-content">演出场次：15:00</span>
+                               <span class="seatInfo-item-content">演出日期：{{seatDetail.performDate |formatDate}}</span>
+                               <span class="seatInfo-item-content">演出场次：{{seatDetail.performTime}}</span>
                            </li>
                        </ul>
                    </div>
                    <div class="seatInfo-bottom">
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
-                        </div>
-                        <div class="seatInfo-bottom-content">
-                           <p>贵宾席</p>
-                           <p>一区入口8排13座</p>
+                        <div class="seatInfo-bottom-content" v-for="(item,index) in this.seatDetail.detail" :key="index">
+                           <p>{{item.areaName.split(' ')[0]}}</p>
+                           <p>{{item.areaName.split(' ')[1]}}</p>
+                           <p>{{item.row}}排{{item.col}}座</p>
                         </div>
                    </div>
                 </div>
@@ -78,21 +66,37 @@
 </template>
 
 <script>
-import { getParkList } from "../../api/query";
+import { getParkList,getOfflineOrderSeat } from "../../api/query";
 export default {
     data(){
         return {
             value:'',
             parkList:[],
             dataForm:{
-               parkId:"",
-               orderId:"" 
+               id:"",  //景区ID
+               billNo:"" ,  //订单号
+               performDate:""   //游玩日期
             },
-            
+            seatDetail:{},
+            showSeatDetail:false
         }
     },
     created(){
         this.init();
+    },
+    filter:{
+        formatDate(value){
+            let arr = [];
+            return arr = value.split(',')[0]
+        },
+        formatAreaName1(value){
+            let arr = [];
+            return arr = value.split(' ')[0]
+        },
+        formatAreaName2(value){
+            let arr = [];
+            return arr = value.split(' ')[1]
+        }
     },
     methods:{
         init() {
@@ -100,21 +104,29 @@ export default {
                 if (res.data.code != 200) {
                     return this.$message.error(res.data.msg)
                 }
-                this.parkList = res.data.data;
-                this.value = this.parkList[0].name;
-                this.dataForm.parkId = this.parkList[0].id;
+                let data = res.data.data
+                data.forEach( item => {
+                    this.parkList.push({
+                        value:item.id,
+                        label:item.name
+                    })
+                })
             })
         },
-        getParkItem(value) {
-            for (let i = 0; i < this.parkList.length; i++) {
-                if (value === this.parkList[i].name) {
-                    this.value = this.parkList[i].name;
-                    this.dataForm.parkId = this.parkList[i].id;
-                }
+        searchSeat(){
+            if(this.dataForm.id === ''){
+                return this.$message.error('请选项所属片区')
             }
-        },
-        handleClick(){
-
+            if(this.dataForm.billNo === ''){
+                return this.$message.error('请输入订单号')
+            }
+            getOfflineOrderSeat(this.dataForm).then(res=>{
+                if (res.data.code != 200) {
+                    return this.$message.error(res.data.error)
+                }
+                this.showSeatDetail = true;
+                this.seatDetail = res.data.data;
+            })
         }
     }
 }
@@ -143,7 +155,7 @@ export default {
       margin-right: 50px;
       display: flex;
       .el-input {
-        width: 200px;
+        width: 240px;
       }
       .title {
         line-height: 40px;
@@ -176,6 +188,7 @@ export default {
                 flex-flow:row wrap;
                 align-content: flex-start;
                 margin-top:20px;
+                font-size: 15px;
                 // justify-content: space-between;
             .seatInfo-bottom-content{
                 box-sizing: border-box;

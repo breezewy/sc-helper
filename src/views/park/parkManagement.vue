@@ -139,7 +139,7 @@ export default {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-            }).then((id) => {
+            }).then(() => {
                 this.deletePark([id])
             }).catch(() => {
                 return          
@@ -159,16 +159,13 @@ export default {
             this.getParkList();
         },
         //删除景区
-        deletePark(idList){
-            deletePark(idList).then(res=>{
+        deletePark(data){
+            deletePark(data).then(res=>{
                 if (res.data.code != 200) {
                     return this.$message.error(res.data.error);
                 }
-                this.getParkList();
-                this.$message({
-                    message: "操作成功",
-                    type: "success"
-                });
+                this.$message.success('删除成功');
+                this.refresh();
             })
         }
     }

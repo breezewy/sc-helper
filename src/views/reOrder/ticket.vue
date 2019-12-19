@@ -41,7 +41,7 @@
           </el-table-column>
           <el-table-column prop="useStartDate" label="使用开始时间" align="center"></el-table-column>
           <el-table-column prop="useEndDate" label="使用结束时间" align="center"></el-table-column>
-          <el-table-column label="操作" align="center" width="300">
+          <el-table-column label="操作" align="center" width="300" fix="right">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
               <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>

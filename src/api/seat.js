@@ -43,3 +43,12 @@ export function deleteSeat(data) {
         data
     })
 }
+
+//查询席位
+export function searchSeat(data) {
+    return request({
+        url: '/seat/listAll',
+        method: 'post',
+        data
+    })
+}

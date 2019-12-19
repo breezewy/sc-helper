@@ -34,11 +34,11 @@
             </el-table-column>
             <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
             <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
-            <el-table-column label="操作" align="center" width="300">
+            <el-table-column label="操作" align="center" width="300" fix="right">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
                 <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
-                <el-button type="text" size="small" @click="handleController(scope.row.id)">关联</el-button>
+                <el-button type="text" size="small" @click="handleController(scope.row.id)">关联预约票</el-button>
               </template>
             </el-table-column>
           </el-table>

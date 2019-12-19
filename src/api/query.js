@@ -43,6 +43,15 @@ export function getOfflineOrderDetail(id, orderId) {
     })
 }
 
+//座位查询
+export function getOfflineOrderSeat(data) {
+    return request({
+        url: '/offline/getByOrderSeat',
+        method: 'post',
+        data
+    })
+}
+
 
 
 

@@ -149,7 +149,7 @@ export const constantRoutes = [
         path: 'childOrderList',
         component: () => import('@/views/reOrder/childOrderList'),
         name: 'childOrderList',
-        meta: { title: '子订单列表' }
+        meta: { title: '预约列表' }
       }
     ]
   },

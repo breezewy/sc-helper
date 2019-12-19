@@ -1,10 +1,41 @@
 <template>
     <div class="theater">
-        <div class="toolbar">
+        <el-form>
+            <el-row>
+                <el-col :span="6">
+                    <el-form-item label-width="80px" label="景区名称:" class="toolbar-item">
+                    <el-select v-model="form.parkId" placeholder="请选择"  style="width: 90%">
+                        <el-option
+                        v-for="item in parkList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label-width="100px" label="剧院编码:" class="toolbar-item">
+                    <el-input v-model="form.code" placeholder="请输入剧院编码"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label-width="100px" label="剧院名称:" class="toolbar-item">
+                    <el-input v-model="form.name" placeholder="请输入剧院名称"></el-input>
+                  </el-form-item>
+                </el-col>
+                 <el-col :span="5">
+                    <el-button @click="search">查询</el-button>
+                    <el-button type="primary" @click="appendTheater">新增</el-button>
+                    <el-button type="danger" @click="deleteAllTheater">删除</el-button>
+                </el-col>
+            </el-row>
+        </el-form>
+        <!-- <div class="toolbar">
             <el-button @click="search">查询</el-button>
             <el-button type="primary" @click="appendTheater">新增</el-button>
             <el-button type="danger" @click="deleteAllTheater">删除</el-button>
-        </div>
+        </div> -->
          <div class="theaterList-table">
             <template>
                 <el-table
@@ -30,10 +61,22 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 30, 50, 100]"
+                    :page-size="10"
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total"
+                ></el-pagination>
             </template>
         </div>
-        <append-theater 
+        <append-theater
+            v-if="showAppendForm"
             :show="showAppendForm"
+            :parkList = "parkList"
             @changeAppendShow="changeAppendShow"
             @handleAppendSuccess="refresh"
         >
@@ -52,16 +95,30 @@
 <script>
 import AppendTheater from './components/appendTheater'
 import UpdateTheater from './components/updateTheater'
-import {getTheaterList,getTheaterById,deleteTheater} from '@/api/theater'
+import {getTheaterList,getTheaterById,deleteTheater,searchTheater} from '@/api/theater'
+import { getParkList} from'@/api/query'
+
 export default {
     name:'theater',
     data(){
         return {
             theaterList:[],
             theaterInfo:{},
+            parkList:[],
             rowIdList:[],
             showAppendForm:false,
-            showUpdateForm:false
+            showUpdateForm:false,
+            form:{
+                code:"",
+                name:"",
+                page:{
+                    pageNum:0,
+                    pageSize:10
+                },
+                parkId:""
+            },
+            total: 0,
+            currentPage: 1,
         }
     },
     components:{
@@ -70,8 +127,35 @@ export default {
     },
     created(){
         this.getTheaterList();
+        this.getParkList();
     },
     methods:{
+        //选择列表不同页面
+        handleSizeChange(val) {
+            this.form.page.pageSize = val;
+            this.getTheaterList(this.form);
+        },
+        //选择列表每页多少条数据
+        handleCurrentChange(val) {
+            this.currentPage = val;
+            this.form.page.pageNum = this.currentPage - 1;
+            this.getTheaterList(this.form);
+        },
+        //获取景区列表
+        getParkList(){
+            getParkList().then(res=>{
+                if(res.data.code !== 200){
+                        return this.$message.error(res.data.error);
+                }
+                let data = res.data.data
+                data.forEach( item => {
+                    this.parkList.push({
+                        value:item.id,
+                        label:item.name
+                    })
+                })
+            })
+        },
         handleSelectionChange(selection){
             this.rowIdList = [];
             for (let i = 0; i < selection.length; i++) {
@@ -92,14 +176,28 @@ export default {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-            }).then((id) => {
+            }).then(( ) => {
                 this.deleteTheater([id])
             }).catch(() => {
                 return          
             }); 
         },
         search(){
-
+            if(this.form.parkId === ''){
+                return this.$message.error('请选择景区')
+            }
+            if(this.form.code === ''){
+                delete this.form.code
+            }
+            if(this.form.name === ''){
+                delete this.form.name
+            }
+            searchTheater(this.form).then(res=>{
+                if(res.data.code !== 200){
+                    return this.$message.error(res.data.error);
+                }
+                this.theaterList = res.data.data.data
+            })
         },
         appendTheater(){
             this.showAppendForm = true
@@ -117,7 +215,7 @@ export default {
                         cancelButtonText: '取消',
                         type: 'warning'
             }).then(() => {
-                this.deleteTheater(this.rowIdList);
+                this.deleteTheater(this.rowIdList)
             }).catch(() => {
                 return          
             }); 
@@ -129,11 +227,26 @@ export default {
             this.showAppendForm = false
         },
         getTheaterList(){
-            getTheaterList().then(res=>{
+            for(let key in this.form){
+                if(this.form[key] === ''){
+                    delete this.form[key]
+                }
+            }
+            searchTheater(this.form).then(res=>{
                 if(res.data.code !== 200){
                         return this.$message.error(res.data.error);
                 }
-                this.theaterList = res.data.data
+                this.theaterList = res.data.data.data
+                this.total = res.data.data.totalCount
+            })
+        },
+        deleteTheater(data){
+            deleteTheater(data).then(res=>{
+                    if(res.data.code !== 200){
+                        return this.$message.error(res.data.error);
+                    }
+                    this.$message.success('删除成功');
+                    this.refresh();
             })
         },
         refresh(){
@@ -146,12 +259,15 @@ export default {
 <style lang="scss" scoped>
 .theater{
     padding:30px;
-    .theater-input{
-        width:300px;
-        margin-right:20px;
+    .el-button{
+        margin-left:15px;
     }
     .theaterList-table{
         margin-top:30px;
+        .el-pagination {
+            padding: 20px 50px;
+            text-align: right;
+        }
     }
 }
  
