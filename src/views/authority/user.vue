@@ -67,12 +67,12 @@
           <el-radio v-model="userForm.gender" :label="1">女</el-radio>
           <el-radio v-model="userForm.gender" :label="2">保密</el-radio>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <!-- <el-form-item label="邮箱" prop="email">
           <el-input v-model="userForm.email" type="email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
           <el-input v-model="userForm.mobile"  autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="角色配置" class="role-list">
           <el-select v-model="userForm.roleIdList" placeholder="角色配置" multiple >
             <el-option v-for="role in roleList" :key="role.id" :label="role.label" :value="role.value"></el-option>
@@ -118,12 +118,12 @@
           <el-radio v-model="updateUserForm.gender" :label="1">女</el-radio>
           <el-radio v-model="updateUserForm.gender" :label="2">保密</el-radio>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <!-- <el-form-item label="邮箱" prop="email">
           <el-input v-model="updateUserForm.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
           <el-input v-model="updateUserForm.mobile" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="角色配置" class="role-list">
           <el-select v-model="updateUserForm.roleIdList" placeholder="角色配置" multiple>
             <el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"></el-option>
@@ -155,18 +155,18 @@ import {
 import { isEmail, isMobile } from "@/utils/validate";
 export default {
   data() {
-    var validateEmail = (rule, value, callback) => {
-      if (!isEmail(value)) {
-        return callback(new Error("邮箱格式错误"));
-      }
-      callback();
-    };
-    var validateMobile = (rule, value, callback) => {
-      if (!isMobile(value)) {
-        return callback(new Error("手机号格式错误"));
-      }
-      callback();
-    };
+    // var validateEmail = (rule, value, callback) => {
+    //   if (!isEmail(value)) {
+    //     return callback(new Error("邮箱格式错误"));
+    //   }
+    //   callback();
+    // };
+    // var validateMobile = (rule, value, callback) => {
+    //   if (!isMobile(value)) {
+    //     return callback(new Error("手机号格式错误"));
+    //   }
+    //   callback();
+    // };
     var validateConfirmPassword = (rule, value, callback) => {
       if (this.userForm.password != value) {
         return callback(new Error("两次密码输入不一致"));
@@ -190,10 +190,10 @@ export default {
       },
       dialogFormVisible: false, //新增或编辑弹框
       userForm: {
-        email: "",
+        // email: "",
         gender: 0,
         headUrl: "",
-        mobile: "",
+        // mobile: "",
         password: "",
         confirmPassword: "",
         realName: "",
@@ -204,9 +204,9 @@ export default {
       },
       updateUserForm: {
         id: "",
-        email: "",
+        // email: "",
         gender: 0,
-        mobile: "",
+        // mobile: "",
         password: "",
         confirmPassword: "",
         realName: "",
@@ -215,14 +215,14 @@ export default {
         username: ""
       },
       userFormRules: {
-        email: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateEmail, trigger: "blur" }
-        ],
-        mobile: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateMobile, trigger: "blur" }
-        ],
+        // email: [
+        //   { required: true, message: "必填项不能为空", trigger: "blur" },
+        //   { validator: validateEmail, trigger: "blur" }
+        // ],
+        // mobile: [
+        //   { required: true, message: "必填项不能为空", trigger: "blur" },
+        //   { validator: validateMobile, trigger: "blur" }
+        // ],
         password: [
           { required: true, message: "必填项不能为空", trigger: "blur" }
         ],
@@ -238,11 +238,11 @@ export default {
         ]
       },
       updateUserFormRules: {
-        email: [
-          { required: false, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateEmail, trigger: "blur" }
-        ],
-        mobile: [{ validator: validateMobile, trigger: "blur" }],
+        // email: [
+        //   { required: false, message: "必填项不能为空", trigger: "blur" },
+        //   { validator: validateEmail, trigger: "blur" }
+        // ],
+        // mobile: [{ validator: validateMobile, trigger: "blur" }],
         password: [
           { required: false, message: "必填项不能为空", trigger: "blur" }
         ],
