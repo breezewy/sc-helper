@@ -263,17 +263,28 @@ export default {
     },
     //单行删除
     handleDeleteSingle(id) {
-      let _this = this;
-      deleteRole([id]).then(res => {
-        if (res.data.code!= 200) {
-          return this.$message.error(res.data.error);
-        }
-        _this.getRoleList();
-        this.$message({
-          message: "操作成功",
-          type: "success"
+       let _this = this;
+       this.$confirm('确定要删除该角色?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteRole([id]).then(res => {
+            if (res.data.code!= 200) {
+              return this.$message.error(res.data.error);
+            }
+            _this.getRoleList();
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-      });
     },
     // 多选删除
     handleDeleteMore() {
@@ -285,16 +296,27 @@ export default {
         });
         return;
       }
-      deleteRole(this.rowIdList).then(res => {
-        if (res.data.code!= 200) {
-          return this.$message.error(res.error);
-        }
-        _this.getRoleList();
-        this.$message({
-          message: "操作成功",
-          type: "success"
+        this.$confirm('确定要删除所选角色?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            deleteRole(this.rowIdList).then(res => {
+              if (res.data.code!= 200) {
+                return this.$message.error(res.error);
+              }
+              _this.getRoleList();
+              this.$message({
+                message: "操作成功",
+                type: "success"
+              });
+            });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-      });
     },
     handleSelectionChange(selection) {
       this.rowIdList = [];

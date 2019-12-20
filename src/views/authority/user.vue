@@ -346,30 +346,52 @@ export default {
         });
         return;
       }
-      deleteUser(this.rowIdList).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
-        }
-        _this.init();
-        this.$message({
-          message: "操作成功",
-          type: "success"
+       this.$confirm('确定要删除所选角色?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            deleteUser(this.rowIdList).then(res => {
+              if (res.data.code != 200) {
+                return this.$message.error(res.data.error);
+              }
+              _this.init();
+              this.$message({
+                message: "操作成功",
+                type: "success"
+              });
+            });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-      });
     },
     //单行删除
     handleDeleteSingle(id) {
       let _this = this;
-      deleteUser([id]).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
-        }
-        _this.init();
-        this.$message({
-          message: "操作成功",
-          type: "success"
+       this.$confirm('确定要删除该角色?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteUser([id]).then(res => {
+            if (res.data.code != 200) {
+              return this.$message.error(res.data.error);
+            }
+            _this.init();
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-      });
     },
     //点击修改按钮
     handleUpdate(id) {
