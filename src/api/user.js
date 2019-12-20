@@ -30,3 +30,11 @@ export function getCaptcha(id) {
       responseType: "arraybuffer"
   })
 }
+
+export function changePwd(data) {
+  return request({
+    url: `/user/updatePwd`,
+    method: 'put',
+    data
+  })
+}

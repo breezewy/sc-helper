@@ -21,18 +21,41 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a> -->
+          <el-dropdown-item divided>
+            <span style="display:block;" @click="changePassword">修改密码</span>
+          </el-dropdown-item>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+
+  <el-dialog title="修改密码" 
+      :visible.sync="showChangePasswordForm" 
+      :close-on-click-modal="false" 
+      @close="resetForm">
+      <el-form :model="form" :rules="formRules" ref="changePassword">
+        <el-form-item label="账号" label-width="80px">
+          <el-input v-model="this.$store.getters.name"  autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="原密码" label-width="80px" prop="oldPwd">
+          <el-input v-model="form.oldPwd" type="password" autocomplete="off" ></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" label-width="80px" prop="newPwd">
+          <el-input v-model="form.newPwd" type="password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" label-width="80px" prop="confirmPwd">
+          <el-input v-model="form.confirmPwd" type="password" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showChangePasswordForm = false">取 消</el-button>
+        <el-button type="primary" @click="handleChange">确 定</el-button>
+      </div>
+  </el-dialog>
+
   </div>
 </template>
 
@@ -40,8 +63,36 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-
+import {changePwd} from '@/api/user'
 export default {
+  data(){
+     var validateConfirmPassword = (rule, value, callback) => {
+      if (this.form.newPwd != value) {
+        return callback(new Error("两次密码输入不一致"));
+      }
+      callback();
+    };
+    return {
+      showChangePasswordForm:false,
+      form:{
+        confirmPwd:"",
+        newPwd:"",
+        oldPwd:""
+      },
+      formRules: {
+        newPwd: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+        ],
+        oldPwd: [
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+        ],
+        confirmPwd:[
+          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { validator: validateConfirmPassword, trigger: "blur" }
+        ]
+      },
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger
@@ -59,6 +110,29 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    changePassword(){
+      this.showChangePasswordForm = true;
+    },
+    resetForm(){
+      this.$refs.changePassword.resetFields()
+    },
+    handleChange(){
+      this.$refs.changePassword.validate(valid=>{
+          if(valid){
+            let _this = this;
+            changePwd(this.form).then(res=>{
+              if(res.data.code != 200){
+                return _this.$message.error(res.data.msg)
+              }
+              _this.showChangePasswordForm = false
+              _this.$message.success('修改密码成功')
+            })
+          }else{
+            console.log("error submit!!");
+            return false;
+          }
+      })
     }
   }
 }

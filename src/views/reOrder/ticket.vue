@@ -229,7 +229,7 @@ export default {
       let _this = this;
       addReTicket(this.ticketForm).then(res => {
         if (res.data.code != 200) {
-          return this.$message.error(res.error);
+          return this.$message.error(res.data.error);
         }
         _this.getTicketList(this.paramForm);
         this.$message.success("添加成功");
