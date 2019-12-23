@@ -127,6 +127,7 @@ export default {
               }
               _this.showChangePasswordForm = false
               _this.$message.success('修改密码成功')
+              _this.logout()
             })
           }else{
             console.log("error submit!!");

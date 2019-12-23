@@ -33,6 +33,10 @@ const actions = {
         loginType: loginType,
         uuid: uuid
       }).then(response => {
+        console.log(response.data.code)
+        if (response.data.code == 500) {
+           return this.$message.error(response.data.error)
+        }
         const { data } = response
         commit('SET_TOKEN', data.data.token)
         setToken(data.data.token)

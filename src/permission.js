@@ -38,7 +38,6 @@ router.beforeEach(async (to, from, next) => {
           })
           next({ ...to, replace: true })
         } catch (error) {
-          alert('d')
           // 移除token 并转到登录页以重新登录
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')

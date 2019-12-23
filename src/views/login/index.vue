@@ -166,9 +166,6 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              // console.log(this)
-              // console.log(this.redirect)
-              // this.$router.push({ path: this.redirect || "/" });
               this.$router.push("/");
               this.loading = false;
             })
