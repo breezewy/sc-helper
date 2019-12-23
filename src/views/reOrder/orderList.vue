@@ -42,7 +42,7 @@
       <el-row :gutter="20">
         <el-col :span="4">
           <el-input
-            placeholder="请输入订单id"
+            placeholder="宋城旅游订单号"
             v-model="paramData.id"
             class="inputArea"
             suffix-icon="el-icon-edit"
@@ -76,7 +76,7 @@
           clearable
           ></el-input>
         </el-col>
-        <el-col :span="4">
+        <!-- <el-col :span="4">
           <el-input
           placeholder="请输入订单号"
           v-model="paramData.orderNo"
@@ -84,7 +84,7 @@
           suffix-icon="el-icon-edit"
           clearable
           ></el-input>
-        </el-col>
+        </el-col> -->
         <el-col :span="4">
           <el-button @click="search">查询</el-button>
         </el-col>

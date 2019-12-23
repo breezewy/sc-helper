@@ -43,7 +43,7 @@
         </el-col>
         <el-col :span="4">
           <el-input
-            placeholder="请输入独木桥ID"
+            placeholder="宋城旅游订单号"
             v-model="paramData.dmqOrderId"
             class="inputArea"
             suffix-icon="el-icon-edit"

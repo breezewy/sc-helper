@@ -34,7 +34,7 @@ router.beforeEach(async (to, from, next) => {
           // get user info
           await store.dispatch('user/getInfo')
           await store.dispatch('GetMenu').then(data => {
-            initMenu(router,data)
+            initMenu(router, data)
           })
           next({ ...to, replace: true })
         } catch (error) {

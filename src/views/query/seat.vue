@@ -20,18 +20,7 @@
             </div>
             <div class="orderInput">
                 <span class="title">订单号：</span>
-                <el-input placeholder="请输入订单号" v-model="dataForm.billNo" clearable ></el-input>
-            </div>
-            <div class="orderInput">
-                <span class="title">游玩日期：</span>
-                <el-date-picker
-                    v-model="dataForm.performDate"
-                    type="date"
-                    placeholder="选择日期"
-                    format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd"
-                >
-                </el-date-picker>
+                <el-input placeholder="请输入宋城旅游订单号" v-model="dataForm.billNo" clearable ></el-input>
             </div>
             <el-button type="primary" @click="searchSeat">查询</el-button>
         </div>
@@ -74,8 +63,7 @@ export default {
             parkList:[],
             dataForm:{
                id:"",  //景区ID
-               billNo:"" ,  //订单号
-               performDate:""   //游玩日期
+               billNo:""   //订单号
             },
             seatDetail:{},
             showSeatDetail:false
