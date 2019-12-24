@@ -14,7 +14,6 @@ export const initMenu = (router, menu) => {
     }
     menus.push(unfound)
     router.options.routes = menus
-    console.log(menus)
     router.addRoutes(menus)
 }
 

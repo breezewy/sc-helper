@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="5">
             <el-form-item label-width="80px" label="所属片区:" class="toolbar-item">
-                    <el-select v-model="value" placeholder="请选择"  style="width: 90%">
+                    <el-select v-model="dataForm.parkId" placeholder="请选择所属片区"  style="width: 90%">
                         <el-option
                         v-for="item in parkList"
                         :key="item.value"
@@ -180,9 +180,16 @@ export default {
         if (res.data.code != 200) {
           return this.$message.error(res.data.error)
         }
-        this.parkList = res.data.data;
-        this.value = this.parkList[0].name;
-        this.dataForm.parkId = this.parkList[0].id;
+        let data = res.data.data;
+        console.log(data)
+        data.forEach(item=>{
+          this.parkList.push({
+            value:item.id,
+            label:item.name
+          })
+        })
+        // this.value = this.parkList[0].name;
+        // this.dataForm.parkId = this.parkList[0].id;
       })
     },
     getParkItem(value) {
