@@ -26,7 +26,11 @@
           <el-table-column prop="realName" label="用户名" align="center"></el-table-column>
           <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
           <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>
-          <el-table-column prop="type" label="登录身份" align="center"></el-table-column>
+          <el-table-column prop="type" label="登录身份" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.type== 0" >系统用户</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.status== 1" type="success" size="mini">正常</el-tag>
@@ -126,7 +130,7 @@
         </el-form-item> -->
         <el-form-item label="角色配置" class="role-list">
           <el-select v-model="updateUserForm.roleIdList" placeholder="角色配置" multiple>
-            <el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"></el-option>
+            <el-option v-for="role in roleList" :key="role.id" :label="role.label" :value="role.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -272,6 +276,21 @@ export default {
         }
         this.userList = res.data.data.data;
       });
+      //初始化角色列表
+      this.roleList = [];
+      getRole().then(res => {
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error);
+        }
+        let data = res.data.data;
+        data.forEach(item => {
+          let role = {
+            value: item.id,
+            label:item.name
+          }
+          this.roleList.push(role)
+        })
+      });
     },
     //点击新增按钮
     addUser() {
@@ -289,19 +308,19 @@ export default {
         superAdmin: 1,
         username: ""
       };
-      getRole().then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
-        }
-        let data = res.data.data;
-        data.forEach(item => {
-          let role = {
-            value: item.id,
-            label:item.name
-          }
-          this.roleList.push(role)
-        })
-      });
+      // getRole().then(res => {
+      //   if (res.data.code != 200) {
+      //     return this.$message.error(res.data.error);
+      //   }
+      //   let data = res.data.data;
+      //   data.forEach(item => {
+      //     let role = {
+      //       value: item.id,
+      //       label:item.name
+      //     }
+      //     this.roleList.push(role)
+      //   })
+      // });
     },
     //新增用户确定按钮
     onSubmit() {

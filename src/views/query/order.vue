@@ -201,10 +201,15 @@ export default {
       }
     },
     handleSearch() {
+      //参数对象属性为空时，删除这个属性
       for(let key in this.dataForm){
           if(this.dataForm[key] === ''){
               delete this.dataForm[key]
           }
+      }
+      //如果整个参数对象为空，就提示，不发起请求
+      if(JSON.stringify(this.dataForm) == "{}"){
+        return this.$message.error('请选择查询条件')
       }
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code != 200) {
