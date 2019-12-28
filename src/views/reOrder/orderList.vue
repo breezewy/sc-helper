@@ -42,8 +42,8 @@
       <el-row :gutter="20">
         <el-col :span="4">
           <el-input
-            placeholder="宋城旅游订单号"
-            v-model="paramData.id"
+            placeholder="请输入宋城旅游订单号"
+            v-model="paramData.orderNo"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
@@ -76,15 +76,7 @@
           clearable
           ></el-input>
         </el-col>
-        <!-- <el-col :span="4">
-          <el-input
-          placeholder="请输入订单号"
-          v-model="paramData.orderNo"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
-          clearable
-          ></el-input>
-        </el-col> -->
+ 
         <el-col :span="4">
           <el-button @click="search">查询</el-button>
         </el-col>
@@ -98,7 +90,6 @@
             tooltip-effect="dark"
             style="width: 100%"
             border
-            @row-dblclick="handleDBclick"
           >
             <el-table-column type="index" width="50" align="center"></el-table-column>
             <el-table-column prop="dmqOrderId" label="宋城旅游订单号" align="center" width="200"></el-table-column>
@@ -110,7 +101,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="productCode" label="票型编码" align="center" width="200"></el-table-column>
-            <el-table-column prop="productName" label="票型名称" align="center" width="200"></el-table-column>
+            <el-table-column prop="productName" label="票型名称" align="center" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
             <el-table-column prop="mobile" label="手机号" align="center" width="120"></el-table-column>
             <el-table-column prop="orderCount" label="订单数量" align="center" width="80"></el-table-column>
@@ -130,8 +121,9 @@
               </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" fixed="right" width="120">
+            <el-table-column label="操作" align="center" fixed="right" width="200">
               <template slot-scope="scope">
+                <el-button type="text" size="small" @click="showOrderDetail(scope.row.id)">订单详情</el-button>
                 <el-button type="text" size="small" @click="getReChildOrder(scope.row.id)">显示预约单</el-button>
               </template>
             </el-table-column>
@@ -165,16 +157,16 @@
         border
       >
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
-        <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
+        <el-table-column prop="name" label="票型名称" align="center" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="code" label="票型编码" align="center" ></el-table-column>
         <el-table-column prop="containShow" label="是否包含演出票" align="center" width="150">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.containShow== true" type="success">是</el-tag>
             <el-tag v-if="scope.row.containShow== false" type="danger">否</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="number" label="已购数量" align="center" v-if="dbData.type == 2"></el-table-column>
-        <el-table-column prop="number" label="剩余数量" align="center" v-else></el-table-column>
+        <el-table-column prop="number" label="已购数量" align="center" v-if="dbData.type == 2"  width="100"></el-table-column>
+        <el-table-column prop="number" label="剩余数量" align="center" v-else  width="100"></el-table-column>
       </el-table>
     </el-dialog>
   </div>
@@ -215,23 +207,27 @@ export default {
   },
   methods: {
     getOrderList(data) {
-      if (data.id == "") {
-        delete data.id;
-      }
-      if (data.idCard == "") {
-        delete data.idCard;
-      }
-      if (data.mobile == "") {
-        delete data.mobile;
-      }
-      if (data.name == "") {
-        delete data.name;
-      }
-      if (data.orderNo == "") {
-        delete data.orderNo;
+      // if (data.id == "") {
+      //   delete data.id;
+      // }
+      // if (data.idCard == "") {
+      //   delete data.idCard;
+      // }
+      // if (data.mobile == "") {
+      //   delete data.mobile;
+      // }
+      // if (data.name == "") {
+      //   delete data.name;
+      // }
+      // if (data.orderNo == "") {
+      //   delete data.orderNo;
+      // }
+      for(let key in data){
+        if(data[key] == ''){
+          delete data[key]
+        }
       }
       getOrderList(data).then(res => {
-
         if (res.data.code!= 200) {
           return this.$message.error(res.data.error);
         }
@@ -263,8 +259,8 @@ export default {
         }
       })
     },
-    handleDBclick(row, column, event){
-      getTicket(row.id).then(res=>{
+    showOrderDetail(id){
+      getTicket(id).then(res=>{
         if (res.data.code != 200) {
           return this.$message.error(res.data.error);
         }

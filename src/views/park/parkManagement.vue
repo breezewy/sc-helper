@@ -84,6 +84,9 @@ export default {
         },
         //点击搜索执行
         search(){
+            if(this.parkId == ''){
+                return this.$message.error('请输入景区ID')
+            }
             getParkById(parseInt(this.parkId)).then(res=>{
                 this.parkList = [];
                 if(res.data.code !== 200){

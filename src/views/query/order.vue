@@ -181,7 +181,6 @@ export default {
           return this.$message.error(res.data.error)
         }
         let data = res.data.data;
-        console.log(data)
         data.forEach(item=>{
           this.parkList.push({
             value:item.id,
@@ -201,16 +200,17 @@ export default {
       }
     },
     handleSearch() {
+      if(this.dataForm.parkId == ''){
+        return this.$message.error('请选择所属片区')
+      }
       //参数对象属性为空时，删除这个属性
       for(let key in this.dataForm){
           if(this.dataForm[key] === ''){
               delete this.dataForm[key]
           }
       }
-      //如果整个参数对象为空，就提示，不发起请求
-      if(JSON.stringify(this.dataForm) == "{}"){
-        return this.$message.error('请选择查询条件')
-      }
+
+      console.log(this.dataForm)
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code != 200) {
           return this.$message.error(res.data.error)
