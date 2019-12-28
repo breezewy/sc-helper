@@ -23,8 +23,8 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" align="center"></el-table-column>
-          <el-table-column prop="realName" label="用户名" align="center"></el-table-column>
-          <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
+          <el-table-column prop="username" label="用户名" align="center"></el-table-column>
+          <el-table-column prop="realName" label="别名" align="center"></el-table-column>
           <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>
           <el-table-column prop="type" label="登录身份" align="center">
             <template slot-scope="scope">
@@ -73,10 +73,10 @@
         </el-form-item>
         <!-- <el-form-item label="邮箱" prop="email">
           <el-input v-model="userForm.email" type="email" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="手机号" prop="mobile">
           <el-input v-model="userForm.mobile"  autocomplete="off"></el-input>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="角色配置" class="role-list">
           <el-select v-model="userForm.roleIdList" placeholder="角色配置" multiple >
             <el-option v-for="role in roleList" :key="role.id" :label="role.label" :value="role.value"></el-option>
