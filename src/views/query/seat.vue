@@ -5,7 +5,7 @@
                 <span class="title">所属片区：</span>
                 <el-select
                     v-model="dataForm.id"
-                    placeholder="所属片区"
+                    placeholder="请选择所属片区"
                     clearable
                     class="filter-item"
                     style="width: 220px"
@@ -103,7 +103,7 @@ export default {
         },
         searchSeat(){
             if(this.dataForm.id === ''){
-                return this.$message.error('请选项所属片区')
+                return this.$message.error('请选择所属片区')
             }
             if(this.dataForm.billNo === ''){
                 return this.$message.error('请输入订单号')
