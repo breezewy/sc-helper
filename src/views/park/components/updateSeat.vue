@@ -10,12 +10,6 @@
                 :model="seatInfo" 
                 ref="appendForm"
                 >
-                <el-form-item label="席位编码" :label-width="formLabelWidth" prop="code">
-                    <el-input v-model="seatInfo.code" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="席位名称" :label-width="formLabelWidth" prop="name">
-                    <el-input v-model="seatInfo.name" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="theaterCode">
                     <el-input v-model="seatInfo.theaterCode" autocomplete="off"></el-input>
                 </el-form-item>
@@ -25,7 +19,12 @@
                  <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="theaterName">
                     <el-input v-model="seatInfo.theaterName" autocomplete="off"></el-input>
                 </el-form-item>
-              
+                <el-form-item label="席位编码" :label-width="formLabelWidth" prop="code">
+                    <el-input v-model="seatInfo.code" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="席位名称" :label-width="formLabelWidth" prop="name">
+                    <el-input v-model="seatInfo.name" autocomplete="off"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>

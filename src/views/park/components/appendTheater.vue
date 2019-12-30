@@ -11,12 +11,6 @@
                 :rules="formRules"
                 ref="appendForm"
                 >
-                <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="code">
-                    <el-input v-model="form.code" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="name">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="景区名称" :label-width="formLabelWidth" prop="parkName" >
                     <!-- <el-input v-model="form.parkName" autocomplete="off"></el-input> -->
                     <el-select v-model="form.parkId" placeholder="请选择"  @change="getParkName">
@@ -32,6 +26,13 @@
                 <!-- <el-form-item label="景区ID" :label-width="formLabelWidth" prop="parkId">
                     <el-input v-model="form.parkId" autocomplete="off"></el-input>
                 </el-form-item> -->
+                <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="code">
+                    <el-input v-model="form.code" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="剧院名称" :label-width="formLabelWidth" prop="name">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>

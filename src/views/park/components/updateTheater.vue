@@ -10,21 +10,22 @@
                 :model="theaterInfo" 
                 ref="appendForm"
                 >
-                <el-form-item label="剧院名称"  prop="name" label-width="100px">
-                    <el-input v-model="theaterInfo.name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="剧院编码名称"  prop="name" label-width="100px">
-                    <el-input v-model="theaterInfo.code" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="剧院ID"  prop="name" label-width="100px">
-                    <el-input v-model="theaterInfo.id" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="景区名称"  prop="name" label-width="100px">
                     <el-input v-model="theaterInfo.parkName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="景区ID"  prop="url" label-width="100px">
-                    <el-input v-model="theaterInfo.parkId" autocomplete="off"></el-input>
+                <el-form-item label="剧院名称"  prop="name" label-width="100px">
+                    <el-input v-model="theaterInfo.name" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="剧院编码"  prop="name" label-width="100px">
+                    <el-input v-model="theaterInfo.code" autocomplete="off"></el-input>
+                </el-form-item>
+                <!-- <el-form-item label="剧院ID"  prop="name" label-width="100px">
+                    <el-input v-model="theaterInfo.id" autocomplete="off"></el-input>
+                </el-form-item> -->
+
+                <!-- <el-form-item label="景区ID"  prop="url" label-width="100px">
+                    <el-input v-model="theaterInfo.parkId" autocomplete="off"></el-input>
+                </el-form-item> -->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="close">取 消</el-button>
@@ -63,7 +64,7 @@ export default {
             let data = {
                 id: this.theaterInfo.id,
                 name: this.theaterInfo.name,
-                code:this.theaterInfo.url,
+                code:this.theaterInfo.code,
                 parkId:this.theaterInfo.parkId,
                 parkName:this.theaterInfo.parkName
             }

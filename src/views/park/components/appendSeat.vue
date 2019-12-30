@@ -11,15 +11,6 @@
                 :rules="formRules"
                 ref="appendForm"
                 >
-                <el-form-item label="席位编码" :label-width="formLabelWidth" prop="code">
-                    <el-input v-model="form.code" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="席位名称" :label-width="formLabelWidth" prop="name">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="theaterCode">
-                    <el-input v-model="form.theaterCode" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="景区名称" :label-width="formLabelWidth" prop="parkId" >
                     <el-select v-model="form.parkId" placeholder="请选择"  @change="getParkName">
                         <el-option
@@ -41,6 +32,15 @@
                         >
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="剧院编码" :label-width="formLabelWidth" prop="theaterCode">
+                    <el-input v-model="form.theaterCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="席位编码" :label-width="formLabelWidth" prop="code">
+                    <el-input v-model="form.code" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="席位名称" :label-width="formLabelWidth" prop="name">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
               
             </el-form>
