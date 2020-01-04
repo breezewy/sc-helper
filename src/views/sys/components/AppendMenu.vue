@@ -202,7 +202,7 @@ export default {
         },
         changeType(value){
             this.menuForm.type = value
-            this.getMenuListById();
+            // this.getMenuListById();
         },
         resourceAddHandle(){
             this.menuForm.resourceList.push({

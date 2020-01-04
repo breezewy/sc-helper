@@ -32,6 +32,10 @@
                     prop="type"
                     align="center"
                 >
+                    <template slot-scope="scope">
+                        <el-tag  size="mini" v-if="scope.row.type == 0">菜单</el-tag>
+                        <el-tag type="success" size="mini" v-if="scope.row.type == 1">按钮</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     label="排序"

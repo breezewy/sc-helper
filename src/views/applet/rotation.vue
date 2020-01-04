@@ -20,14 +20,14 @@
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="景区名称"
+                label="图片名称"
                 width="180"
                 align="center"        
             >
             </el-table-column>
             <el-table-column
                 prop="state"
-                label="景区状态"
+                label="图片状态"
                 width="180"
                 align="center"        
             >

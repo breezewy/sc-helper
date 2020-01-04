@@ -68,7 +68,7 @@
             value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="5">
           <el-button @click="search">查询</el-button>
         </el-col>
     </el-row>
@@ -180,12 +180,6 @@ export default {
 <style lang="scss" scoped>
 #childListContainer {
   padding: 30px;
-  .toolbar {
-    .inputArea {
-      width: 260px;
-      margin-right: 30px;
-    }
-  }
   .tableContainer {
     margin-top: 30px;
     .el-pagination {

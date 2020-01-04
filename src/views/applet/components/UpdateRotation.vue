@@ -9,13 +9,13 @@
                 <el-form-item label="图片链接" :label-width="formLabelWidth" prop="imgUrl">
                     <el-input v-model="form.imgUrl" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="景区名称" :label-width="formLabelWidth" prop="name">
+                <el-form-item label="图片名称" :label-width="formLabelWidth" prop="name">
                      <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="景区排序" :label-width="formLabelWidth" prop="sort">
+                <el-form-item label="图片排序" :label-width="formLabelWidth" prop="sort">
                      <el-input v-model="form.sort" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="景区状态" :label-width="formLabelWidth" prop="state">
+                <el-form-item label="图片状态" :label-width="formLabelWidth" prop="state">
                     <el-radio-group v-model="form.state">
                         <el-radio :label="true">显示</el-radio>
                         <el-radio :label="false">不显示</el-radio>
