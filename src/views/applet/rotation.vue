@@ -44,7 +44,7 @@
             </el-table-column>
              <el-table-column
                 prop="url"
-                label="项目地址"
+                label="跳转地址"
                 align="center"    
             >
             </el-table-column>

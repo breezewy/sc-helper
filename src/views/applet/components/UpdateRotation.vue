@@ -21,7 +21,7 @@
                         <el-radio :label="false">不显示</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                 <el-form-item label="项目地址" :label-width="formLabelWidth" prop="url">
+                 <el-form-item label="跳转地址" :label-width="formLabelWidth" prop="url">
                      <el-input v-model="form.url" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
