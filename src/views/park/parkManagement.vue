@@ -26,6 +26,12 @@
                     <el-table-column prop="name" label="景区名称" align="center"></el-table-column>
                     <el-table-column prop="url" label="景区链接" align="center"></el-table-column>
                     <el-table-column prop="id" label="景区ID" align="center"></el-table-column>
+                    <el-table-column prop="theater" label="是否包含剧院" align="center">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.theater == true">是</span>
+                            <span v-if="scope.row.theater == false">否</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" align="center" width="300">
                         <template slot-scope="scope">
                             <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>

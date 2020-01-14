@@ -166,11 +166,12 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
+              alert('a')
               this.$router.push("/");
               this.loading = false;
             })
             .catch((error) => {
-              console.log(error)
+               alert('b')
               this.getCaptcha();
               this.loading = false;
             });
