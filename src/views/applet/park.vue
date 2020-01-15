@@ -32,8 +32,8 @@
                 align="center"        
             >
                 <template slot-scope="scope">
-                    <el-tag type="success" v-if="scope.row.state == true">显示</el-tag>
-                    <el-tag type="info" v-if="scope.row.state == false">不显示</el-tag>
+                    <el-tag type="success" v-if="scope.row.state == true" size="mini">显示</el-tag>
+                    <el-tag type="info" v-if="scope.row.state == false" size="mini">不显示</el-tag>
                 </template>
             </el-table-column>
             <el-table-column

@@ -107,8 +107,8 @@
             <el-table-column prop="orderCount" label="订单数量" align="center" width="80"></el-table-column>
             <el-table-column prop="orderStatus" label="订单状态" align="center" >
               <template slot-scope="scope">
-                <el-tag v-if="scope.row.orderStatus==3" type="info">已退单</el-tag>
-                <el-tag v-else type="success">已预约</el-tag>
+                <el-tag v-if="scope.row.orderStatus==3" type="info" size="mini">已退单</el-tag>
+                <el-tag v-else type="success" size="mini">已预约</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="idCard" label="证件号" align="center" width="180"></el-table-column>
