@@ -143,7 +143,8 @@ export default {
         },
         //获取景区列表
         getParkList(){
-            getParkList().then(res=>{
+            let data  ={"theater":''}
+            getParkList(data).then(res=>{
                 if(res.data.code !== 200){
                         return this.$message.error(res.data.error);
                 }

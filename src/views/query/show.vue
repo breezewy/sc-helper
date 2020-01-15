@@ -115,7 +115,8 @@ export default {
   },
   methods: {
     init() {
-      getParkList().then(res => {
+      let data = {"theater": ''}
+      getParkList(data).then(res => {
         if (res.data.code != 200) {
            return this.$message.error(res.data.error)
         }

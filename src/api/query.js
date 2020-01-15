@@ -2,10 +2,11 @@ import request from '@/utils/request'
 
 
 //获取景区列表
-export function getParkList() {
+export function getParkList(data) {
     return request({
         url: '/park/list',
-        method: 'post'
+        method: 'post',
+        data
     })
 }
 

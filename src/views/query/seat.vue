@@ -28,7 +28,7 @@
         <div class="seatDetail"  v-if = "showSeatDetail">
             <el-card class="box-card">
                 <h2 class="title">游客座位</h2>
-                <div class="seatInfo">
+                <div class="seatInfo" >
                    <div class="seatInfo-top">
                        <ul>
                            <li class="seatInfo-item">
@@ -36,7 +36,7 @@
                                <span class="seatInfo-item-content">联系电话：{{seatDetail.telNo}}</span>
                            </li>
                            <li class="seatInfo-item">
-                               <span class="seatInfo-item-content">演出日期：{{seatDetail.performDate |formatDate}}</span>
+                               <span class="seatInfo-item-content">演出日期：{{seatDetail.performDate}}</span>
                                <span class="seatInfo-item-content">演出场次：{{seatDetail.performTime}}</span>
                            </li>
                        </ul>
@@ -66,29 +66,17 @@ export default {
                billNo:""   //订单号
             },
             seatDetail:{},
-            showSeatDetail:false
+            showSeatDetail:false,
+            loading:true
         }
     },
     created(){
         this.init();
     },
-    filter:{
-        formatDate(value){
-            let arr = [];
-            return arr = value.split(',')[0]
-        },
-        formatAreaName1(value){
-            let arr = [];
-            return arr = value.split(' ')[0]
-        },
-        formatAreaName2(value){
-            let arr = [];
-            return arr = value.split(' ')[1]
-        }
-    },
     methods:{
         init() {
-            getParkList().then(res => {
+            let data  ={"theater":true}
+            getParkList(data).then(res => {
                 if (res.data.code != 200) {
                     return this.$message.error(res.data.msg)
                 }
@@ -109,6 +97,7 @@ export default {
                 return this.$message.error('请输入订单号')
             }
             getOfflineOrderSeat(this.dataForm).then(res=>{
+                this.loading = false;
                 if (res.data.code != 200) {
                     return this.$message.error(res.data.error)
                 }

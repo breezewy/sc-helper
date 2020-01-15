@@ -17,6 +17,12 @@
                 <el-form-item label="景区链接" :label-width="formLabelWidth" prop="url">
                     <el-input v-model="form.url" autocomplete="off"></el-input>
                 </el-form-item>
+                 <el-form-item label="是否包含剧院" :label-width="formLabelWidth" prop="theater">
+                    <el-radio-group v-model="form.theater">
+                        <el-radio :label="true">是</el-radio>
+                        <el-radio :label="false">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -41,7 +47,8 @@ export default {
             this.dialogFormVisible = newVal
             this.form= {
                     name:"",
-                    url:""
+                    url:"",
+                    theater:true
             }
         }
     },
@@ -49,7 +56,8 @@ export default {
         return {
             form:{
                 name:"",
-                url:""
+                url:"",
+                theater:true
             },
             formRules: {
                 name: [
@@ -59,7 +67,7 @@ export default {
                 { required: true, message: "必填项不能为空", trigger: "blur" },
                 ]
             },
-            formLabelWidth:"100px",
+            formLabelWidth:"120px",
             dialogFormVisible:false
         }
     },

@@ -10,11 +10,17 @@
                 :model="parkInfo" 
                 ref="appendForm"
                 >
-                <el-form-item label="景区名称"  prop="name" label-width="100px">
+                <el-form-item label="景区名称"  prop="name" label-width="120px">
                     <el-input v-model="parkInfo.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="景区链接"  prop="url" label-width="100px">
+                <el-form-item label="景区链接"  prop="url" label-width="120px">
                     <el-input v-model="parkInfo.url" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="是否包含剧院" label-width="120px" prop="theater">
+                    <el-radio-group v-model="parkInfo.theater">
+                        <el-radio :label="true">是</el-radio>
+                        <el-radio :label="false">否</el-radio>
+                    </el-radio-group>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -54,6 +60,7 @@ export default {
             let data = {
                 id: this.parkInfo.id,
                 name: this.parkInfo.name,
+                theater:this.parkInfo.theater,
                 url:this.parkInfo.url
             }
             updatePark(data).then(res=>{

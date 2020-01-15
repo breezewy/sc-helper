@@ -39,13 +39,15 @@
             <el-table-column
                 prop="imgUrl"
                 label="图片链接"
-                align="center"        
+                align="center"
+                :show-overflow-tooltip="true"        
             >
             </el-table-column>
              <el-table-column
                 prop="url"
                 label="项目地址"
-                align="center"    
+                align="center" 
+                :show-overflow-tooltip="true"   
             >
             </el-table-column>
             <el-table-column
