@@ -88,11 +88,12 @@
         <el-form-item label="菜单授权">
           <el-tree
             :data="menuList"
-            :props="defaultProps"
             node-key="id"
+            :default-checked-keys="checkedList"
+            :props="defaultProps"
             show-checkbox
             accordion
-            ref="menuListTree"
+            ref="listTree"
           ></el-tree>
         </el-form-item>
 
@@ -151,6 +152,7 @@ export default {
       menuList: [],
       roleList: [],
       rowIdList: [],
+      checkedList:[],
       defaultProps: {
         children: "children",
         label: "name"
@@ -224,9 +226,10 @@ export default {
     handleSubmit() {
       this.$refs.updateRoleForm.validate(valid => {
         if (valid) {
+          this.updateRoleForm.menuIdList = this.$refs.listTree.getCheckedKeys();
           let _this = this;
           updateRole(this.updateRoleForm).then(res => {
-            if (red.data.code != 200) {
+            if (res.data.code != 200) {
               return this.$message.error(res.data.error);
             }
             _this.getRoleList();
@@ -256,6 +259,7 @@ export default {
             return this.$message.error(res.data.error);
           }
           this.updateRoleForm = res.data.data;
+          this.checkedList = res.data.data.menuIdList
         })
         .catch(err => {
           console.log(err);

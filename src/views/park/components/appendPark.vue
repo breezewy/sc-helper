@@ -17,7 +17,7 @@
                 <el-form-item label="景区链接" :label-width="formLabelWidth" prop="url">
                     <el-input v-model="form.url" autocomplete="off"></el-input>
                 </el-form-item>
-                 <el-form-item label="是否包含剧院" :label-width="formLabelWidth" prop="theater">
+                <el-form-item label="是否包含剧院" :label-width="formLabelWidth" prop="theater">
                     <el-radio-group v-model="form.theater">
                         <el-radio :label="true">是</el-radio>
                         <el-radio :label="false">否</el-radio>
