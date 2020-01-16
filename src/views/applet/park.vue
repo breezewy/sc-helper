@@ -37,6 +37,13 @@
                 </template>
             </el-table-column>
             <el-table-column
+                prop="sort"
+                label="景区排序"
+                align="center"
+                :show-overflow-tooltip="true"        
+            >
+            </el-table-column>
+            <el-table-column
                 prop="imgUrl"
                 label="图片链接"
                 align="center"
