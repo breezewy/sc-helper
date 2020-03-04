@@ -40,147 +40,146 @@
                     </el-table-column>
                 </el-table>
         </div>
-        <append-park 
-            :show="showAppendForm" 
-            @changeAppendShow="changeAppendShow" 
+        <append-park
+            :show="showAppendForm"
+            @changeAppendShow="changeAppendShow"
             @handleAppendSuccess="refresh"
         ></append-park>
-        <update-park 
-            :show="showUpdateForm" 
-            @changeUpdateShow="changeUpdateShow" 
-            @handleUpdateSuccess="refresh" 
+        <update-park
+            :show="showUpdateForm"
+            @changeUpdateShow="changeUpdateShow"
+            @handleUpdateSuccess="refresh"
             :parkInfo="parkInfo"
         ></update-park>
     </div>
 </template>
 
 <script>
-import { getParkList,getParkById} from'@/api/query'
+import { getParkList, getParkById } from '@/api/query'
 import { deletePark } from '@/api/park'
 import AppendPark from './components/appendPark'
 import UpdatePark from './components/updatePark'
 export default {
-    name:'park',
-    data(){
-        return {
-            parkId:"",
-            parkList:[],
-            parkInfo:{},
-            rowIdList:[],
-            showAppendForm:false,
-            showUpdateForm:false
-        }
-    },
-    components:{
-        AppendPark,
-        UpdatePark
-    },
-    mounted(){
-        this.getParkList();
-    },
-    methods:{
-        //获取景区列表
-        getParkList(){
-            let data = {
-                "theater": ''
-            }
-            getParkList(data).then(res=>{
-                if(res.data.code !== 200){
-                        return this.$message.error(res.data.error);
-                }
-                this.parkList = res.data.data
-            })
-        },
-        //点击搜索执行
-        search(){
-            if(this.parkId == ''){
-                return this.$message.error('请输入景区ID')
-            }
-            getParkById(parseInt(this.parkId)).then(res=>{
-                this.parkList = [];
-                if(res.data.code !== 200){
-                        return this.$message.error(res.data.error);
-                }
-                this.parkInfo = res.data.data
-                this.parkList.push (this.parkInfo)
-            })
-        },
-        //点击新增按钮
-        appendPark(){
-            this.showAppendForm = true;
-        },
-        //点击头部删除按钮
-        deleteAllPark(){
-            if (this.rowIdList.length === 0) {
-                this.$message({
-                message: "请选择删除项",
-                type: "warning"
-                });
-                return;
-            }
-            this.$confirm('确定要删除吗?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-            }).then(() => {
-                this.deletePark(this.rowIdList);
-            }).catch(() => {
-                return          
-            }); 
-        },
-        //点击全选
-        handleSelectionChange(selection){
-            this.rowIdList = [];
-            for (let i = 0; i < selection.length; i++) {
-                this.rowIdList.push(selection[i].id);
-            }
-        },
-        //点击修改执行
-        handleUpdate(id){
-            this.showUpdateForm = true;
-            getParkById(id).then(res=>{
-                if(res.data.code !== 200){
-                    return this.$message.error(res.data.error);
-                }
-                this.parkInfo = res.data.data
-            })
-        },
-        //每行的删除按钮
-        handleDeleteSingle(id){
-            this.$confirm('确定要删除吗?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-            }).then(() => {
-                this.deletePark([id])
-            }).catch(() => {
-                return          
-            }); 
-           
-        },
-        //关闭新增框
-        changeAppendShow(){
-            this.showAppendForm = false
-        },
-        //关闭修改框
-        changeUpdateShow(){
-            this.showUpdateForm = false
-        },
-        //刷新列表
-        refresh(){
-            this.getParkList();
-        },
-        //删除景区
-        deletePark(data){
-            deletePark(data).then(res=>{
-                if (res.data.code != 200) {
-                    return this.$message.error(res.data.error);
-                }
-                this.$message.success('删除成功');
-                this.refresh();
-            })
-        }
+  name: 'Park',
+  data() {
+    return {
+      parkId: '',
+      parkList: [],
+      parkInfo: {},
+      rowIdList: [],
+      showAppendForm: false,
+      showUpdateForm: false
     }
+  },
+  components: {
+    AppendPark,
+    UpdatePark
+  },
+  mounted() {
+    this.getParkList()
+  },
+  methods: {
+    // 获取景区列表
+    getParkList() {
+      const data = {
+        'theater': ''
+      }
+      getParkList(data).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.parkList = res.data.data
+      })
+    },
+    // 点击搜索执行
+    search() {
+      if (this.parkId === '') {
+        return this.$message.error('请输入景区ID')
+      }
+      getParkById(parseInt(this.parkId)).then(res => {
+        this.parkList = []
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.parkInfo = res.data.data
+        this.parkList.push(this.parkInfo)
+      })
+    },
+    // 点击新增按钮
+    appendPark() {
+      this.showAppendForm = true
+    },
+    // 点击头部删除按钮
+    deleteAllPark() {
+      if (this.rowIdList.length === 0) {
+        this.$message({
+          message: '请选择删除项',
+          type: 'warning'
+        })
+        return
+      }
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deletePark(this.rowIdList)
+      }).catch(() => {
+        return
+      })
+    },
+    // 点击全选
+    handleSelectionChange(selection) {
+      this.rowIdList = []
+      for (let i = 0; i < selection.length; i++) {
+        this.rowIdList.push(selection[i].id)
+      }
+    },
+    // 点击修改执行
+    handleUpdate(id) {
+      this.showUpdateForm = true
+      getParkById(id).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.parkInfo = res.data.data
+      })
+    },
+    // 每行的删除按钮
+    handleDeleteSingle(id) {
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deletePark([id])
+      }).catch(() => {
+        return
+      })
+    },
+    // 关闭新增框
+    changeAppendShow() {
+      this.showAppendForm = false
+    },
+    // 关闭修改框
+    changeUpdateShow() {
+      this.showUpdateForm = false
+    },
+    // 刷新列表
+    refresh() {
+      this.getParkList()
+    },
+    // 删除景区
+    deletePark(data) {
+      deletePark(data).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.$message.success('删除成功')
+        this.refresh()
+      })
+    }
+  }
 }
 </script>
 
@@ -195,5 +194,5 @@ export default {
         margin-top:30px;
     }
 }
-    
+
 </style>
