@@ -88,172 +88,172 @@
             @handleUpdateSuccess="refresh"
         >
         </update-theater>
-        
+
     </div>
 </template>
 
 <script>
 import AppendTheater from './components/appendTheater'
 import UpdateTheater from './components/updateTheater'
-import {getTheaterList,getTheaterById,deleteTheater,searchTheater} from '@/api/theater'
-import { getParkList} from'@/api/query'
+import { getTheaterList, getTheaterById, deleteTheater, searchTheater } from '@/api/theater'
+import { getParkList } from '@/api/query'
 
 export default {
-    name:'theater',
-    data(){
-        return {
-            theaterList:[],
-            theaterInfo:{},
-            parkList:[],
-            rowIdList:[],
-            showAppendForm:false,
-            showUpdateForm:false,
-            form:{
-                code:"",
-                name:"",
-                page:{
-                    pageNum:0,
-                    pageSize:10
-                },
-                parkId:""
-            },
-            total: 0,
-            currentPage: 1,
-        }
-    },
-    components:{
-        AppendTheater,
-        UpdateTheater
-    },
-    created(){
-        this.getTheaterList();
-        this.getParkList();
-    },
-    methods:{
-        //选择列表不同页面
-        handleSizeChange(val) {
-            this.form.page.pageSize = val;
-            this.getTheaterList(this.form);
+  name: 'Theater',
+  data() {
+    return {
+      theaterList: [],
+      theaterInfo: {},
+      parkList: [],
+      rowIdList: [],
+      showAppendForm: false,
+      showUpdateForm: false,
+      form: {
+        code: '',
+        name: '',
+        page: {
+          pageNum: 0,
+          pageSize: 10
         },
-        //选择列表每页多少条数据
-        handleCurrentChange(val) {
-            this.currentPage = val;
-            this.form.page.pageNum = this.currentPage - 1;
-            this.getTheaterList(this.form);
-        },
-        //获取景区列表
-        getParkList(){
-            let data  ={"theater":''}
-            getParkList(data).then(res=>{
-                if(res.data.code !== 200){
-                        return this.$message.error(res.data.error);
-                }
-                let data = res.data.data
-                data.forEach( item => {
-                    this.parkList.push({
-                        value:item.id,
-                        label:item.name
-                    })
-                })
-            })
-        },
-        handleSelectionChange(selection){
-            this.rowIdList = [];
-            for (let i = 0; i < selection.length; i++) {
-                this.rowIdList.push(selection[i].id);
-            }
-        },
-        handleUpdate(id){
-            this.showUpdateForm = true
-            getTheaterById(id).then(res=>{
-                if(res.data.code !== 200){
-                    return this.$message.error(res.data.error);
-                }
-                this.theaterInfo = res.data.data
-            })
-        },
-        handleDeleteSingle(id){
-            this.$confirm('确定要删除吗?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-            }).then(( ) => {
-                this.deleteTheater([id])
-            }).catch(() => {
-                return          
-            }); 
-        },
-        search(){
-            if(this.form.parkId === ''){
-                return this.$message.error('请选择景区')
-            }
-            if(this.form.code === ''){
-                delete this.form.code
-            }
-            if(this.form.name === ''){
-                delete this.form.name
-            }
-            searchTheater(this.form).then(res=>{
-                if(res.data.code !== 200){
-                    return this.$message.error(res.data.error);
-                }
-                this.theaterList = res.data.data.data
-            })
-        },
-        appendTheater(){
-            this.showAppendForm = true
-        },
-        deleteAllTheater(){
-            if (this.rowIdList.length === 0) {
-                this.$message({
-                message: "请选择删除项",
-                type: "warning"
-                });
-                return;
-            }
-            this.$confirm('确定要删除吗?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-            }).then(() => {
-                this.deleteTheater(this.rowIdList)
-            }).catch(() => {
-                return          
-            }); 
-        },
-        changeUpdateShow(){
-            this.showUpdateForm = false
-        },
-        changeAppendShow(){
-            this.showAppendForm = false
-        },
-        getTheaterList(){
-            for(let key in this.form){
-                if(this.form[key] === ''){
-                    delete this.form[key]
-                }
-            }
-            searchTheater(this.form).then(res=>{
-                if(res.data.code !== 200){
-                        return this.$message.error(res.data.error);
-                }
-                this.theaterList = res.data.data.data
-                this.total = res.data.data.totalCount
-            })
-        },
-        deleteTheater(data){
-            deleteTheater(data).then(res=>{
-                    if(res.data.code !== 200){
-                        return this.$message.error(res.data.error);
-                    }
-                    this.$message.success('删除成功');
-                    this.refresh();
-            })
-        },
-        refresh(){
-            this.getTheaterList();
-        }
+        parkId: ''
+      },
+      total: 0,
+      currentPage: 1
     }
+  },
+  components: {
+    AppendTheater,
+    UpdateTheater
+  },
+  created() {
+    this.getTheaterList()
+    this.getParkList()
+  },
+  methods: {
+    // 选择列表不同页面
+    handleSizeChange(val) {
+      this.form.page.pageSize = val
+      this.getTheaterList(this.form)
+    },
+    // 选择列表每页多少条数据
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.form.page.pageNum = this.currentPage - 1
+      this.getTheaterList(this.form)
+    },
+    // 获取景区列表
+    getParkList() {
+      const data = { 'theater': '' }
+      getParkList(data).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        const data = res.data.data
+        data.forEach(item => {
+          this.parkList.push({
+            value: item.id,
+            label: item.name
+          })
+        })
+      })
+    },
+    handleSelectionChange(selection) {
+      this.rowIdList = []
+      for (let i = 0; i < selection.length; i++) {
+        this.rowIdList.push(selection[i].id)
+      }
+    },
+    handleUpdate(id) {
+      this.showUpdateForm = true
+      getTheaterById(id).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.theaterInfo = res.data.data
+      })
+    },
+    handleDeleteSingle(id) {
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteTheater([id])
+      }).catch(() => {
+        return
+      })
+    },
+    search() {
+      if (this.form.parkId === '') {
+        return this.$message.error('请选择景区')
+      }
+      if (this.form.code === '') {
+        delete this.form.code
+      }
+      if (this.form.name === '') {
+        delete this.form.name
+      }
+      searchTheater(this.form).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.theaterList = res.data.data.data
+      })
+    },
+    appendTheater() {
+      this.showAppendForm = true
+    },
+    deleteAllTheater() {
+      if (this.rowIdList.length === 0) {
+        this.$message({
+          message: '请选择删除项',
+          type: 'warning'
+        })
+        return
+      }
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteTheater(this.rowIdList)
+      }).catch(() => {
+        return
+      })
+    },
+    changeUpdateShow() {
+      this.showUpdateForm = false
+    },
+    changeAppendShow() {
+      this.showAppendForm = false
+    },
+    getTheaterList() {
+      for (const key in this.form) {
+        if (this.form[key] === '') {
+          delete this.form[key]
+        }
+      }
+      searchTheater(this.form).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.theaterList = res.data.data.data
+        this.total = res.data.data.totalCount
+      })
+    },
+    deleteTheater(data) {
+      deleteTheater(data).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.$message.success('删除成功')
+        this.refresh()
+      })
+    },
+    refresh() {
+      this.getTheaterList()
+    }
+  }
 }
 </script>
 
@@ -271,5 +271,5 @@ export default {
         }
     }
 }
- 
+
 </style>

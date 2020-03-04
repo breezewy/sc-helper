@@ -3,6 +3,7 @@
     <el-row>
       <el-button  type="primary" @click="addPark">新增</el-button>
     </el-row>
+    <!-- 景区列表 -->
     <el-table
       :data="parkList"
       border
@@ -35,6 +36,18 @@
           </template>
         </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 50, 100]"
+        :page-size="10"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+    ></el-pagination>
+    <!-- 新增或修改组件 -->
     <addOrUpdatePark
       v-if="show"
       :show="show"
@@ -69,11 +82,25 @@ export default {
     this.getParkList()
   },
   methods: {
+    // 选择列表不同页面
+    handleSizeChange(val) {
+      this.page.pageSize = val
+      this.getParkList()
+    },
+    // 选择列表每页多少条数据
+    handleCurrentChange(val) {
+      this.page.pageSize = val
+      this.page.pageNum = 1
+      this.getParkList()
+    },
     // 获取登记景区列表
     getParkList() {
       const data = {
         page: this.page,
         parkName: this.parkName
+      }
+      if (this.parkName === '') {
+        delete (data.parkName)
       }
       getParkList(data).then(res => {
         if (res.data.code !== 200) {
