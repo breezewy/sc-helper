@@ -6,6 +6,10 @@
     <!-- 景区列表 -->
     <el-table
       :data="parkList"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
       border
       style="width: 100%">
         <el-table-column
@@ -23,7 +27,35 @@
         <el-table-column
           prop="parkAdders"
           label="景区地址"
+          align="center"
+          width="150px"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="region"
+          label="区域管理"
+          align="center"
+          width="150px"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="describes"
+          label="描述"
+          align="center"
+          width="200px"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="tipsInfo"
+          label="提示"
+          width="200px"
           align="center">
+        </el-table-column>
+        <el-table-column
+          prop="remarks"
+          label="备注"
+          align="center"
+          width="200px">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -69,12 +101,12 @@ export default {
         pageNum: 0,
         pageSize: 10
       },
-      pageName: '', // 景区名称
       currentPage: 1, // 当前页面
       total: 0, // 总数量
       show: false, // 是否显示添加弹框
       title: '', // 点击新增还是修改
-      id: '' // 景区id
+      id: '', // 景区id
+      loading: true
     }
   },
   components: {
@@ -109,6 +141,7 @@ export default {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
+        this.loading = false
         this.parkList = res.data.data.data
         this.total = res.data.data.totalCount
       })

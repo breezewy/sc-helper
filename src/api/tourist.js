@@ -36,3 +36,20 @@ export function updatePark(data) {
   })
 }
 
+// 登记游客列表
+export function getVisitorList(data) {
+  return request({
+    url: '/visitorInfo/list',
+    method: 'post',
+    data
+  })
+}
+
+// 根据ID获取游客信息
+export function getVisitorInfoById(id) {
+  return request({
+    url: `/visitorInfo/getVisitorInfoById/${id}`,
+    method: 'get'
+  })
+}
+

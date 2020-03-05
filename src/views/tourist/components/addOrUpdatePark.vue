@@ -13,6 +13,18 @@
             <el-form-item label="景区地址" :label-width="formLabelWidth" prop="parkAdders">
                 <el-input v-model="form.parkAdders" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="区域管理" :label-width="formLabelWidth" prop="region">
+                <el-input v-model="form.region" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="描述" :label-width="formLabelWidth" prop="describes" width="300px">
+                <el-input v-model="form.describes" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="提示" :label-width="formLabelWidth" prop="tipsInfo">
+                <el-input v-model="form.tipsInfo" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
+                <el-input v-model="form.remarks" autocomplete="off"></el-input>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -37,7 +49,11 @@ export default {
       formTitle: this.title,
       form: {
         parkAdders: '',
-        parkName: ''
+        parkName: '',
+        region: '',
+        describes: '',
+        tipsInfo: '',
+        remarks: ''
       },
       rules: {
         parkName: [
@@ -45,6 +61,9 @@ export default {
         ],
         parkAdders: [
           { required: true, message: '请输入景区地址', trigger: 'blur' }
+        ],
+        region: [
+          { required: true, message: '请输入区域管理', trigger: 'blur' }
         ]
       }
     }
@@ -86,7 +105,11 @@ export default {
     addPark() {
       const data = {
         parkAdders: this.form.parkAdders,
-        parkName: this.form.parkName
+        parkName: this.form.parkName,
+        region: this.form.region,
+        describes: this.form.describes,
+        tipsInfo: this.form.tipsInfo,
+        remarks: this.form.remarks
       }
       addPark(data).then(res => {
         if (res.data.code !== 200) {
@@ -101,7 +124,11 @@ export default {
       const data = {
         id: this.id,
         parkAdders: this.form.parkAdders,
-        parkName: this.form.parkName
+        parkName: this.form.parkName,
+        region: this.form.region,
+        describes: this.form.describes,
+        tipsInfo: this.form.tipsInfo,
+        remarks: this.form.remarks
       }
       updatePark(data).then(res => {
         if (res.data.code !== 200) {
