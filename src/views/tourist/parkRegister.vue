@@ -66,10 +66,12 @@ export default {
     return {
       parkList: [], // 登记景区列表
       page: { // 列表分页
-        pageNum: 1,
+        pageNum: 0,
         pageSize: 10
       },
       pageName: '', // 景区名称
+      currentPage: 1, // 当前页面
+      total: 0, // 总数量
       show: false, // 是否显示添加弹框
       title: '', // 点击新增还是修改
       id: '' // 景区id
@@ -82,15 +84,16 @@ export default {
     this.getParkList()
   },
   methods: {
-    // 选择列表不同页面
+    // 选择列表每页多少数据
     handleSizeChange(val) {
+      this.page.pageNum = 0
       this.page.pageSize = val
       this.getParkList()
     },
-    // 选择列表每页多少条数据
+    // 选择列表当前第几页
     handleCurrentChange(val) {
-      this.page.pageSize = val
-      this.page.pageNum = 1
+      this.currentPage = val
+      this.page.pageNum = this.currentPage - 1
       this.getParkList()
     },
     // 获取登记景区列表
@@ -107,6 +110,7 @@ export default {
           return this.$message.error(res.data.error)
         }
         this.parkList = res.data.data.data
+        this.total = res.data.data.totalCount
       })
     },
     // 新增登记景区
@@ -135,6 +139,10 @@ export default {
   padding:30px;
   .el-table{
     margin-top:30px;
+  }
+  .el-pagination {
+    padding: 20px 50px;
+    text-align: right;
   }
 }
 </style>

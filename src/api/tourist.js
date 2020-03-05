@@ -30,7 +30,7 @@ export function getParkInfoById(id) {
 // 修改景区
 export function updatePark(data) {
   return request({
-    url: '/gatherPark',
+    url: '/gatherPark/update',
     method: 'put',
     data
   })

@@ -57,16 +57,12 @@ export default {
   methods: {
     // 提交
     handleSubmit() {
-      const data = {
-        parkAdders: this.form.parkAdders,
-        parkName: this.form.parkName
-      }
       this.$refs.parkForm.validate((valid) => {
         if (valid) {
           if (this.formTitle === '新增') {
-            this.addPark(data)
+            this.addPark()
           } else {
-            this.updatePark(data)
+            this.updatePark()
           }
         } else {
           return false
@@ -83,11 +79,15 @@ export default {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
-        this.form = res.data.data.data
+        this.form = res.data.data
       })
     },
     // 新增景区
-    addPark(data) {
+    addPark() {
+      const data = {
+        parkAdders: this.form.parkAdders,
+        parkName: this.form.parkName
+      }
       addPark(data).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
@@ -97,7 +97,12 @@ export default {
       })
     },
     // 修改景区
-    updatePark(data) {
+    updatePark() {
+      const data = {
+        id: this.id,
+        parkAdders: this.form.parkAdders,
+        parkName: this.form.parkName
+      }
       updatePark(data).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
