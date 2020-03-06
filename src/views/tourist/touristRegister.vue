@@ -1,5 +1,26 @@
 <template>
   <div class="visitor">
+    <el-form :inline="true" :model="form" class="demo-form-inline">
+        <el-form-item label="景区">
+          <el-select v-model="form.gatherParkId" placeholder="景区">
+              <el-option
+                v-for="item in parkOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="form.visitorPhone" placeholder="手机号"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">查询</el-button>
+        </el-form-item>
+        <!-- <el-form-item>
+          <el-button type="success" @click="handleExport">导出</el-button>
+        </el-form-item> -->
+    </el-form>
     <!-- 游客列表 -->
     <el-table
       :data="visitorList"
@@ -10,24 +31,19 @@
       border
       style="width: 100%">
         <el-table-column
-          prop="nickName"
-          label="微信昵称"
+          prop="registerPark"
+          label="景区名字"
           align="center">
         </el-table-column>
         <el-table-column
-          prop="openId"
-          label="微信Id"
+          prop="visitorPhone"
+          label="游客手机号"
           align="center">
         </el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          width="100"
-          align="center"
-          >
-          <template slot-scope="scope">
-            <el-button @click="showVisitorInfo(scope.row)" type="text" size="small">详情</el-button>
-          </template>
+         <el-table-column
+          prop="visitorTime"
+          label="登记时间"
+          align="center">
         </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -41,38 +57,32 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
     ></el-pagination>
-    <visitor-info
-      v-if="show"
-      :show="show"
-      :id="id"
-      @close="handleClose"
-    ></visitor-info>
   </div>
 </template>
 
 <script>
-import { getVisitorList } from '@/api/tourist'
-import visitorInfo from './components/visitorInfo'
+import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
 export default {
   data() {
     return {
       visitorList: [], // 游客列表
-      page: {
-        pageNum: 0,
-        pageSize: 10
+      form: {
+        page: {
+          pageNum: 0,
+          pageSize: 10
+        },
+        gatherParkId: '', // 景区
+        visitorPhone: '' // 游客手机
       },
       currentPage: 1, // 当前页
       total: 0, // 总条数
-      id: '', // 游客id
-      show: false, // 弹框状态
-      loading: true
+      loading: true,
+      parkOptions: [] // 下拉框
     }
-  },
-  components: {
-    visitorInfo
   },
   created() {
     this.getVisitorList()
+    this.gatherParkList()
   },
   methods: {
     // 选择列表每页多少数据
@@ -85,14 +95,17 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.page.pageNum = this.currentPage - 1
-      this.getParkList()
+      this.getVisitorList()
     },
     // 获取游客列表
     getVisitorList() {
-      const data = {
-        page: this.page
+      // 空字符串参数不提交
+      for (const key in this.form) {
+        if (this.form[key] === '') {
+          delete this.form[key]
+        }
       }
-      getVisitorList(data).then(res => {
+      getVisitorList(this.form).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
@@ -101,15 +114,31 @@ export default {
         this.total = res.data.data.totalCount
       })
     },
-    // 点击详情时，出现弹框
-    showVisitorInfo(row) {
-      this.show = true
-      this.id = row.id
+    // 下拉框获取景区
+    gatherParkList() {
+      gatherParkList().then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        const data = res.data.data
+        data.forEach(item => {
+          this.parkOptions.push({
+            value: item['id'],
+            label: item['parkName']
+          })
+        })
+      })
     },
-    // 监听到弹框关闭时执行
-    handleClose() {
-      this.show = false
-    }
+    // 查询
+    onSubmit() {
+      this.getVisitorList()
+    },
+    // 导出
+    // handleExport() {
+    //   handleExport(this.form).then(res => {
+    //     console.log(res)
+    //   })
+    // }
   }
 }
 </script>

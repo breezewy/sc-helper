@@ -88,7 +88,7 @@
       @close="closeQRCode"
       >
         <img :src="url">
-        <p class="qrparkName">{{QRParkName}}</p>
+        <p class="parkName">{{QRParkName}}</p>
     </el-dialog>
 
     <!-- 新增或修改组件 -->

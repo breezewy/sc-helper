@@ -45,20 +45,30 @@ export function updatePark(data) {
   })
 }
 
+// 游客踪迹
 // 登记游客列表
 export function getVisitorList(data) {
   return request({
-    url: '/visitorInfo/list',
+    url: '/visitorRecord/list',
     method: 'post',
     data
   })
 }
 
-// 根据ID获取游客信息
-export function getVisitorInfoById(id) {
+// 下拉框获取景区
+export function gatherParkList() {
   return request({
-    url: `/visitorInfo/getVisitorInfoById/${id}`,
-    method: 'get'
+    url: '/gatherPark/listGatherPark',
+    method: 'post'
+  })
+}
+
+// 导出
+export function handleExport(data) {
+  return request({
+    url: '/visitorRecord/export',
+    method: 'post',
+    data
   })
 }
 
