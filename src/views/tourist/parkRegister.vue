@@ -1,8 +1,21 @@
 <template>
   <div class="park">
-    <el-row>
-      <el-button  type="primary" @click="addPark">新增</el-button>
-    </el-row>
+    <el-form :inline="true"  class="demo-form-inline">
+      <el-form-item label="景区">
+        <el-input
+          v-model="parkName"
+          placeholder="请输入景区名称"
+          clearable
+          @clear="handleClear"
+          ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button  @click="query">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button  type="primary" @click="addPark">新增</el-button>
+      </el-form-item>
+    </el-form>
     <!-- 景区列表 -->
     <el-table
       :data="parkList"
@@ -132,6 +145,9 @@ export default {
     this.getParkList()
   },
   methods: {
+    query() {
+      this.getParkList()
+    },
     // 选择列表每页多少数据
     handleSizeChange(val) {
       this.page.pageNum = 0
@@ -189,6 +205,11 @@ export default {
         this.url = window.URL.createObjectURL(blob)
       })
     },
+    // 清空查询时，重新请求
+    handleClear() {
+      this.getParkList()
+    },
+    // 关闭二维码
     closeQRCode() {
       this.dialogTableVisible = false
     }

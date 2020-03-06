@@ -6,7 +6,7 @@
               v-model="form.gatherParkId"
               clearable
               placeholder="景区"
-              @clear="postAgain"
+              @clear="handleClear"
           >
               <el-option
                 v-for="item in parkOptions"
@@ -17,10 +17,15 @@
           </el-select>
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="form.visitorPhone" placeholder="手机号"></el-input>
+          <el-input
+            v-model="form.visitorPhone"
+            placeholder="手机号"
+            clearable
+            @clear="handleClear"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button  @click="onSubmit">查询</el-button>
         </el-form-item>
         <!-- <el-form-item>
           <el-button type="success" @click="handleExport">导出</el-button>
@@ -139,7 +144,7 @@ export default {
       this.getVisitorList()
     },
     // 当清空选择器的时候，重新发起请求
-    postAgain() {
+    handleClear() {
       this.getVisitorList()
     }
     // 导出
