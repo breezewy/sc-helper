@@ -2,7 +2,12 @@
   <div class="visitor">
     <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-form-item label="景区">
-          <el-select v-model="form.gatherParkId" placeholder="景区">
+          <el-select
+              v-model="form.gatherParkId"
+              clearable
+              placeholder="景区"
+              @clear="postAgain"
+          >
               <el-option
                 v-for="item in parkOptions"
                 :key="item.value"
@@ -61,7 +66,7 @@
 </template>
 
 <script>
-import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
+import { getVisitorList, gatherParkList } from '@/api/tourist'
 export default {
   data() {
     return {
@@ -133,6 +138,10 @@ export default {
     onSubmit() {
       this.getVisitorList()
     },
+    // 当清空选择器的时候，重新发起请求
+    postAgain() {
+      this.getVisitorList()
+    }
     // 导出
     // handleExport() {
     //   handleExport(this.form).then(res => {
