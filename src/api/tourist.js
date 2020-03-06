@@ -27,6 +27,15 @@ export function getParkInfoById(id) {
   })
 }
 
+// 景区二维码
+export function QRCode(code) {
+  return request({
+    url: `/gatherPark/creatQrCode/${code}`,
+    method: 'get',
+    responseType: 'arraybuffer'
+  })
+}
+
 // 修改景区
 export function updatePark(data) {
   return request({

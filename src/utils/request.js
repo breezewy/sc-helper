@@ -38,6 +38,8 @@ service.interceptors.response.use(
 
     if (res.request.responseURL.indexOf('auth/captcha') != -1) {
       return response
+    } else if (res.request.responseURL.indexOf('gatherPark/creatQrCode') != -1) {
+      return response
     }
 
     if (status != 200) {

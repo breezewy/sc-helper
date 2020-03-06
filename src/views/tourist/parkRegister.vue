@@ -65,6 +65,7 @@
           >
           <template slot-scope="scope">
             <el-button @click="updatePark(scope.row)" type="text" size="small">修改</el-button>
+            <el-button @click="QRCode(scope.row)" type="text" size="small">二维码</el-button>
           </template>
         </el-table-column>
     </el-table>
@@ -79,6 +80,17 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
     ></el-pagination>
+    <!-- 二维码 -->
+    <el-dialog
+      title="二维码"
+      :visible.sync="dialogTableVisible"
+      :close-on-click-modal="false"
+      @close="closeQRCode"
+      >
+        <img :src="url">
+        <p class="qrparkName">{{QRParkName}}</p>
+    </el-dialog>
+
     <!-- 新增或修改组件 -->
     <addOrUpdatePark
       v-if="show"
@@ -91,7 +103,7 @@
 </template>
 
 <script>
-import { getParkList } from '@/api/tourist'
+import { getParkList, QRCode } from '@/api/tourist'
 import addOrUpdatePark from './components/addOrUpdatePark'
 export default {
   data() {
@@ -106,7 +118,11 @@ export default {
       show: false, // 是否显示添加弹框
       title: '', // 点击新增还是修改
       id: '', // 景区id
-      loading: true
+      loading: true,
+      dialogTableVisible: false, // 二维码弹框显示
+      url: '', // 二维码链接
+      parkName: '', // 景区名字
+      QRParkName: '' // 二维码景区名称
     }
   },
   components: {
@@ -161,6 +177,20 @@ export default {
       this.show = true
       this.title = '修改'
       this.id = row.id
+    },
+
+    // 二维码
+    QRCode(row) {
+      this.dialogTableVisible = true
+      this.QRParkName = row.parkName
+      QRCode(row.parkCode).then(res => {
+        const data = res.data
+        const blob = new Blob([data])
+        this.url = window.URL.createObjectURL(blob)
+      })
+    },
+    closeQRCode() {
+      this.dialogTableVisible = false
     }
   }
 }
@@ -176,6 +206,16 @@ export default {
   .el-pagination {
     padding: 20px 50px;
     text-align: right;
+  }
+  /deep/ .el-dialog {
+     .el-dialog__body {
+      text-align: center;
+      img{
+        width:300px;
+        height:300px;
+        text-align: center;
+      }
+    }
   }
 }
 </style>
