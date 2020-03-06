@@ -59,7 +59,7 @@ export function getVisitorList(data) {
 export function gatherParkList() {
   return request({
     url: '/gatherPark/listGatherPark',
-    method: 'post'
+    method: 'get'
   })
 }
 
