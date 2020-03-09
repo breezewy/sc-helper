@@ -68,7 +68,8 @@ export function handleExport(data) {
   return request({
     url: '/visitorRecord/export',
     method: 'post',
-    data
+    data,
+    responseType: 'arraybuffer'
   })
 }
 

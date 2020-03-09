@@ -27,9 +27,9 @@
         <el-form-item>
           <el-button  @click="onSubmit">查询</el-button>
         </el-form-item>
-        <!-- <el-form-item>
+        <el-form-item>
           <el-button type="success" @click="handleExport">导出</el-button>
-        </el-form-item> -->
+        </el-form-item>
     </el-form>
     <!-- 游客列表 -->
     <el-table
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { getVisitorList, gatherParkList } from '@/api/tourist'
+import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
 export default {
   data() {
     return {
@@ -81,6 +81,7 @@ export default {
           pageNum: 0,
           pageSize: 10
         },
+        registerPark: '', // 景区名字
         gatherParkId: '', // 景区
         visitorPhone: '' // 游客手机
       },
@@ -110,10 +111,14 @@ export default {
     // 获取游客列表
     getVisitorList() {
       // 空字符串参数不提交
-      for (const key in this.form) {
-        if (this.form[key] === '') {
-          delete this.form[key]
-        }
+      if (this.form.gatherParkId === '') {
+        delete this.form.gatherParkId
+      }
+      if (this.form.visitorPhone === '') {
+        delete this.form.visitorPhone
+      }
+      if (this.form.registerPark === '') {
+        delete this.form.registerPark
       }
       getVisitorList(this.form).then(res => {
         if (res.data.code !== 200) {
@@ -146,13 +151,20 @@ export default {
     // 当清空选择器的时候，重新发起请求
     handleClear() {
       this.getVisitorList()
-    }
+    },
     // 导出
-    // handleExport() {
-    //   handleExport(this.form).then(res => {
-    //     console.log(res)
-    //   })
-    // }
+    handleExport() {
+      handleExport(this.form).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        // 创建一个blob对象,file的一种
+        const blob = new Blob([res.data.data], { type: 'application/x-xls' })
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.click()
+      })
+    }
   }
 }
 </script>
