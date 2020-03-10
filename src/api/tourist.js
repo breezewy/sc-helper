@@ -64,13 +64,3 @@ export function gatherParkList() {
     method: 'get'
   })
 }
-
-// 导出
-export function handleExport(form) {
-  const params = qs.stringify({
-    'token': Cookies.get('token'),
-    ...form
-  })
-  window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${params}`
-}
-

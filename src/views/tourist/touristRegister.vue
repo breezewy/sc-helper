@@ -71,8 +71,9 @@
 </template>
 
 <script>
-import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
+import { getVisitorList, gatherParkList } from '@/api/tourist'
 import qs from 'qs'
+import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -155,12 +156,12 @@ export default {
     },
     // 导出
     handleExport() {
-      const data = {
-        registerPark: this.form.registerPark,
+      const data = qs.stringify({
+        token: Cookies.get('token'),
         gatherParkId: this.form.gatherParkId,
         visitorPhone: this.form.visitorPhone
-      }
-      handleExport(data)
+      })
+      window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${data}`
     }
   }
 }
