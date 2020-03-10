@@ -7,10 +7,10 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img 
-            src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif" 
+          <img
+            src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
             alt=""
-            style="width:40px;height:40px;"  
+            style="width:40px;height:40px;"
           >
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
           <i class="el-icon-caret-bottom" />
@@ -31,10 +31,10 @@
       </el-dropdown>
     </div>
 
-
-  <el-dialog title="修改密码" 
-      :visible.sync="showChangePasswordForm" 
-      :close-on-click-modal="false" 
+  <el-dialog
+title="修改密码"
+      :visible.sync="showChangePasswordForm"
+      :close-on-click-modal="false"
       @close="resetForm">
       <el-form :model="form" :rules="formRules" ref="changePassword">
         <el-form-item label="账号" label-width="80px">
@@ -63,34 +63,34 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import {changePwd} from '@/api/user'
+import { changePwd } from '@/api/user'
 export default {
-  data(){
-     var validateConfirmPassword = (rule, value, callback) => {
+  data() {
+    var validateConfirmPassword = (rule, value, callback) => {
       if (this.form.newPwd != value) {
-        return callback(new Error("两次密码输入不一致"));
+        return callback(new Error('两次密码输入不一致'))
       }
-      callback();
-    };
+      callback()
+    }
     return {
-      showChangePasswordForm:false,
-      form:{
-        confirmPwd:"",
-        newPwd:"",
-        oldPwd:""
+      showChangePasswordForm: false,
+      form: {
+        confirmPwd: '',
+        newPwd: '',
+        oldPwd: ''
       },
       formRules: {
         newPwd: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         oldPwd: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
-        confirmPwd:[
-          { required: true, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateConfirmPassword, trigger: "blur" }
+        confirmPwd: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' },
+          { validator: validateConfirmPassword, trigger: 'blur' }
         ]
-      },
+      }
     }
   },
   components: {
@@ -111,28 +111,28 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    changePassword(){
-      this.showChangePasswordForm = true;
+    changePassword() {
+      this.showChangePasswordForm = true
     },
-    resetForm(){
+    resetForm() {
       this.$refs.changePassword.resetFields()
     },
-    handleChange(){
-      this.$refs.changePassword.validate(valid=>{
-          if(valid){
-            let _this = this;
-            changePwd(this.form).then(res=>{
-              if(res.data.code != 200){
-                return _this.$message.error(res.data.msg)
-              }
-              _this.showChangePasswordForm = false
-              _this.$message.success('修改密码成功')
-              _this.logout()
-            })
-          }else{
-            console.log("error submit!!");
-            return false;
-          }
+    handleChange() {
+      this.$refs.changePassword.validate(valid => {
+        if (valid) {
+          const _this = this
+          changePwd(this.form).then(res => {
+            if (res.data.code != 200) {
+              return _this.$message.error(res.data.msg)
+            }
+            _this.showChangePasswordForm = false
+            _this.$message.success('修改密码成功')
+            _this.logout()
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     }
   }

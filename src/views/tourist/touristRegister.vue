@@ -72,6 +72,7 @@
 
 <script>
 import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
+import qs from 'qs'
 export default {
   data() {
     return {
@@ -154,16 +155,12 @@ export default {
     },
     // 导出
     handleExport() {
-      handleExport(this.form).then(res => {
-        if (res.data.code !== 200) {
-          return this.$message.error(res.data.error)
-        }
-        // 创建一个blob对象,file的一种
-        const blob = new Blob([res.data.data], { type: 'application/x-xls' })
-        const link = document.createElement('a')
-        link.href = window.URL.createObjectURL(blob)
-        link.click()
-      })
+      const data = {
+        registerPark: this.form.registerPark,
+        gatherParkId: this.form.gatherParkId,
+        visitorPhone: this.form.visitorPhone
+      }
+      handleExport(data)
     }
   }
 }

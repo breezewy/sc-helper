@@ -3,8 +3,6 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
-
-
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -33,25 +31,25 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
-    let res = response
-    let status = res.status
-
+    const res = response
+    const status = res.status
+    // console.log(res)
     if (res.request.responseURL.indexOf('auth/captcha') != -1) {
       return response
     } else if (res.request.responseURL.indexOf('gatherPark/creatQrCode') != -1) {
       return response
     }
 
-    if (status != 200) {
+    if (status !== 200) {
       Message({
         message: res.statusText || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
     } else {
-      if (res.data.code != 200) {
+      if (res.data.code !== 200) {
         Message({
-          message:res.data.error || 'Error',
+          message: res.data.error || 'Error',
           type: 'error',
           duration: 5 * 1000
         })

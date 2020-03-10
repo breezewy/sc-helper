@@ -1,5 +1,7 @@
 // 系统设置
 import request from '@/utils/request'
+import Cookies from 'js-cookie'
+import qs from 'qs'
 
 // 登记景区列表
 export function getParkList(data) {
@@ -64,12 +66,11 @@ export function gatherParkList() {
 }
 
 // 导出
-export function handleExport(data) {
-  return request({
-    url: '/visitorRecord/export',
-    method: 'post',
-    data,
-    responseType: 'arraybuffer'
+export function handleExport(form) {
+  const params = qs.stringify({
+    'token': Cookies.get('token'),
+    ...form
   })
+  window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${params}`
 }
 
