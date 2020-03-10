@@ -157,7 +157,6 @@ export default {
     // 导出
     handleExport() {
       const data = qs.stringify({
-        token: Cookies.get('token'),
         gatherParkId: this.form.gatherParkId,
         visitorPhone: this.form.visitorPhone
       })
