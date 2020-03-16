@@ -28,47 +28,40 @@
         <el-table-column
           prop="parkName"
           label="景区名称"
-          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="parkCode"
           label="景区码"
-          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="parkAdders"
           label="景区地址"
           align="center"
-          width="150px"
           >
         </el-table-column>
         <el-table-column
           prop="region"
           label="区域管理"
           align="center"
-          width="150px"
           >
         </el-table-column>
         <el-table-column
           prop="describes"
           label="描述"
           align="center"
-          width="200px"
           >
         </el-table-column>
         <el-table-column
           prop="tipsInfo"
           label="提示"
-          width="200px"
           align="center">
         </el-table-column>
         <el-table-column
           prop="remarks"
           label="备注"
-          align="center"
-          width="200px">
+          align="center">
         </el-table-column>
         <el-table-column
           fixed="right"
