@@ -27,9 +27,9 @@
         <el-form-item>
           <el-button  @click="onSubmit">查询</el-button>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button type="success" @click="handleExport">导出</el-button>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
     <!-- 游客列表 -->
     <el-table
