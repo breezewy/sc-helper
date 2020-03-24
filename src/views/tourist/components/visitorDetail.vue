@@ -7,7 +7,6 @@
             @close="close"
             >
             <el-table :data="visitorDetail" border>
-                <el-table-column property="id" label="ID"  align="center"></el-table-column>
                 <el-table-column property="touristName" label="姓名"  align="center"></el-table-column>
                 <el-table-column property="touristIdCard" label="证件号码" align="center"></el-table-column>
                 <el-table-column property="touristIdType" label="证件类型" align="center">

@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
+import { getVisitorList, gatherParkList } from '@/api/tourist'
 import VisitorDetail from './components/visitorDetail'
 import qs from 'qs'
 export default {
@@ -170,15 +170,15 @@ export default {
       this.getVisitorList()
     },
     // 导出
-    // handleExport() {
-    //   const data = qs.stringify({
-    //     gatherParkId: this.form.gatherParkId,
-    //     visitorPhone: this.form.visitorPhone
-    //   })
-    //   window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${data}`
-    // },
-    // 导出
+    handleExport() {
+      const data = qs.stringify({
+        gatherParkId: this.form.gatherParkId,
+        visitorPhone: this.form.visitorPhone
+      })
+      window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${data}`
+    },
 
+    // 导出
     // handleExport() {
     //   const param = {
     //     guideId: this.guideId,
