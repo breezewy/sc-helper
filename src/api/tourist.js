@@ -64,3 +64,21 @@ export function gatherParkList() {
     method: 'get'
   })
 }
+
+// 获取游客踪迹详情
+export function getVisitorDetail(id) {
+  return request({
+    url: `/visitorRecordDetailed/getRecordDetailed/${id}`,
+    method: 'get'
+  })
+}
+
+// 导出
+export function handleExport(param) {
+  return request({
+    url: `/visitorRecord/export`,
+    method: 'get',
+    params: param,
+    responseType: 'blob'
+  })
+}

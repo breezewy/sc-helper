@@ -55,6 +55,15 @@
           label="登记时间"
           align="center">
         </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="100"
+          align="center">
+          <template slot-scope="scope">
+            <el-button @click="handleShowDetail(scope.row.id)" type="text" size="small">查看详情</el-button>
+          </template>
+        </el-table-column>
     </el-table>
     <!-- 分页 -->
     <el-pagination
@@ -67,11 +76,13 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
     ></el-pagination>
+    <visitor-detail v-if="showDetail" :show="showDetail" :id="id" @close=handleClose></visitor-detail>
   </div>
 </template>
 
 <script>
-import { getVisitorList, gatherParkList } from '@/api/tourist'
+import { getVisitorList, gatherParkList, handleExport } from '@/api/tourist'
+import VisitorDetail from './components/visitorDetail'
 import qs from 'qs'
 export default {
   data() {
@@ -89,12 +100,17 @@ export default {
       currentPage: 1, // 当前页
       total: 0, // 总条数
       loading: true,
-      parkOptions: [] // 下拉框
+      parkOptions: [], // 下拉框
+      showDetail: false,
+      id: ''
     }
   },
   created() {
     this.getVisitorList()
     this.gatherParkList()
+  },
+  components: {
+    VisitorDetail
   },
   methods: {
     // 选择列表每页多少数据
@@ -154,12 +170,66 @@ export default {
       this.getVisitorList()
     },
     // 导出
-    handleExport() {
-      const data = qs.stringify({
-        gatherParkId: this.form.gatherParkId,
-        visitorPhone: this.form.visitorPhone
-      })
-      window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${data}`
+    // handleExport() {
+    //   const data = qs.stringify({
+    //     gatherParkId: this.form.gatherParkId,
+    //     visitorPhone: this.form.visitorPhone
+    //   })
+    //   window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${data}`
+    // },
+    // 导出
+
+    // handleExport() {
+    //   const param = {
+    //     guideId: this.guideId,
+    //     guideCardNo: this.guideCardNo,
+    //     idCard: this.idCard
+    //   }
+    //   handleExport(param).then(res => {
+    //     const base64Code = res.headers.filename
+    //     const filename = Base64.decode(base64Code)
+    //     const time = formatDate(new Date())
+    //     const blob = new Blob([res.data])
+    //     const elink = document.createElement('a')
+    //     elink.download = filename
+    //     elink.style.display = 'none'
+    //     elink.href = URL.createObjectURL(blob)
+    //     document.body.appendChild(elink)
+    //     elink.click()
+    //     URL.revokeObjectURL(elink.href)
+    //     document.body.removeChild(elink)
+    //   })
+    // },
+
+    //   this.$http.get('/rescueInfo/export', {
+    //     params: {
+    //       guideId: this.guideId,
+    //       guideCardNo: this.guideCardNo,
+    //       idCard: this.idCard
+    //     },
+    //     responseType: 'blob'
+    //   }).then(res => {
+    //     const base64Code = res.headers.filename
+    //     const filename = Base64.decode(base64Code)
+    //     const time = formatDate(new Date())
+    //     const blob = new Blob([res.data])
+    //     const elink = document.createElement('a')
+    //     elink.download = filename
+    //     elink.style.display = 'none'
+    //     elink.href = URL.createObjectURL(blob)
+    //     document.body.appendChild(elink)
+    //     elink.click()
+    //     URL.revokeObjectURL(elink.href)
+    //     document.body.removeChild(elink)
+    //   })
+    // },
+    // 查看详情
+    handleShowDetail(id) {
+      this.showDetail = true
+      this.id = id
+    },
+    handleClose() {
+      this.showDetail = false
     }
   }
 }
