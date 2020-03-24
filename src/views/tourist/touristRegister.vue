@@ -73,7 +73,6 @@
 <script>
 import { getVisitorList, gatherParkList } from '@/api/tourist'
 import qs from 'qs'
-import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -100,14 +99,14 @@ export default {
   methods: {
     // 选择列表每页多少数据
     handleSizeChange(val) {
-      this.page.pageNum = 0
-      this.page.pageSize = val
+      this.form.page.pageNum = 0
+      this.form.page.pageSize = val
       this.getVisitorList()
     },
     // 选择列表当前第几页
     handleCurrentChange(val) {
       this.currentPage = val
-      this.page.pageNum = this.currentPage - 1
+      this.form.page.pageNum = this.currentPage - 1
       this.getVisitorList()
     },
     // 获取游客列表
