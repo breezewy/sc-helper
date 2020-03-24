@@ -46,11 +46,42 @@
           align="center">
         </el-table-column>
         <el-table-column
+          prop="touristName"
+          label="游客姓名"
+          align="center">
+        </el-table-column>
+        <el-table-column
           prop="visitorPhone"
           label="游客手机号"
           align="center">
         </el-table-column>
-         <el-table-column
+        <el-table-column
+          prop="touristIdType"
+          label="证件类型"
+          align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.touristIdType == 0">身份证</span>
+            <span v-if="scope.row.touristIdType == 1">护照</span>
+            <span v-if="scope.row.touristIdType == 2">港澳通行证</span>
+            <span v-if="scope.row.touristIdType == 3">台湾通行证</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="touristIdCard"
+          label="证件号"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="personNum"
+          label="出行人数"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="childNum"
+          label="携带小孩数量"
+          align="center">
+        </el-table-column>
+        <el-table-column
           prop="visitorTime"
           label="登记时间"
           align="center">

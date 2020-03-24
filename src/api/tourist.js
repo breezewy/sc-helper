@@ -1,7 +1,7 @@
 // 系统设置
 import request from '@/utils/request'
-import Cookies from 'js-cookie'
-import qs from 'qs'
+// import Cookies from 'js-cookie'
+// import qs from 'qs'
 
 // 登记景区列表
 export function getParkList(data) {
