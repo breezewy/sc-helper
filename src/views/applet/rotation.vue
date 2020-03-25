@@ -12,24 +12,17 @@
             style="width: 100%"
         >
             <el-table-column
-                prop="id"
-                label="id"
-                width="180"
-                align="center"    
-            >
-            </el-table-column>
-            <el-table-column
                 prop="name"
                 label="图片名称"
                 width="180"
-                align="center"        
+                align="center"
             >
             </el-table-column>
             <el-table-column
                 prop="state"
                 label="图片状态"
                 width="180"
-                align="center"        
+                align="center"
             >
                 <template slot-scope="scope">
                     <el-tag type="success" v-if="scope.row.state == true" size="mini">显示</el-tag>
@@ -40,28 +33,28 @@
                 prop="sort"
                 label="图片排序"
                 align="center"
-                :show-overflow-tooltip="true"        
+                :show-overflow-tooltip="true"
             >
             </el-table-column>
             <el-table-column
                 prop="imgUrl"
                 label="图片链接"
                 align="center"
-                :show-overflow-tooltip="true"         
+                :show-overflow-tooltip="true"
             >
             </el-table-column>
              <el-table-column
                 prop="url"
                 label="跳转地址"
                 align="center"
-                :show-overflow-tooltip="true"     
+                :show-overflow-tooltip="true"
             >
             </el-table-column>
             <el-table-column
                 fixed="right"
                 label="操作"
                 width="120"
-                align="center" 
+                align="center"
                 >
                 <template slot-scope="scope">
                     <el-button
@@ -80,7 +73,7 @@
             </el-table-column>
         </el-table>
 
-        <append-rotation 
+        <append-rotation
             v-if="showAppendForm"
             :show="showAppendForm"
             @close="closeDialog"
@@ -98,73 +91,73 @@
 </template>
 
 <script>
-import {getRotationList,deleteRotation} from '@/api/applet'
+import { getRotationList, deleteRotation } from '@/api/applet'
 import AppendRotation from './components/AppendRotation'
 import UpdateRotation from './components/UpdateRotation'
 export default {
-    props:{
-        show:Boolean
-    },
-    components:{
-        AppendRotation,
-        UpdateRotation
-    },
-    data(){
-        return{
-            rotationList:[],
-            showAppendForm:false,
-            showUpdateForm:false,
-            rowId:""
-        }
-    },
-    created(){
-        this.getRotationList()
-    },
-    methods:{
-        handleClose(){
-            this.$emit('close')
-        },
-        getRotationList(){
-            getRotationList().then(res=>{
-                if(res.data.code != 200){
-                    return this.$message.error(res.data.error)
-                }
-                this.rotationList = res.data.data
-            })
-        },
-        handleClick(){
-            this.showAppendForm = true
-        },
-        closeDialog(){
-            this.showAppendForm = false
-            this.showUpdateForm = false
-            this.getRotationList()
-        },
-        updateRow(id){
-            this.showUpdateForm = true;
-            this.rowId = id;
-        },
-        deleteRow(id){
-            this.$confirm('确定要删除?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                deleteRotation([id]).then(res=>{
-                    if(res.data.code != 200){
-                        return this.$message.error(res.data.error)
-                    }
-                    this.$message.success('删除成功')
-                    this.getRotationList();
-                })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });          
-            });
-        }
+  props: {
+    show: Boolean
+  },
+  components: {
+    AppendRotation,
+    UpdateRotation
+  },
+  data() {
+    return {
+      rotationList: [],
+      showAppendForm: false,
+      showUpdateForm: false,
+      rowId: ''
     }
+  },
+  created() {
+    this.getRotationList()
+  },
+  methods: {
+    handleClose() {
+      this.$emit('close')
+    },
+    getRotationList() {
+      getRotationList().then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.rotationList = res.data.data
+      })
+    },
+    handleClick() {
+      this.showAppendForm = true
+    },
+    closeDialog() {
+      this.showAppendForm = false
+      this.showUpdateForm = false
+      this.getRotationList()
+    },
+    updateRow(id) {
+      this.showUpdateForm = true
+      this.rowId = id
+    },
+    deleteRow(id) {
+      this.$confirm('确定要删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRotation([id]).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          this.$message.success('删除成功')
+          this.getRotationList()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    }
+  }
 }
 </script>
 
