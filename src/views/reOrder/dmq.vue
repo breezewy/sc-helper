@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <div class="dmq" v-if="hideController">
+    <div class="dmq">
       <div class="toolbar">
         <el-input
           placeholder="请输入票型编码"
@@ -25,15 +25,15 @@
           >
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column type="index" width="50" align="center"></el-table-column>
-            <el-table-column prop="type" label="票型" align="center">
+            <el-table-column prop="type" label="票型" align="center" width="150">
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.type==1" size="mini">单选票</el-tag>
                 <el-tag v-if="scope.row.type==2" type="warning" size="mini">多选票</el-tag>
                 <el-tag v-if="scope.row.type==3" type="success" size="mini">通玩票</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
-            <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
+            <el-table-column prop="code" label="票型编码" align="center"  width="300"></el-table-column>
+            <el-table-column prop="name" label="票型名称" align="center" ></el-table-column>
             <el-table-column label="操作" align="center" width="300" fix="right">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
@@ -116,7 +116,12 @@
         </el-form>
       </el-dialog>
     </div>
-    <Controller v-else :id="dmqId"></Controller>
+    <Controller
+      v-if="showDialog"
+      :show="showDialog"
+      :id="dmqId"
+      @close="closeDialog"
+    ></Controller>
   </div>
 </template>
 
@@ -128,25 +133,25 @@ import {
   getDmqTicketDetail,
   updateDmqTicket,
   checkOrder
-} from "../../api/reOrder";
+} from '../../api/reOrder'
 
-import Controller from "./components/controller";
+import Controller from './components/controller'
 export default {
   data() {
     return {
-      hideController: true,
+      showDialog: false,
       dialogFormVisible: false,
       updatedialogFormVisible: false,
       ticketList: [],
       dmqForm: {
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         type: 1,
         number: 1
       },
       dmqTicketDetial: {},
       paramForm: {
-        code: "",
+        code: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -155,209 +160,211 @@ export default {
       rowIdList: [],
       total: 0,
       currentPage: 1,
-      dmqId: "",
-      showNumber:false,
+      dmqId: '',
+      showNumber: false,
       dmqFormRules: {
         code: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         type: [
-          { required: true, message: "必选项不能为空", trigger: "blur" }
+          { required: true, message: '必选项不能为空', trigger: 'blur' }
         ],
         number: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ]
-      },
-    };
+      }
+    }
   },
   components: {
     Controller
   },
   created() {
-    this.getTicketList(this.paramForm);
+    this.getTicketList(this.paramForm)
   },
   methods: {
-    //点击新增按钮
+    // 点击新增按钮
     addDmq() {
-      this.dialogFormVisible = true;
+      this.dialogFormVisible = true
       this.dmqForm = {
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         number: 1,
-        type:1
-      };
+        type: 1
+      }
     },
-    //获取票型列表
+    // 获取票型列表
     getTicketList(data) {
-      if (data.code == "") {
-        delete data.code;
+      if (data.code === '') {
+        delete data.code
       }
       getDmqTicketList(data).then(res => {
-        if(res.data.code != 200){
-            return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.ticketList = res.data.data.data;
-        this.total = res.data.data.totalCount;
-      });
+        this.ticketList = res.data.data.data
+        this.total = res.data.data.totalCount
+      })
     },
-    //确定添加
+    // 确定添加
     handleSubmit() {
-      this.$refs.addDmqForm.validate(valid=>{
-        if(valid){
-          let _this = this;
-          if(this.dmqForm.type != 2){
+      this.$refs.addDmqForm.validate(valid => {
+        if (valid) {
+          const _this = this
+          if (this.dmqForm.type !== 2) {
             delete this.dmqForm.number
           }
           addDmqTicket(this.dmqForm).then(res => {
-          if (res.data.code != 200) {
-            return this.$message.error(res.data.error);
-          }
-          _this.getTicketList(this.paramForm);
-          this.$message.success("添加成功");
-          this.dialogFormVisible = false;
-          });
-        }else{
-          console.log("error submit!!");
-          return false;
+            if (res.data.code !== 200) {
+              return this.$message.error(res.data.error)
+            }
+            _this.getTicketList(this.paramForm)
+            this.$message.success('添加成功')
+            this.dialogFormVisible = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
       })
-     
     },
-    //取消添加
+    // 取消添加
     handleCancel() {
-      this.dialogFormVisible = false;
+      this.dialogFormVisible = false
     },
-    //查询
+    // 查询
     search() {
-      this.getTicketList(this.paramForm);
+      this.getTicketList(this.paramForm)
     },
-    //头部删除按钮
+    // 头部删除按钮
     handleDeleteMore() {
-      let _this = this;
+      const _this = this
       if (this.rowIdList.length === 0) {
         this.$message({
-          message: "请选择删除项",
-          type: "warning"
-        });
-        return;
+          message: '请选择删除项',
+          type: 'warning'
+        })
+        return
       }
       deleteDmqTicket(this.rowIdList).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        _this.getTicketList(this.paramForm);
+        _this.getTicketList(this.paramForm)
         this.$message({
-          message: "操作成功",
-          type: "success"
-        });
-      });
+          message: '操作成功',
+          type: 'success'
+        })
+      })
     },
-    //列表全选按钮
+    // 列表全选按钮
     handleSelectionChange(selection) {
-      this.rowIdList = [];
+      this.rowIdList = []
       for (let i = 0; i < selection.length; i++) {
-        this.rowIdList.push(selection[i].id);
+        this.rowIdList.push(selection[i].id)
       }
     },
-    //每行的删除按钮
+    // 每行的删除按钮
     handleDeleteSingle(id) {
-      let _this = this;
+      const _this = this
       deleteDmqTicket([id]).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        _this.getTicketList(this.paramForm);
+        _this.getTicketList(this.paramForm)
         this.$message({
-          message: "操作成功",
-          type: "success"
-        });
-      });
+          message: '操作成功',
+          type: 'success'
+        })
+      })
     },
-    //每行的修改按钮
+    // 每行的修改按钮
     handleUpdate(id) {
       getDmqTicketDetail(id).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.updatedialogFormVisible = true;
-        this.dmqTicketDetial = res.data.data;
-      });
+        this.updatedialogFormVisible = true
+        this.dmqTicketDetial = res.data.data
+      })
     },
-    //选择列表不同页面
+    // 选择列表不同页面
     handleSizeChange(val) {
-      this.paramForm.page.pageSize = val;
-      this.getTicketList(this.paramForm);
+      this.paramForm.page.pageSize = val
+      this.getTicketList(this.paramForm)
     },
-    //选择列表每页多少条数据
+    // 选择列表每页多少条数据
     handleCurrentChange(val) {
-      this.currentPage = val;
-      this.paramForm.page.pageNum = this.currentPage - 1;
-      this.getTicketList(this.paramForm);
+      this.currentPage = val
+      this.paramForm.page.pageNum = this.currentPage - 1
+      this.getTicketList(this.paramForm)
     },
-    //修改区域确定按钮
+    // 修改区域确定按钮
     handleUpdateSubmit() {
       this.checkOrder(this.dmqTicketDetial)
     },
-    //修改区域取消按钮
+    // 修改区域取消按钮
     handleUpdateCancel() {
-      this.updatedialogFormVisible = false;
+      this.updatedialogFormVisible = false
     },
-    //根据独木桥票型获取管理票型
+    // 根据独木桥票型获取管理票型
     handleController(id) {
-      this.dmqId = id;
-      this.hideController = false;
+      this.dmqId = id
+      this.showDialog = true
     },
-    change(value){
-      if(value != 2){
+    change(value) {
+      if (value !== 2) {
         this.showNumber = false
-        return 
+        return
       }
       this.showNumber = true
     },
-    //点击修改后先验证
-    checkOrder(item){
-      let data = {
-        code:item.code,
-        type:item.type,
-        id:item.id
+    // 点击修改后先验证
+    checkOrder(item) {
+      const data = {
+        code: item.code,
+        type: item.type,
+        id: item.id
       }
-      checkOrder(data).then(res=>{
-         if(res.data){
-              this.$confirm('修改票型会影响已存在的订单 确定要修改吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }).then(() => {
-                  if(this.dmqTicketDetial.type != 2){
-                      delete this.dmqTicketDetial.number
-                    }
-                    updateDmqTicket(this.dmqTicketDetial).then(res => {
-                      if (res.data.code != 200) {
-                        return this.$message.error(res.data.error);
-                      }
-                      this.updatedialogFormVisible = false;
-                      this.$message({
-                        message: "操作成功",
-                        type: "success"
-                      });
-                      this.getTicketList(this.paramForm);
-                  });
-              }).catch(() => {
-                this.$message({
-                  type: 'info',
-                  message: '已取消修改'
-                });          
-              });
-         }else{
-           return
-         }
+      checkOrder(data).then(res => {
+        if (res.data) {
+          this.$confirm('修改票型会影响已存在的订单 确定要修改吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            if (this.dmqTicketDetial.type !== 2) {
+              delete this.dmqTicketDetial.number
+            }
+            updateDmqTicket(this.dmqTicketDetial).then(res => {
+              if (res.data.code !== 200) {
+                return this.$message.error(res.data.error)
+              }
+              this.updatedialogFormVisible = false
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+              this.getTicketList(this.paramForm)
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            })
+          })
+        } else {
+          return
+        }
       })
+    },
+    closeDialog() {
+      this.showDialog = false
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
