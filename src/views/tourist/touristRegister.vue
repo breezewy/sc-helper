@@ -24,6 +24,18 @@
             @clear="handleClear"
           ></el-input>
         </el-form-item>
+        <el-form-item label="时间">
+          <el-date-picker
+            v-model="dataRange"
+            type="daterange"
+            @change="pickerChange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </el-form-item>
         <el-form-item>
           <el-button  @click="onSubmit">查询</el-button>
         </el-form-item>
@@ -119,6 +131,7 @@ export default {
   data() {
     return {
       visitorList: [], // 游客列表
+      dataRange: [], // 时间选择器
       form: {
         page: {
           pageNum: 0,
@@ -126,7 +139,9 @@ export default {
         },
         registerPark: '', // 景区名字
         gatherParkId: '', // 景区
-        visitorPhone: '' // 游客手机
+        visitorPhone: '', // 游客手机
+        startTime: '', // 起始时间
+        endTime: '' // 结束时间
       },
       currentPage: 1, // 当前页
       total: 0, // 总条数
@@ -259,8 +274,15 @@ export default {
       this.showDetail = true
       this.id = id
     },
+    // 关闭弹窗
     handleClose() {
       this.showDetail = false
+    },
+    // 时间选择器
+    pickerChange(value) {
+      this.dataRange = value
+      this.form.startTime = this.dataRange[0]
+      this.form.endTime = this.dataRange[1]
     }
   }
 }
