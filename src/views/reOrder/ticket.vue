@@ -1,16 +1,26 @@
 <template>
   <div id="container">
-    <div class="toolbar">
-      <el-input
+    <el-form :inline="true"  class="demo-form-inline">
+      <el-form-item>
+        <el-input
         placeholder="请输入票型编码"
         v-model="paramForm.code"
         class="inputArea"
         suffix-icon="el-icon-edit"
-      ></el-input>
-      <el-button @click="search">查询</el-button>
-      <el-button type="primary" @click="addTicket">新增</el-button>
-      <el-button type="danger" @click="handleDeleteMore">删除</el-button>
-    </div>
+        clearable
+        @clear="handleClear"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="search">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="addTicket">新增</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="danger" @click="handleDeleteMore">删除</el-button>
+      </el-form-item>
+    </el-form>
     <div class="tableContainer">
       <template>
         <el-table
@@ -39,7 +49,7 @@
               <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="updateLinkInfo" label="是否携带原订单游客信息" align="center">
+          <el-table-column prop="updateLinkInfo" label="是否限制下单信息" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.updateLinkInfo== true" type="success" size="mini">是</el-tag>
               <el-tag v-if="scope.row.updateLinkInfo== false" type="danger" size="mini">否</el-tag>
@@ -73,7 +83,7 @@
       class="dislog"
       :close-on-click-modal="false"
     >
-      <el-form ref="addTicketForm" :model="ticketForm" label-width="120px" prop>
+      <el-form ref="addTicketForm" :model="ticketForm" label-width="150px" prop>
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketForm.code" type="text" autocomplete="off"></el-input>
         </el-form-item>
@@ -90,6 +100,10 @@
         <el-form-item label="是否包含演出票" prop="containShow">
           <el-radio v-model="ticketForm.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.containShow" :label="false">否</el-radio>
+        </el-form-item>
+        <el-form-item label="是否限制下单信息" prop="containShow">
+          <el-radio v-model="ticketForm.updateLinkInfo" :label="true">是</el-radio>
+          <el-radio v-model="ticketForm.updateLinkInfo" :label="false">否</el-radio>
         </el-form-item>
         <el-form-item label="使用开始时间" prop="useStartDate">
           <el-date-picker
@@ -123,7 +137,7 @@
       class="dislog"
       :close-on-click-modal="false"
     >
-      <el-form ref="updateTicketForm" :model="ticketDetial" label-width="120px" prop>
+      <el-form ref="updateTicketForm" :model="ticketDetial" label-width="150px" prop>
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketDetial.code" type="text" autocomplete="off"></el-input>
         </el-form-item>
@@ -140,6 +154,10 @@
         <el-form-item label="是否包含演出票" prop="containShow">
           <el-radio v-model="ticketDetial.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketDetial.containShow" :label="false">否</el-radio>
+        </el-form-item>
+        <el-form-item label="是否限制下单信息" prop="containShow">
+          <el-radio v-model="ticketDetial.updateLinkInfo" :label="true">是</el-radio>
+          <el-radio v-model="ticketDetial.updateLinkInfo" :label="false">否</el-radio>
         </el-form-item>
         <el-form-item label="使用开始时间" prop="useStartDate">
           <el-date-picker
@@ -175,7 +193,7 @@ import {
   deleteTicket,
   getTicketDetail,
   updateTicket
-} from "../../api/reOrder";
+} from '../../api/reOrder'
 export default {
   data() {
     return {
@@ -183,17 +201,18 @@ export default {
       updatedialogFormVisible: false,
       ticketList: [],
       ticketForm: {
-        code: "",
-        name: "",
-        city:"",
+        code: '',
+        name: '',
+        city: '',
         buyToday: true,
         containShow: true,
-        useStartDate: "",
-        useEndDate: ""
+        ticketForm: true,
+        useStartDate: '',
+        useEndDate: ''
       },
       ticketDetial: {},
       paramForm: {
-        code: "",
+        code: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -202,148 +221,146 @@ export default {
       rowIdList: [],
       total: 0,
       currentPage: 1
-    };
+    }
   },
   created() {
-    this.getTicketList(this.paramForm);
+    this.getTicketList(this.paramForm)
   },
   methods: {
-    //点击新增按钮
+    // 点击新增按钮
     addTicket() {
-      this.dialogFormVisible = true;
+      this.dialogFormVisible = true
       this.ticketForm = {
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         buyToday: true,
         containShow: true,
-        useStartDate: "",
-        useEndDate: ""
-      };
+        updateLinkInfo: true,
+        useStartDate: '',
+        useEndDate: ''
+      }
     },
-    //获取票型列表
+    // 获取票型列表
     getTicketList(data) {
-      if (data.code == "") {
-        delete data.code;
+      if (data.code === '') {
+        delete data.code
       }
       getTicketList(data).then(res => {
         this.ticketList = res.data.data.data
-        this.total = res.data.data.totalCount;
-      });
+        this.total = res.data.data.totalCount
+      })
     },
-    //确定添加
+    // 确定添加
     handleSubmit() {
-      let _this = this;
+      const _this = this
       addReTicket(this.ticketForm).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        _this.getTicketList(this.paramForm);
-        this.$message.success("添加成功");
-        this.dialogFormVisible = false;
-      });
+        _this.getTicketList(this.paramForm)
+        this.$message.success('添加成功')
+        this.dialogFormVisible = false
+      })
     },
-    //取消添加
+    // 取消添加
     handleCancel() {
-      this.dialogFormVisible = false;
+      this.dialogFormVisible = false
     },
-    //查询
+    // 查询
     search() {
-      this.getTicketList(this.paramForm);
+      this.getTicketList(this.paramForm)
     },
-    //头部删除按钮
+    // 头部删除按钮
     handleDeleteMore() {
-      let _this = this;
+      const _this = this
       if (this.rowIdList.length === 0) {
         this.$message({
-          message: "请选择删除项",
-          type: "warning"
-        });
-        return;
+          message: '请选择删除项',
+          type: 'warning'
+        })
+        return
       }
       deleteTicket(this.rowIdList).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        _this.getTicketList(this.paramForm);
+        _this.getTicketList(this.paramForm)
         this.$message({
-          message: "操作成功",
-          type: "success"
-        });
-      });
+          message: '操作成功',
+          type: 'success'
+        })
+      })
     },
-    //列表全选按钮
+    // 列表全选按钮
     handleSelectionChange(selection) {
-      this.rowIdList = [];
+      this.rowIdList = []
       for (let i = 0; i < selection.length; i++) {
-        this.rowIdList.push(selection[i].id);
+        this.rowIdList.push(selection[i].id)
       }
     },
-    //每行的删除按钮
+    // 每行的删除按钮
     handleDeleteSingle(id) {
-      let _this = this;
+      const _this = this
       deleteTicket([id]).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        _this.getTicketList(this.paramForm);
+        _this.getTicketList(this.paramForm)
         this.$message({
-          message: "操作成功",
-          type: "success"
-        });
-      });
+          message: '操作成功',
+          type: 'success'
+        })
+      })
     },
-    //每行的修改按钮
+    // 每行的修改按钮
     handleUpdate(id) {
       getTicketDetail(id).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.updatedialogFormVisible = true;
-        this.ticketDetial = res.data.data;
-      });
+        this.updatedialogFormVisible = true
+        this.ticketDetial = res.data.data
+      })
     },
-    //选择列表每页多少条数据
+    // 选择列表每页多少条数据
     handleSizeChange(val) {
-      this.paramForm.page.pageSize = val;
-      this.getTicketList(this.paramForm);
+      this.paramForm.page.pageSize = val
+      this.getTicketList(this.paramForm)
     },
-    //选择列表不同页面
+    // 选择列表不同页面
     handleCurrentChange(val) {
-      this.currentPage = val;
-      this.paramForm.page.pageNum = this.currentPage - 1;
-      this.getTicketList(this.paramForm);
+      this.currentPage = val
+      this.paramForm.page.pageNum = this.currentPage - 1
+      this.getTicketList(this.paramForm)
     },
-    //修改区域确定按钮
+    // 修改区域确定按钮
     handleUpdateSubmit() {
       updateTicket(this.ticketDetial).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.error)
         }
-        this.updatedialogFormVisible = false;
+        this.updatedialogFormVisible = false
         this.$message({
-          message: "操作成功",
-          type: "success"
-        });
-        this.getTicketList(this.paramForm);
-      });
+          message: '操作成功',
+          type: 'success'
+        })
+        this.getTicketList(this.paramForm)
+      })
     },
-    //修改区域取消按钮
+    // 修改区域取消按钮
     handleUpdateCancel() {
-      this.updatedialogFormVisible = false;
+      this.updatedialogFormVisible = false
+    },
+    handleClear() {
+      this.getTicketList(this.paramForm)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 #container {
   padding: 30px;
-  .toolbar {
-    .inputArea {
-      width: 300px;
-      margin-right: 30px;
-    }
-  }
   .tableContainer {
     margin-top: 30px;
     .el-pagination {

@@ -1,86 +1,51 @@
 <template>
   <div id="listContainer">
-    <div class="list" v-if="hideChildOrder">
-      <!-- <div class="toolbar">
-        <el-input
-          placeholder="请输入订单id"
-          v-model="paramData.id"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
-          clearable
-        ></el-input>
-        <el-input
-          placeholder="请输入证件号"
-          v-model="paramData.idCard"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
-          clearable
-        ></el-input>
-        <el-input
-          placeholder="请输入电话"
-          v-model="paramData.mobile"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
-          clearable
-        ></el-input>
-        <el-input
-          placeholder="请输入姓名"
-          v-model="paramData.name"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
-          clearable
-        ></el-input>
-        <el-input
-          placeholder="请输入订单号"
-          v-model="paramData.orderNo"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
-          clearable
-        ></el-input>
-        <el-button @click="search">查询</el-button>
-      </div> -->
-      <el-row :gutter="20">
-        <el-col :span="4">
+    <el-form :inline="true"  class="demo-form-inline">
+      <el-form-item>
           <el-input
             placeholder="请输入宋城旅游订单号"
             v-model="paramData.orderNo"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
+            @clear="handleClear"
           ></el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-input
+      </el-form-item>
+      <el-form-item>
+         <el-input
             placeholder="请输入证件号"
             v-model="paramData.idCard"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
+            @clear="handleClear"
           ></el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-input
-          placeholder="请输入电话"
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          placeholder="请输入手机号"
           v-model="paramData.mobile"
           class="inputArea"
           suffix-icon="el-icon-edit"
           clearable
-          ></el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-input
+          @clear="handleClear"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input
           placeholder="请输入姓名"
           v-model="paramData.name"
           class="inputArea"
           suffix-icon="el-icon-edit"
           clearable
+          @clear="handleClear"
           ></el-input>
-        </el-col>
- 
-        <el-col :span="4">
-          <el-button @click="search">查询</el-button>
-        </el-col>
-      </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="search">查询</el-button>
+      </el-form-item>
+    </el-form>
+    <div class="list" v-if="hideChildOrder">
       <div class="tableContainer">
         <template>
           <el-table
@@ -103,6 +68,7 @@
             <el-table-column prop="productCode" label="票型编码" align="center" width="200"></el-table-column>
             <el-table-column prop="productName" label="票型名称" align="center" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
+            <el-table-column prop="buyerName" label="购买人" align="center" width="100"></el-table-column>
             <el-table-column prop="mobile" label="手机号" align="center" width="120"></el-table-column>
             <el-table-column prop="orderCount" label="订单数量" align="center" width="80"></el-table-column>
             <el-table-column prop="orderStatus" label="订单状态" align="center" >
@@ -111,6 +77,15 @@
                 <el-tag v-else type="success" size="mini">已预约</el-tag>
               </template>
             </el-table-column>
+            <el-table-column prop="dmqOrderStatus" label="独木桥订单状态" align="center" >
+              <template slot-scope="scope">
+                <span v-if="scope.row.dmqOrderStatus === 0 ">初始化</span>
+                <span v-if="scope.row.dmqOrderStatus === 1 || scope.row.dmqOrderStatus === 2">订单失败</span>
+                <span v-if="scope.row.dmqOrderStatus >= 3 &&  scope.row.dmqOrderStatus <= 8">订单成功</span>
+                <span v-if="scope.row.dmqOrderStatus === 9 ">已退单</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="payTime" label="付款时间" align="center" width="180"></el-table-column>
             <el-table-column prop="idCard" label="证件号" align="center" width="180"></el-table-column>
             <el-table-column prop="certificateType" label="证件类型" align="center">
               <template slot-scope="scope">
@@ -173,103 +148,91 @@
 </template>
 
 <script>
-import { getOrderList, getReChildOrder,getTicket } from "../../api/reOrder";
-import ChildOrder from "./components/childOrder";
+import { getOrderList, getReChildOrder, getTicket } from '../../api/reOrder'
+import ChildOrder from './components/childOrder'
 export default {
   data() {
     return {
       orderList: [],
-      code: "",
+      code: '',
       currentPage: 1,
       total: 0,
       paramData: {
-        id: "",
-        idCard: "",
-        mobile: "",
-        name: "",
-        orderNo: "",
+        id: '',
+        idCard: '',
+        mobile: '',
+        name: '',
+        orderNo: '',
         page: {
           pageNum: 0,
           pageSize: 10
         }
       },
       hideChildOrder: true,
-      reOrderId: "",
-      dbData:{},
-      dialogVisible:false
-    };
+      reOrderId: '',
+      dbData: {},
+      dialogVisible: false
+    }
   },
   components: {
     ChildOrder
   },
   created() {
-    this.getOrderList(this.paramData);
+    this.getOrderList(this.paramData)
   },
   methods: {
     getOrderList(data) {
-      // if (data.id == "") {
-      //   delete data.id;
-      // }
-      // if (data.idCard == "") {
-      //   delete data.idCard;
-      // }
-      // if (data.mobile == "") {
-      //   delete data.mobile;
-      // }
-      // if (data.name == "") {
-      //   delete data.name;
-      // }
-      // if (data.orderNo == "") {
-      //   delete data.orderNo;
-      // }
-      for(let key in data){
-        if(data[key] == ''){
+      for (const key in data) {
+        if (data[key] === '') {
           delete data[key]
         }
       }
       getOrderList(data).then(res => {
-        if (res.data.code!= 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.orderList = res.data.data.data;
-        this.total = res.data.data.totalCount;
-      });
+        this.orderList = res.data.data.data
+        this.total = res.data.data.totalCount
+      })
     },
     search() {
-      this.getOrderList(this.paramData);
+      this.getOrderList(this.paramData)
     },
-    //选择列表不同页面
+    // 选择列表不同页面
     handleSizeChange(val) {
-      this.paramData.page.pageSize = val;
-      this.getOrderList(this.paramData);
+      this.paramData.page.pageSize = val
+      this.getOrderList(this.paramData)
     },
-    //选择列表每页多少条数据
+    // 选择列表每页多少条数据
     handleCurrentChange(val) {
-      this.currentPage = val;
-      this.paramData.page.pageNum = this.currentPage - 1;
-      this.getOrderList(this.paramData);
+      this.currentPage = val
+      this.paramData.page.pageNum = this.currentPage - 1
+      this.getOrderList(this.paramData)
     },
     getReChildOrder(id) {
       // this.hideChildOrder = false;
-      this.reOrderId = id;
+      this.reOrderId = id
       this.$router.push({
-        name:'reOrder/childOrderList',
-        params:{
-          id:this.reOrderId
+        name: 'reOrder/childOrderList',
+        params: {
+          id: this.reOrderId
         }
       })
     },
-    showOrderDetail(id){
-      getTicket(id).then(res=>{
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+    showOrderDetail(id) {
+      getTicket(id).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.dialogVisible = true;
-        this.dbData = res.data.data;
+        this.dialogVisible = true
+        this.dbData = res.data.data
       })
+    },
+    handleClear() {
+      this.getOrderList(this.paramData)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

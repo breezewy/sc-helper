@@ -1,17 +1,27 @@
 <template>
   <div id="container">
-    <div class="dmq">
-      <div class="toolbar">
+    <el-form :inline="true"  class="demo-form-inline">
+      <el-form-item>
         <el-input
-          placeholder="请输入票型编码"
-          v-model="paramForm.code"
-          class="inputArea"
-          suffix-icon="el-icon-edit"
+        placeholder="请输入票型编码"
+        v-model="paramForm.code"
+        class="inputArea"
+        suffix-icon="el-icon-edit"
+        clearable
+        @clear="handleClear"
         ></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="search">查询</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="primary" @click="addDmq">新增</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="danger" @click="handleDeleteMore">删除</el-button>
-      </div>
+      </el-form-item>
+    </el-form>
+    <div class="dmq">
       <div class="tableContainer">
         <template>
           <el-table
@@ -25,7 +35,7 @@
           >
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column type="index" width="50" align="center"></el-table-column>
-            <el-table-column prop="type" label="票型" align="center" width="150">
+            <el-table-column prop="type" label="票型类型" align="center" width="150">
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.type==1" size="mini">单选票</el-tag>
                 <el-tag v-if="scope.row.type==2" type="warning" size="mini">多选票</el-tag>
@@ -362,6 +372,9 @@ export default {
     },
     closeDialog() {
       this.showDialog = false
+    },
+    handleClear() {
+      this.getTicketList(this.paramForm)
     }
   }
 }
@@ -370,12 +383,6 @@ export default {
 <style lang="scss" scoped>
 #container {
   padding: 30px;
-  .toolbar {
-    .inputArea {
-      width: 300px;
-      margin-right: 30px;
-    }
-  }
   .tableContainer {
     margin-top: 30px;
     .el-pagination {
