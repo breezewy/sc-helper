@@ -39,6 +39,12 @@
               <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="updateLinkInfo" label="是否携带原订单游客信息" align="center">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.updateLinkInfo== true" type="success" size="mini">是</el-tag>
+              <el-tag v-if="scope.row.updateLinkInfo== false" type="danger" size="mini">否</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="useStartDate" label="使用开始时间" align="center"></el-table-column>
           <el-table-column prop="useEndDate" label="使用结束时间" align="center"></el-table-column>
           <el-table-column label="操作" align="center" width="300" fix="right">
