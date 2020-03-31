@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import { getOrderList, getReChildOrder, getTicket } from '../../api/reOrder'
+import { getOrderList, getTicket } from '../../api/reOrder'
 import ChildOrder from './components/childOrder'
 export default {
   data() {

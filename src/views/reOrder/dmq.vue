@@ -17,7 +17,6 @@
           :fetch-suggestions="querySearchAsync"
           placeholder="请输入票型名称"
           clearable
-          @select="handleSelect"
         ></el-autocomplete>
       </el-form-item>
       <el-form-item>
@@ -217,8 +216,12 @@ export default {
     },
     // 获取票型列表
     getTicketList(data) {
+      this.restaurants = []
       if (data.code === '') {
         delete data.code
+      }
+      if (data.name === '') {
+        delete data.name
       }
       getDmqTicketList(data).then(res => {
         if (res.data.code !== 200) {
@@ -390,6 +393,17 @@ export default {
     },
     handleClear() {
       this.getTicketList(this.paramForm)
+    },
+    // 模糊查询
+    querySearchAsync(queryString, cb) {
+      const restaurants = this.restaurants
+      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      cb(results)
+    },
+    createStateFilter(queryString) {
+      return (state) => {
+        return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
     }
   }
 }
