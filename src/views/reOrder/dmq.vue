@@ -12,6 +12,15 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
+        <el-autocomplete
+          v-model="paramForm.name"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请输入票型名称"
+          clearable
+          @select="handleSelect"
+        ></el-autocomplete>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
@@ -153,6 +162,7 @@ export default {
       dialogFormVisible: false,
       updatedialogFormVisible: false,
       ticketList: [],
+      restaurants: [],
       dmqForm: {
         code: '',
         name: '',
@@ -216,6 +226,11 @@ export default {
         }
         this.ticketList = res.data.data.data
         this.total = res.data.data.totalCount
+        this.ticketList.forEach(item => {
+          this.restaurants.push({
+            value: item.name
+          })
+        })
       })
     },
     // 确定添加

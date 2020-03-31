@@ -12,20 +12,11 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <!-- <el-input
-        placeholder="请输入票型名称"
-        v-model="paramForm.name"
-        class="inputArea"
-        suffix-icon="el-icon-edit"
-        clearable
-        @clear="handleClear"
-        ></el-input> -->
         <el-autocomplete
           v-model="paramForm.name"
           :fetch-suggestions="querySearchAsync"
           placeholder="请输入票型名称"
           clearable
-          @select="handleSelect"
         ></el-autocomplete>
       </el-form-item>
       <el-form-item>
@@ -260,6 +251,7 @@ export default {
     },
     // 获取票型列表
     getTicketList(data) {
+      this.restaurants = []
       if (data.code === '') {
         delete data.code
       }
@@ -391,10 +383,6 @@ export default {
       return (state) => {
         return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
-    },
-    // 模糊搜索选择
-    handleSelect(item) {
-      console.log(item)
     }
   }
 }
