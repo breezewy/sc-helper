@@ -56,10 +56,21 @@
           border
         >
           <el-table-column type="index" width="50" align="center"></el-table-column>
-          <el-table-column prop="dmqOrderId" label="宋城旅游订单号" align="center"></el-table-column>
-          <el-table-column prop="name" label="票型名称" align="center" ></el-table-column>
+          <el-table-column prop="dmqOrderId" label="宋城旅游订单号" align="center" width="240"></el-table-column>
+          <el-table-column prop="name" label="票型名称" align="center" width="300"></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center" width="200"></el-table-column>
           <el-table-column prop="buyerName" label="购买人" align="center" width="100"></el-table-column>
+          <el-table-column prop="linkName" label="游客姓名" align="center" width="100"></el-table-column>
+          <el-table-column prop="mobile" label="游客手机号" align="center" width="150"></el-table-column>
+          <el-table-column prop="idCard" label="证件号" align="center" width="200"></el-table-column>
+          <el-table-column prop="certificateType" label="证件类型" align="center" width="100">
+             <template slot-scope="scope">
+              <span v-if="scope.row.certificateType === '0' ">身份证</span>
+              <span v-if="scope.row.certificateType === '1' ">护照</span>
+              <span v-if="scope.row.certificateType === '2' ">港澳通行证</span>
+              <span v-if="scope.row.certificateType === '3' ">台湾通行证</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="dmqOrderStatus" label="独木桥订单状态" align="center" >
             <template slot-scope="scope">
               <span v-if="scope.row.dmqOrderStatus === 0 ">初始化</span>
@@ -70,7 +81,7 @@
           </el-table-column>
           <el-table-column prop="payTime" label="付款时间" align="center" width="180"></el-table-column>
           <el-table-column prop="number" label="预约数量" align="center" width="100"></el-table-column>
-          <el-table-column prop="playTime" label="游玩日期" align="center"></el-table-column>
+          <el-table-column prop="playTime" label="游玩日期" align="center" width="100"></el-table-column>
           <el-table-column prop="showTime" label="演出场次" align="center"></el-table-column>
           <el-table-column prop="orderStatus" label="订单状态" align="center" width="100">
               <template slot-scope="scope">
