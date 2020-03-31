@@ -110,7 +110,7 @@
                 <span v-if="scope.row.orderStatus==3" >已退单</span>
               </template>
             </el-table-column>
-            <el-table-column prop="dmqOrderStatus" label="独木桥订单状态" align="center" >
+            <el-table-column prop="dmqOrderStatus" label="独木桥订单状态" align="center" width="150">
               <template slot-scope="scope">
                 <span v-if="scope.row.dmqOrderStatus === 0 ">初始化</span>
                 <span v-if="scope.row.dmqOrderStatus === 1 || scope.row.dmqOrderStatus === 2">订单失败</span>
