@@ -12,6 +12,23 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
+        <!-- <el-input
+        placeholder="请输入票型名称"
+        v-model="paramForm.name"
+        class="inputArea"
+        suffix-icon="el-icon-edit"
+        clearable
+        @clear="handleClear"
+        ></el-input> -->
+        <el-autocomplete
+          v-model="paramForm.name"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请输入票型名称"
+          clearable
+          @select="handleSelect"
+        ></el-autocomplete>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
@@ -200,6 +217,7 @@ export default {
       dialogFormVisible: false,
       updatedialogFormVisible: false,
       ticketList: [],
+      restaurants: [],
       ticketForm: {
         code: '',
         name: '',
@@ -245,9 +263,17 @@ export default {
       if (data.code === '') {
         delete data.code
       }
+      if (data.name === '') {
+        delete data.name
+      }
       getTicketList(data).then(res => {
         this.ticketList = res.data.data.data
         this.total = res.data.data.totalCount
+        this.ticketList.forEach(item => {
+          this.restaurants.push({
+            value: item.name
+          })
+        })
       })
     },
     // 确定添加
@@ -351,8 +377,24 @@ export default {
     handleUpdateCancel() {
       this.updatedialogFormVisible = false
     },
+    // 清空搜索框
     handleClear() {
       this.getTicketList(this.paramForm)
+    },
+    // 模糊查询
+    querySearchAsync(queryString, cb) {
+      const restaurants = this.restaurants
+      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      cb(results)
+    },
+    createStateFilter(queryString) {
+      return (state) => {
+        return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
+    // 模糊搜索选择
+    handleSelect(item) {
+      console.log(item)
     }
   }
 }
