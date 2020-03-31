@@ -42,6 +42,37 @@
           ></el-input>
       </el-form-item>
       <el-form-item>
+          <el-input
+          placeholder="请输入购买人"
+          v-model="paramData.buyerName"
+          class="inputArea"
+          suffix-icon="el-icon-edit"
+          clearable
+          @clear="handleClear"
+          ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="paramData.orderStatus" clearable placeholder="请选择订单状态">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker
+          v-model="paramData.payTime"
+          type="date"
+          placeholder="请选择付款时间"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          clearable
+          >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="search">查询</el-button>
       </el-form-item>
     </el-form>
@@ -73,8 +104,10 @@
             <el-table-column prop="orderCount" label="订单数量" align="center" width="80"></el-table-column>
             <el-table-column prop="orderStatus" label="订单状态" align="center" >
               <template slot-scope="scope">
-                <el-tag v-if="scope.row.orderStatus==3" type="info" size="mini">已退单</el-tag>
-                <el-tag v-else type="success" size="mini">已预约</el-tag>
+                <span v-if="scope.row.orderStatus==0" >未预约</span>
+                <span v-if="scope.row.orderStatus==1" >已预约</span>
+                <span v-if="scope.row.orderStatus==2" >订单失败</span>
+                <span v-if="scope.row.orderStatus==3" >已退单</span>
               </template>
             </el-table-column>
             <el-table-column prop="dmqOrderStatus" label="独木桥订单状态" align="center" >
@@ -171,7 +204,20 @@ export default {
       hideChildOrder: true,
       reOrderId: '',
       dbData: {},
-      dialogVisible: false
+      dialogVisible: false,
+      options: [{
+        value: 0,
+        label: '未预约'
+      }, {
+        value: 1,
+        label: '已预约'
+      }, {
+        value: 2,
+        label: '订单失败'
+      }, {
+        value: 3,
+        label: '已退单'
+      }]
     }
   },
   components: {
