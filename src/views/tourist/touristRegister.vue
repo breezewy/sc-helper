@@ -28,7 +28,7 @@
           <el-date-picker
             v-model="dataRange"
             type="daterange"
-            @change="pickerChange"
+            @change="timeChange"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             format="yyyy 年 MM 月 dd 日"
@@ -39,9 +39,9 @@
         <el-form-item>
           <el-button  @click="onSubmit">查询</el-button>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="success" @click="handleExport">导出</el-button>
-        </el-form-item> -->
+        <el-form-item>
+          <el-button type="success" @click="handleTouristExport">导出</el-button>
+        </el-form-item>
     </el-form>
     <!-- 游客列表 -->
     <el-table
@@ -124,9 +124,9 @@
 </template>
 
 <script>
-import { getVisitorList, gatherParkList } from '@/api/tourist'
+import { getVisitorList, gatherParkList, handleTouristExport } from '@/api/tourist'
 import VisitorDetail from './components/visitorDetail'
-import qs from 'qs'
+import { handleExport } from '../../utils/handleExport'
 export default {
   data() {
     return {
@@ -162,6 +162,7 @@ export default {
     // 选择列表每页多少数据
     handleSizeChange(val) {
       this.form.page.pageNum = 0
+      this.currentPage = 1
       this.form.page.pageSize = val
       this.getVisitorList()
     },
@@ -173,15 +174,15 @@ export default {
     },
     // 获取游客列表
     getVisitorList() {
+      if (this.dataRange && this.dataRange.length > 1) {
+        this.startTime = this.dataRange[0]
+        this.endTime = this.dataRange[1]
+      }
       // 空字符串参数不提交
-      if (this.form.gatherParkId === '') {
-        delete this.form.gatherParkId
-      }
-      if (this.form.visitorPhone === '') {
-        delete this.form.visitorPhone
-      }
-      if (this.form.registerPark === '') {
-        delete this.form.registerPark
+      for (const key in this.form) {
+        if (this.form[key] === '' || this.form[key] === null) {
+          delete this.form[key]
+        }
       }
       getVisitorList(this.form).then(res => {
         if (res.data.code !== 200) {
@@ -216,59 +217,19 @@ export default {
       this.getVisitorList()
     },
     // 导出
-    handleExport() {
-      const data = qs.stringify({
-        gatherParkId: this.form.gatherParkId,
-        visitorPhone: this.form.visitorPhone
+    handleTouristExport() {
+      for (const key in this.form) {
+        if (this.form[key] === '' || this.form[key] === null) {
+          delete this.form[key]
+        }
+      }
+      handleTouristExport(this.form).then(res => {
+        if (res.data) {
+          handleExport(res.data)
+        }
       })
-      window.location.href = `${process.env.VUE_APP_BASE_API}visitorRecord/export?${data}`
     },
 
-    // 导出
-    // handleExport() {
-    //   const param = {
-    //     guideId: this.guideId,
-    //     guideCardNo: this.guideCardNo,
-    //     idCard: this.idCard
-    //   }
-    //   handleExport(param).then(res => {
-    //     const base64Code = res.headers.filename
-    //     const filename = Base64.decode(base64Code)
-    //     const time = formatDate(new Date())
-    //     const blob = new Blob([res.data])
-    //     const elink = document.createElement('a')
-    //     elink.download = filename
-    //     elink.style.display = 'none'
-    //     elink.href = URL.createObjectURL(blob)
-    //     document.body.appendChild(elink)
-    //     elink.click()
-    //     URL.revokeObjectURL(elink.href)
-    //     document.body.removeChild(elink)
-    //   })
-    // },
-
-    //   this.$http.get('/rescueInfo/export', {
-    //     params: {
-    //       guideId: this.guideId,
-    //       guideCardNo: this.guideCardNo,
-    //       idCard: this.idCard
-    //     },
-    //     responseType: 'blob'
-    //   }).then(res => {
-    //     const base64Code = res.headers.filename
-    //     const filename = Base64.decode(base64Code)
-    //     const time = formatDate(new Date())
-    //     const blob = new Blob([res.data])
-    //     const elink = document.createElement('a')
-    //     elink.download = filename
-    //     elink.style.display = 'none'
-    //     elink.href = URL.createObjectURL(blob)
-    //     document.body.appendChild(elink)
-    //     elink.click()
-    //     URL.revokeObjectURL(elink.href)
-    //     document.body.removeChild(elink)
-    //   })
-    // },
     // 查看详情
     handleShowDetail(id) {
       this.showDetail = true
@@ -283,6 +244,14 @@ export default {
       this.dataRange = value
       this.form.startTime = this.dataRange[0]
       this.form.endTime = this.dataRange[1]
+    },
+    // 清空付款日期选择器时执行
+    timeChange(value) {
+      if (value == null) {
+        this.form.startTime = ''
+        this.form.endTime = ''
+        this.getVisitorList()
+      }
     }
   }
 }

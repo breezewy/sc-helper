@@ -73,12 +73,12 @@ export function getVisitorDetail(id) {
   })
 }
 
-// 导出
-export function handleExport(param) {
+// 游客踪迹导出
+export function handleTouristExport(data) {
   return request({
     url: `/visitorRecord/export`,
-    method: 'get',
-    params: param,
+    method: 'post',
+    data,
     responseType: 'blob'
   })
 }
