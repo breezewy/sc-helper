@@ -20,12 +20,12 @@
           v-model="dateArr"
           type="daterange"
           align="right"
-          unlink-panels
-          range-separator="——"
+          value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
           @change="getDateRange"
+          :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
       </div>
     </div>
@@ -45,26 +45,24 @@
         </el-table-column>
         <el-table-column prop="sceneId" label="场次ID" align="center"></el-table-column>
       </el-table>
-      <!-- <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 50, 100]"
-        :page-size="10"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      ></el-pagination>-->
     </div>
   </div>
 </template>
 
 <script>
 import { getParkList, getPerformList } from '../../api/query'
-import { getDateTime } from '../../utils/formatDate'
 
-const start = new Date()
-const end = new Date()
+// 获取新的时间(2019.4.12）
+const date = new Date()
+// 获取当前时间的年份转为字符串
+const year = date.getFullYear().toString() // '2019'
+// 获取月份，由于月份从0开始，此处要加1，判断是否小于10，如果是在字符串前面拼接'0'
+const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString() // '04'
+// 获取天，判断是否小于10，如果是在字符串前面拼接'0'
+const da = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString() // '12'
+
+const start = year + '-' + month + '-' + da
+const end = year + '-' + month + '-' + da
 export default {
   data() {
     return {
@@ -127,8 +125,8 @@ export default {
       })
     },
     getPerForm() {
-      this.startStr = getDateTime(this.dateArr[0])
-      this.endStr = getDateTime(this.dateArr[1])
+      this.startStr = this.dateArr[0]
+      this.endStr = this.dateArr[1]
       const dataForm = {
         endDate: this.endStr,
         id: this.parkId,
@@ -157,20 +155,9 @@ export default {
     getDateRange(date) {
       this.perFormTable = null
       this.dateArr = date
+      console.log(this.dateArr)
       this.getPerForm()
     }
-    // 分页功能
-    // //选择列表不同页面
-    // handleSizeChange(val) {
-    //   this.paramForm.page.pageSize = val;
-    //   this.getTicketList(this.paramForm);
-    // },
-    // //选择列表每页多少条数据
-    // handleCurrentChange(val) {
-    //   this.currentPage = val;
-    //   this.paramForm.page.pageNum = this.currentPage - 1;
-    //   this.getTicketList(this.paramForm);
-    // }
   }
 }
 </script>
