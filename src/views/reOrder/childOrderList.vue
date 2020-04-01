@@ -53,24 +53,31 @@
       </el-form-item>
       <el-form-item>
         <el-date-picker
-          v-model="paramData.payTime"
-          type="date"
-          placeholder="请选择付款时间"
+          v-model="payTime"
+          type="daterange"
+          start-placeholder="付款时间"
+          end-placeholder="付款时间"
           format="yyyy 年 MM 月 dd 日"
           value-format="yyyy-MM-dd"
           clearable
+          :default-time="['00:00:00', '23:59:59']"
+          @change="payTimeChange"
           >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-date-picker
-            v-model="paramData.playTime"
-            type="date"
-            placeholder="请选择游玩日期"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            clearable
-        ></el-date-picker>
+          v-model="playTime"
+          type="daterange"
+          start-placeholder="游玩时间"
+          end-placeholder="游玩时间"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          clearable
+          :default-time="['00:00:00', '23:59:59']"
+          @change="playTimeChange"
+          >
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button @click="search">查询</el-button>
@@ -155,9 +162,14 @@ export default {
           pageNum: 0,
           pageSize: 10
         },
-        playTime: '',
         reOrdersId: this.$route.params.id
       },
+      playTime: '', // 日期选择器绑定的游玩日期
+      startPlayTime: '', // 传参的游玩日期开始时间
+      endPlayTime: '', // 传参的游玩日期结束时间
+      payTime: '', // 日期选择器绑定的付款日期
+      startPayTime: '', // 传参的付款时间
+      endPayTime: '', // 传参的付款时间
       options: [{
         value: 0,
         label: '未预约'
@@ -178,22 +190,28 @@ export default {
   },
   methods: {
     getChildOrder(data) {
-      if (data.code === '') {
-        delete data.code
+      if (this.playTime && this.playTime.length > 1) {
+        this.startPlayTime = this.playTime[0]
+        this.endPlayTime = this.playTime[1]
       }
-      if (data.dmqOrderId === '') {
-        delete data.dmqOrderId
+      if (this.payTime && this.payTime.length > 1) {
+        this.startPayTime = this.payTime[0]
+        this.endPayTime = this.payTime[1]
       }
-      if (data.name === '') {
-        delete data.name
+      const timeRange = {
+        startPlayTime: this.startPlayTime,
+        endPlayTime: this.endPlayTime,
+        startPayTime: this.startPayTime,
+        endPayTime: this.endPayTime
       }
-      if (data.playTime === '') {
-        delete data.playTime
+      const newData = {}
+      Object.assign(newData, timeRange, data)
+      for (const key in newData) {
+        if (newData[key] === '' || newData[key] === null) {
+          delete newData[key]
+        }
       }
-      if (data.reOrdersId === '') {
-        delete data.reOrdersId
-      }
-      getReChildOrder(data).then(res => {
+      getReChildOrder(newData).then(res => {
         this.childOrderList = res.data.data.data
         this.total = res.data.data.totalCount
       })
@@ -209,11 +227,29 @@ export default {
       this.paramData.page.pageNum = this.currentPage - 1
       this.getChildOrder(this.paramData)
     },
+    // 查询
     search() {
       this.getChildOrder(this.paramData)
     },
+    // 清空查询框
     handleClear() {
       this.getChildOrder(this.paramData)
+    },
+    // 清空游玩日期选择器时执行
+    playTimeChange(value) {
+      if (value == null) {
+        this.startPlayTime = ''
+        this.endPlayTime = ''
+        this.getChildOrder(this.paramData)
+      }
+    },
+    // 清空付款日期选择器时执行
+    payTimeChange(value) {
+      if (value == null) {
+        this.startPayTime = ''
+        this.endPayTime = ''
+        this.getChildOrder(this.paramData)
+      }
     }
   }
 }

@@ -63,12 +63,15 @@
       </el-form-item>
       <el-form-item>
         <el-date-picker
-          v-model="paramData.payTime"
-          type="date"
-          placeholder="请选择付款时间"
+          v-model="payTime"
+          type="daterange"
+          start-placeholder="付款时间"
+          end-placeholder="付款时间"
           format="yyyy 年 MM 月 dd 日"
           value-format="yyyy-MM-dd"
           clearable
+          :default-time="['00:00:00', '23:59:59']"
+          @change="payTimeChange"
           >
         </el-date-picker>
       </el-form-item>
@@ -201,6 +204,9 @@ export default {
           pageSize: 10
         }
       },
+      payTime: '', // 日期选择器绑定的付款日期
+      startPayTime: '', // 传参的付款时间
+      endPayTime: '', // 传参的付款时间
       hideChildOrder: true,
       reOrderId: '',
       dbData: {},
@@ -228,12 +234,22 @@ export default {
   },
   methods: {
     getOrderList(data) {
-      for (const key in data) {
-        if (data[key] === '') {
-          delete data[key]
+      if (this.payTime && this.payTime.length > 1) {
+        this.startPayTime = this.payTime[0]
+        this.endPayTime = this.payTime[1]
+      }
+      const timeRange = {
+        startPayTime: this.startPayTime,
+        endPayTime: this.endPayTime
+      }
+      const newData = {}
+      Object.assign(newData, timeRange, data)
+      for (const key in newData) {
+        if (newData[key] === '') {
+          delete newData[key]
         }
       }
-      getOrderList(data).then(res => {
+      getOrderList(newData).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
@@ -276,6 +292,14 @@ export default {
     },
     handleClear() {
       this.getOrderList(this.paramData)
+    },
+    // 清空付款日期选择器时执行
+    payTimeChange(value) {
+      if (value == null) {
+        this.startPayTime = ''
+        this.endPayTime = ''
+        this.getOrderList(this.paramData)
+      }
     }
   }
 }
