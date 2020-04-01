@@ -78,6 +78,9 @@
       <el-form-item>
         <el-button @click="search">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="handleReOrderExport">导出</el-button>
+      </el-form-item>
     </el-form>
     <div class="list" v-if="hideChildOrder">
       <div class="tableContainer">
@@ -184,8 +187,9 @@
 </template>
 
 <script>
-import { getOrderList, getTicket } from '../../api/reOrder'
+import { getOrderList, getTicket, handleReOrderExport } from '../../api/reOrder'
 import ChildOrder from './components/childOrder'
+import { handleExport } from '../../utils/handleExport'
 export default {
   data() {
     return {
@@ -233,6 +237,24 @@ export default {
     this.getOrderList(this.paramData)
   },
   methods: {
+    // 导出
+    handleReOrderExport() {
+      const data = {
+        ...this.paramData,
+        startPayTime: this.startPayTime,
+        endPayTime: this.endPayTime
+      }
+      for (const key in data) {
+        if (data[key] === '' || data[key] === null) {
+          delete data[key]
+        }
+      }
+      handleReOrderExport(data).then(res => {
+        if (res.data) {
+          handleExport(res.data)
+        }
+      })
+    },
     getOrderList(data) {
       if (this.payTime && this.payTime.length > 1) {
         this.startPayTime = this.payTime[0]

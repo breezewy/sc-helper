@@ -28,6 +28,9 @@
       <el-form-item>
         <el-button type="danger" @click="handleDeleteMore">删除</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="handleReDmqExport">导出</el-button>
+      </el-form-item>
     </el-form>
     <div class="dmq">
       <div class="tableContainer">
@@ -150,9 +153,10 @@ import {
   deleteDmqTicket,
   getDmqTicketDetail,
   updateDmqTicket,
-  checkOrder
+  checkOrder,
+  handleReDmqExport
 } from '../../api/reOrder'
-
+import { handleExport } from '../../utils/handleExport'
 import Controller from './components/controller'
 export default {
   data() {
@@ -204,6 +208,18 @@ export default {
     this.getTicketList(this.paramForm)
   },
   methods: {
+    handleReDmqExport() {
+      for (const key in this.paramForm) {
+        if (this.paramForm[key] === '' || this.paramForm[key] === null) {
+          delete this.paramForm[key]
+        }
+      }
+      handleReDmqExport(this.paramForm).then(res => {
+        if (res.data) {
+          handleExport(res.data)
+        }
+      })
+    },
     // 点击新增按钮
     addDmq() {
       this.dialogFormVisible = true

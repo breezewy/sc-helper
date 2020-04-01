@@ -82,6 +82,9 @@
       <el-form-item>
         <el-button @click="search">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="handleReChildOrderExport">导出</el-button>
+      </el-form-item>
     </el-form>
     <div class="tableContainer">
       <template>
@@ -146,7 +149,8 @@
 </template>
 
 <script>
-import { getReChildOrder } from '../../api/reOrder'
+import { getReChildOrder, handleReChildOrderExport } from '../../api/reOrder'
+import { handleExport } from '../../utils/handleExport'
 export default {
   name: 'ChildOrderList',
   data() {
@@ -189,6 +193,26 @@ export default {
     this.getChildOrder(this.paramData)
   },
   methods: {
+    // 导出
+    handleReChildOrderExport() {
+      const data = {
+        ...this.paramData,
+        startPlayTime: this.startPlayTime,
+        endPlayTime: this.endPlayTime,
+        startPayTime: this.startPayTime,
+        endPayTime: this.endPayTime
+      }
+      for (const key in data) {
+        if (data[key] === '' || data[key] === null) {
+          delete data[key]
+        }
+      }
+      handleReChildOrderExport(data).then(res => {
+        if (res.data) {
+          handleExport(res.data)
+        }
+      })
+    },
     getChildOrder(data) {
       if (this.playTime && this.playTime.length > 1) {
         this.startPlayTime = this.playTime[0]

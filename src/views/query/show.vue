@@ -60,104 +60,104 @@
 </template>
 
 <script>
-import { getParkList, getPerformList } from "../../api/query";
-import { getDateTime } from "../../utils/formatDate";
+import { getParkList, getPerformList } from '../../api/query'
+import { getDateTime } from '../../utils/formatDate'
 
-let start = new Date();
-let end = new Date();
+const start = new Date()
+const end = new Date()
 export default {
   data() {
     return {
-      parkList: [], //景区列表
-      value: "", //选中的景区
-      parkId: "", //景区ID,
-      dateArr: [start, end], //日期选择数组
-      startStr: "", //起始时间字符串
-      endStr: "", //结束时间字符串
+      parkList: [], // 景区列表
+      value: '', // 选中的景区
+      parkId: '', // 景区ID,
+      dateArr: [start, end], // 日期选择数组
+      startStr: '', // 起始时间字符串
+      endStr: '', // 结束时间字符串
       perFormTable: null,
       total: 0,
       currentPage: 1,
       pickerOptions: {
         shortcuts: [
           {
-            text: "最近一周",
+            text: '最近一周',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近一个月",
+            text: '最近一个月',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近三个月",
+            text: '最近三个月',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
             }
           }
         ]
       }
-    };
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
-      let data = {"theater": ''}
+      const data = { 'theater': '' }
       getParkList(data).then(res => {
-        if (res.data.code != 200) {
-           return this.$message.error(res.data.error)
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.parkList = res.data.data;
-        this.value = this.parkList[0].name;
-        this.parkId = this.parkList[0].id;
-        this.getPerForm();
-      });
+        this.parkList = res.data.data
+        this.value = this.parkList[0].name
+        this.parkId = this.parkList[0].id
+        this.getPerForm()
+      })
     },
     getPerForm() {
-      this.startStr = getDateTime(this.dateArr[0]);
-      this.endStr = getDateTime(this.dateArr[1]);
-      let dataForm = {
+      this.startStr = getDateTime(this.dateArr[0])
+      this.endStr = getDateTime(this.dateArr[1])
+      const dataForm = {
         endDate: this.endStr,
         id: this.parkId,
         startDate: this.startStr
-      };
+      }
       getPerformList(dataForm).then(res => {
-        if (res.data.code != 200) {
-           return this.$message.error(res.data.error)
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        this.perFormTable = res.data.data;
+        this.perFormTable = res.data.data
       })
     },
 
-    //选择景区，获取景区ID
+    // 选择景区，获取景区ID
     getParkItem(item) {
-      this.perFormTable = null;
+      this.perFormTable = null
       for (let i = 0; i < this.parkList.length; i++) {
         if (item === this.parkList[i].name) {
-          this.value = item;
-          this.parkId = this.parkList[i].id;
+          this.value = item
+          this.parkId = this.parkList[i].id
         }
       }
-      this.getPerForm();
+      this.getPerForm()
     },
-    //选择时间，获取查询时间段
+    // 选择时间，获取查询时间段
     getDateRange(date) {
-      this.perFormTable = null;
-      this.dateArr = date;
-      this.getPerForm();
+      this.perFormTable = null
+      this.dateArr = date
+      this.getPerForm()
     }
     // 分页功能
     // //选择列表不同页面
@@ -172,9 +172,8 @@ export default {
     //   this.getTicketList(this.paramForm);
     // }
   }
-};
+}
 </script>
-
 
 <style scoped lang="scss">
 #showContainer {

@@ -163,3 +163,34 @@ export function getReChildOrder(data) {
   })
 }
 
+// 虚拟票导出
+
+export function handleReDmqExport(data) {
+  return request({
+    url: '/reDmqTicket/export',
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}
+
+// 虚拟订单列表导出
+
+export function handleReOrderExport(data) {
+  return request({
+    url: '/reOrder/export',
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}
+
+// 预约订单列表导出
+export function handleReChildOrderExport(data) {
+  return request({
+    url: '/reChildOrder/export',
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}
