@@ -31,7 +31,7 @@
             @change="timeChange"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
           >
           </el-date-picker>
@@ -174,10 +174,6 @@ export default {
     },
     // 获取游客列表
     getVisitorList() {
-      if (this.dataRange && this.dataRange.length > 1) {
-        this.startTime = this.dataRange[0]
-        this.endTime = this.dataRange[1]
-      }
       // 空字符串参数不提交
       for (const key in this.form) {
         if (this.form[key] === '' || this.form[key] === null) {
@@ -241,16 +237,18 @@ export default {
     },
     // 时间选择器
     pickerChange(value) {
-      this.dataRange = value
-      this.form.startTime = this.dataRange[0]
-      this.form.endTime = this.dataRange[1]
+
     },
-    // 清空付款日期选择器时执行
+    // 选择或清空日期时执行
     timeChange(value) {
       if (value == null) {
         this.form.startTime = ''
         this.form.endTime = ''
         this.getVisitorList()
+      } else {
+        this.dataRange = value
+        this.form.startTime = this.dataRange[0]
+        this.form.endTime = this.dataRange[1]
       }
     }
   }

@@ -67,7 +67,7 @@
           type="daterange"
           start-placeholder="付款时间"
           end-placeholder="付款时间"
-          format="yyyy 年 MM 月 dd 日"
+          format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
           clearable
           :default-time="['00:00:00', '23:59:59']"
