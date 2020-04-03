@@ -1,41 +1,32 @@
 <template>
     <div class="theater">
-        <el-form>
-            <el-row>
-                <el-col :span="6">
-                    <el-form-item label-width="80px" label="景区名称:" class="toolbar-item">
-                    <el-select v-model="form.parkId" placeholder="请选择"  style="width: 90%">
-                        <el-option
-                        v-for="item in parkList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="100px" label="剧院编码:" class="toolbar-item">
-                    <el-input v-model="form.code" placeholder="请输入剧院编码"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-form-item label-width="100px" label="剧院名称:" class="toolbar-item">
-                    <el-input v-model="form.name" placeholder="请输入剧院名称"></el-input>
-                  </el-form-item>
-                </el-col>
-                 <el-col :span="5">
-                    <el-button @click="search">查询</el-button>
-                    <el-button type="primary" @click="appendTheater">新增</el-button>
-                    <el-button type="danger" @click="deleteAllTheater">删除</el-button>
-                </el-col>
-            </el-row>
-        </el-form>
-        <!-- <div class="toolbar">
-            <el-button @click="search">查询</el-button>
-            <el-button type="primary" @click="appendTheater">新增</el-button>
-            <el-button type="danger" @click="deleteAllTheater">删除</el-button>
-        </div> -->
+        <el-form :inline="true"  class="demo-form-inline">
+            <el-form-item  label="景区名称" >
+              <el-select v-model="form.parkId" placeholder="请选择">
+                  <el-option
+                  v-for="item in parkList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                  </el-option>
+              </el-select>
+            </el-form-item>
+              <el-form-item  label="剧院编码" >
+                <el-input v-model="form.code" placeholder="请输入剧院编码"></el-input>
+              </el-form-item>
+              <el-form-item  label="剧院名称">
+                <el-input v-model="form.name" placeholder="请输入剧院名称"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="search">查询</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="appendTheater">新增</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="danger" @click="deleteAllTheater">删除</el-button>
+              </el-form-item>
+         </el-form>
          <div class="theaterList-table">
             <template>
                 <el-table
@@ -95,7 +86,7 @@
 <script>
 import AppendTheater from './components/appendTheater'
 import UpdateTheater from './components/updateTheater'
-import { getTheaterList, getTheaterById, deleteTheater, searchTheater } from '@/api/theater'
+import { getTheaterById, deleteTheater, searchTheater } from '@/api/theater'
 import { getParkList } from '@/api/query'
 
 export default {

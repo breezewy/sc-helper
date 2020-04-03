@@ -1,16 +1,24 @@
 <template>
     <div class="park">
-        <div class="toolbar">
-            <el-input
-                class="park-input"
-                placeholder="请输入景区ID"
-                v-model="parkId"
-                suffix-icon="el-icon-edit"
-            ></el-input>
-            <el-button @click="search">查询</el-button>
-            <el-button type="primary" @click="appendPark">新增</el-button>
-            <el-button type="danger" @click="deleteAllPark">删除</el-button>
-        </div>
+        <el-form :inline="true"  class="demo-form-inline">
+            <el-form-item label="景区ID">
+              <el-input
+                  class="park-input"
+                  placeholder="请输入景区ID"
+                  v-model="parkId"
+                  suffix-icon="el-icon-edit"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="search">查询</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="appendPark">新增</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="danger" @click="deleteAllPark">删除</el-button>
+            </el-form-item>
+        </el-form>
         <div class="parkList-table">
                 <el-table
                     ref="multipleTable"

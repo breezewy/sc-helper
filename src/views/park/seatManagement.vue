@@ -1,11 +1,9 @@
 <template>
     <div class="seat">
         <div class="toolbar">
-            <el-form>
-                <el-row>
-                <el-col :span="5">
-                  <el-form-item label-width="80px" label="景区名称:" class="toolbar-item">
-                    <el-select v-model="form.parkId" placeholder="请选择" @change="getParkName" style="width: 90%">
+            <el-form :inline="true"  class="demo-form-inline">
+                  <el-form-item  label="景区名称">
+                    <el-select v-model="form.parkId" placeholder="请选择" @change="getParkName">
                         <el-option
                         v-for="item in parkList"
                         :key="item.value"
@@ -14,10 +12,8 @@
                         </el-option>
                     </el-select>
                   </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-form-item label-width="80px" label="剧院名称:" class="toolbar-item">
-                    <el-select v-model="form.theaterId" placeholder="请选择" style="width: 90%">
+                  <el-form-item  label="剧院名称">
+                    <el-select v-model="form.theaterId" placeholder="请选择" >
                         <el-option
                         v-for="item in theaterList"
                         :key="item.value"
@@ -26,25 +22,22 @@
                         </el-option>
                     </el-select>
                   </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="100px" label="席位编码:" class="toolbar-item">
+                  <el-form-item  label="席位编码" >
                     <el-input v-model="form.code" placeholder="请输入席位编码"></el-input>
                   </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-form-item label-width="100px" label="席位名称:" class="toolbar-item">
+                  <el-form-item  label="席位名称" >
                     <el-input v-model="form.name" placeholder="请输入席位名称"></el-input>
                   </el-form-item>
-                </el-col>
-                <el-col :span="5">
+                  <el-form-item>
                     <el-button @click="search">查询</el-button>
+                  </el-form-item>
+                  <el-form-item>
                     <el-button type="primary" @click="appendSeat">新增</el-button>
+                  </el-form-item>
+                  <el-form-item>
                     <el-button type="danger" @click="deleteAllSeat">删除</el-button>
-                </el-col>
-                </el-row>
+                  </el-form-item>
             </el-form>
-
         </div>
          <div class="seatList-table">
             <template>
@@ -102,7 +95,7 @@
 </template>
 
 <script>
-import { getSeatList, getSeatById, deleteSeat, searchSeat } from '@/api/seat'
+import { getSeatById, deleteSeat, searchSeat } from '@/api/seat'
 import { getParkList } from '@/api/query'
 import { getTheaterByParkId } from '@/api/theater'
 import AppendSeat from './components/appendSeat'
@@ -171,7 +164,7 @@ export default {
     },
     getParkName(value) {
       this.parkList.forEach(item => {
-        if (value == item.value) {
+        if (value === item.value) {
           this.getTheaterListByParkId(value)
         }
       })
