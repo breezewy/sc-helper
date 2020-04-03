@@ -55,6 +55,8 @@
             </el-table-column>
             <el-table-column prop="code" label="票型编码" align="center"  width="300"></el-table-column>
             <el-table-column prop="name" label="票型名称" align="center" ></el-table-column>
+            <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
+            <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
             <el-table-column label="操作" align="center" width="300" fix="right">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
@@ -89,6 +91,12 @@
           <el-form-item label="票型名称" prop="name">
             <el-input v-model="dmqForm.name" type="text" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item label="采购价" prop="purchasePrice">
+            <el-input v-model="dmqForm.purchasePrice" type="text" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="结算金额" prop="finalSum">
+            <el-input v-model="dmqForm.finalSum" type="text" autocomplete="off"></el-input>
+          </el-form-item>
           <el-form-item label="票型类型" prop="type">
             <el-radio-group v-model="dmqForm.type" @change="change">
               <el-radio :label="1">单选票</el-radio>
@@ -119,6 +127,12 @@
           </el-form-item>
           <el-form-item label="票型名称" prop="name">
             <el-input v-model="dmqTicketDetial.name" type="text" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="采购价" prop="purchasePrice">
+            <el-input v-model="dmqTicketDetial.purchasePrice" type="text" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="结算金额" prop="finalSum">
+            <el-input v-model="dmqTicketDetial.finalSum" type="text" autocomplete="off"></el-input>
           </el-form-item>
            <el-form-item label="票型类型" prop="type">
             <el-radio-group v-model="dmqTicketDetial.type">
@@ -196,6 +210,12 @@ export default {
           { required: true, message: '必选项不能为空', trigger: 'blur' }
         ],
         number: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        purchasePrice: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        finalSum: [
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ]
       }

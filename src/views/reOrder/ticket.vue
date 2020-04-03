@@ -45,6 +45,8 @@
           <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
           <el-table-column prop="name" label="票型名称" align="center"></el-table-column>
           <el-table-column prop="city" label="城市" align="center"></el-table-column>
+          <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
+          <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
           <el-table-column prop="buyToday" label="当天是否可预约" align="center" width="150">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.buyToday== true" type="success" size="mini">是</el-tag>
@@ -101,6 +103,12 @@
          <el-form-item label="城市" prop="city">
           <el-input v-model="ticketForm.city" type="text" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="采购价" prop="purchasePrice">
+          <el-input v-model="ticketForm.purchasePrice" type="text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="结算金额" prop="finalSum">
+          <el-input v-model="ticketForm.finalSum" type="text" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="是否可当天购买" prop="buyToday">
           <el-radio v-model="ticketForm.buyToday" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.buyToday" :label="false">否</el-radio>
@@ -154,6 +162,12 @@
         </el-form-item>
         <el-form-item label="城市" prop="city">
           <el-input v-model="ticketDetial.city" type="text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="采购价" prop="purchasePrice">
+          <el-input v-model="ticketDetial.purchasePrice" type="text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="结算金额" prop="finalSum">
+          <el-input v-model="ticketDetial.finalSum" type="text" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="是否可当天购买" prop="buyToday">
           <el-radio v-model="ticketDetial.buyToday" :label="true">是</el-radio>

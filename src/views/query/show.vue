@@ -155,7 +155,6 @@ export default {
     getDateRange(date) {
       this.perFormTable = null
       this.dateArr = date
-      console.log(this.dateArr)
       this.getPerForm()
     }
   }
