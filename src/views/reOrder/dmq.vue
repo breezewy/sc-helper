@@ -92,7 +92,7 @@
             <el-input v-model="dmqForm.name" type="text" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="采购价" prop="purchasePrice">
-            <el-input v-model="dmqForm.purchasePrice" type="text" autocomplete="off"></el-input>
+            <el-input v-model="dmqForm.purchasePrice"    type="text" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="结算金额" prop="finalSum">
             <el-input v-model="dmqForm.finalSum" type="text" autocomplete="off"></el-input>
@@ -121,7 +121,7 @@
         class="dislog"
         :close-on-click-modal="false"
       >
-        <el-form ref="updateDmqForm" :model="dmqTicketDetial" label-width="120px" prop>
+        <el-form ref="updateDmqForm" :model="dmqTicketDetial" :rules="dmqFormRules" label-width="120px" prop>
           <el-form-item label="票型编码" prop="code">
             <el-input v-model="dmqTicketDetial.code" type="text" autocomplete="off"></el-input>
           </el-form-item>
@@ -174,6 +174,15 @@ import { handleExport } from '../../utils/handleExport'
 import Controller from './components/controller'
 export default {
   data() {
+    const checkPrice = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('必填项不能为空'))
+      } else if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+        callback(new Error('请输入正整数'))
+      } else {
+        callback()
+      }
+    }
     return {
       showDialog: false,
       dialogFormVisible: false,
@@ -213,10 +222,10 @@ export default {
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         purchasePrice: [
-          { required: true, message: '必填项不能为空', trigger: 'blur' }
+          { validator: checkPrice, trigger: 'blur' }
         ],
         finalSum: [
-          { required: true, message: '必填项不能为空', trigger: 'blur' }
+          { validator: checkPrice, trigger: 'blur' }
         ]
       }
     }
@@ -387,40 +396,47 @@ export default {
     },
     // 点击修改后先验证
     checkOrder(item) {
-      const data = {
-        code: item.code,
-        type: item.type,
-        id: item.id
-      }
-      checkOrder(data).then(res => {
-        if (res.data) {
-          this.$confirm('修改票型会影响已存在的订单 确定要修改吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            if (this.dmqTicketDetial.type !== 2) {
-              delete this.dmqTicketDetial.number
-            }
-            updateDmqTicket(this.dmqTicketDetial).then(res => {
-              if (res.data.code !== 200) {
-                return this.$message.error(res.data.error)
-              }
-              this.updatedialogFormVisible = false
-              this.$message({
-                message: '操作成功',
-                type: 'success'
+      this.$refs.updateDmqForm.validate(valid => {
+        if (valid) {
+          const data = {
+            code: item.code,
+            type: item.type,
+            id: item.id
+          }
+          checkOrder(data).then(res => {
+            if (res.data) {
+              this.$confirm('修改票型会影响已存在的订单 确定要修改吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                if (this.dmqTicketDetial.type !== 2) {
+                  delete this.dmqTicketDetial.number
+                }
+                updateDmqTicket(this.dmqTicketDetial).then(res => {
+                  if (res.data.code !== 200) {
+                    return this.$message.error(res.data.error)
+                  }
+                  this.updatedialogFormVisible = false
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  })
+                  this.getTicketList(this.paramForm)
+                })
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消修改'
+                })
               })
-              this.getTicketList(this.paramForm)
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消修改'
-            })
+            } else {
+              return
+            }
           })
         } else {
-          return
+          console.log('error submit!!')
+          return false
         }
       })
     },

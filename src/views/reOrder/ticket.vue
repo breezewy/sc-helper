@@ -93,7 +93,7 @@
       class="dislog"
       :close-on-click-modal="false"
     >
-      <el-form ref="addTicketForm" :model="ticketForm" label-width="150px" prop>
+      <el-form ref="addTicketForm" :model="ticketForm" :rules="ticketFormRules" label-width="150px">
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketForm.code" type="text" autocomplete="off"></el-input>
         </el-form-item>
@@ -153,7 +153,7 @@
       class="dislog"
       :close-on-click-modal="false"
     >
-      <el-form ref="updateTicketForm" :model="ticketDetial" label-width="150px" prop>
+      <el-form ref="updateTicketForm" :model="ticketDetial" :rules="ticketDetialRules" label-width="150px">
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketDetial.code" type="text" autocomplete="off"></el-input>
         </el-form-item>
@@ -218,6 +218,15 @@ import {
 } from '../../api/reOrder'
 export default {
   data() {
+    const checkPrice = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('必填项不能为空'))
+      } else if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+        callback(new Error('请输入正整数'))
+      } else {
+        callback()
+      }
+    }
     return {
       dialogFormVisible: false,
       updatedialogFormVisible: false,
@@ -231,9 +240,57 @@ export default {
         containShow: true,
         ticketForm: true,
         useStartDate: '',
-        useEndDate: ''
+        useEndDate: '',
+        purchasePrice: '',
+        finalSum: ''
+      },
+      ticketFormRules: {
+        code: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        city: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        useStartDate: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        useEndDate: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        purchasePrice: [
+          { validator: checkPrice, trigger: 'blur' }
+        ],
+        finalSum: [
+          { validator: checkPrice, trigger: 'blur' }
+        ]
       },
       ticketDetial: {},
+      ticketDetialRules: {
+        code: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        city: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        useStartDate: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        useEndDate: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        purchasePrice: [
+          { validator: checkPrice, trigger: 'blur' }
+        ],
+        finalSum: [
+          { validator: checkPrice, trigger: 'blur' }
+        ]
+      },
       paramForm: {
         code: '',
         page: {
@@ -285,13 +342,20 @@ export default {
     // 确定添加
     handleSubmit() {
       const _this = this
-      addReTicket(this.ticketForm).then(res => {
-        if (res.data.code !== 200) {
-          return this.$message.error(res.data.error)
+      this.$refs.addTicketForm.validate(valid => {
+        if (valid) {
+          addReTicket(this.ticketForm).then(res => {
+            if (res.data.code !== 200) {
+              return this.$message.error(res.data.error)
+            }
+            _this.getTicketList(this.paramForm)
+            this.$message.success('添加成功')
+            this.dialogFormVisible = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-        _this.getTicketList(this.paramForm)
-        this.$message.success('添加成功')
-        this.dialogFormVisible = false
       })
     },
     // 取消添加
@@ -367,16 +431,23 @@ export default {
     },
     // 修改区域确定按钮
     handleUpdateSubmit() {
-      updateTicket(this.ticketDetial).then(res => {
-        if (res.data.code !== 200) {
-          return this.$message.error(res.error)
+      this.$refs.updateTicketForm.validate(valid => {
+        if (valid) {
+          updateTicket(this.ticketDetial).then(res => {
+            if (res.data.code !== 200) {
+              return this.$message.error(res.error)
+            }
+            this.updatedialogFormVisible = false
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.getTicketList(this.paramForm)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-        this.updatedialogFormVisible = false
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        this.getTicketList(this.paramForm)
       })
     },
     // 修改区域取消按钮
