@@ -1,72 +1,29 @@
 <template>
   <div id="orderContainer">
-    <el-form>
-      <el-row>
-        <el-col :span="5">
-            <el-form-item label-width="80px" label="所属片区:" class="toolbar-item">
-                    <el-select v-model="dataForm.parkId" placeholder="请选择所属片区"  style="width: 90%">
-                        <el-option
-                        v-for="item in parkList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
+    <el-form :inline="true"  class="demo-form-inline">
+            <el-form-item  label="所属片区">
+              <el-select v-model="dataForm.parkId" placeholder="请选择所属片区"  style="width: 90%">
+                  <el-option
+                  v-for="item in parkList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                  </el-option>
+              </el-select>
             </el-form-item>
-        </el-col>
-        <el-col :span="5">
-            <el-form-item label-width="80px" label="订单号:" class="toolbar-item">
-                <el-input placeholder="请输入订单号" v-model="dataForm.orderId" clearable></el-input>   
+            <el-form-item  label="订单号">
+                <el-input placeholder="请输入订单号" v-model="dataForm.orderId" clearable></el-input>
             </el-form-item>
-        </el-col>
-        <el-col :span="5">
-            <el-form-item label-width="80px" label="手机号:" class="toolbar-item">
+            <el-form-item  label="手机号">
                 <el-input placeholder="请输入手机号" v-model="dataForm.mobile" clearable></el-input>
             </el-form-item>
-        </el-col>
-        <el-col :span="5">
-            <el-form-item label-width="80px" label="证件号:" class="toolbar-item">
+            <el-form-item  label="证件号">
                 <el-input placeholder="请输入证件号" v-model="dataForm.idCard" clearable></el-input>
             </el-form-item>
-        </el-col>
-        <el-col :span="4">
-            <el-button type="primary" @click="handleSearch">查询</el-button>
-        </el-col>
-      </el-row>
+            <el-form-item>
+              <el-button type="primary" @click="handleSearch">查询</el-button>
+            </el-form-item>
     </el-form>
-    <!-- <div class="filter">
-      <div class="park">
-        <span class="title">所属片区：</span>
-        <el-select
-          v-model="value"
-          placeholder="所属片区"
-          clearable
-          class="filter-item"
-          style="width: 240px"
-          @change="getParkItem"
-        >
-          <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
-        </el-select>
-      </div>
-
-      <div class="orderInput">
-        <span class="title">订单号：</span>
-        <el-input placeholder="请输入订单号" v-model="dataForm.orderId" clearable></el-input>
-      </div>
-
-      <div class="phoneInput">
-        <span class="title">手机号：</span>
-        <el-input placeholder="请输入手机号" v-model="dataForm.mobile" clearable></el-input>
-      </div>
-
-      <div class="idCardInput">
-        <span class="title">证件号：</span>
-        <el-input placeholder="请输入证件号" v-model="dataForm.idCard" clearable></el-input>
-      </div>
-
-      <el-button type="primary" @click="handleClick">查询</el-button>
-    </div> -->
-
     <div class="orderTable">
       <el-table
         :data="orderList"
@@ -153,39 +110,39 @@ import {
   getParkList,
   getOfflineOrderList,
   getOfflineOrderDetail
-} from "../../api/query";
+} from '../../api/query'
 
 export default {
   data() {
     return {
       parkList: [],
-      value: "",
+      value: '',
       dataForm: {
-        idCard: "",
-        orderId: "",
-        mobile: "",
-        parkId: ""
+        idCard: '',
+        orderId: '',
+        mobile: '',
+        parkId: ''
       },
       orderList: [],
       orderDetail: [],
-      currentRow:null
-    };
+      currentRow: null
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
-      let data  ={"theater":''}
+      const data = { 'theater': '' }
       getParkList(data).then(res => {
-        if (res.data.code != 200) {
+        if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
-        let data = res.data.data;
-        data.forEach(item=>{
+        const data = res.data.data
+        data.forEach(item => {
           this.parkList.push({
-            value:item.id,
-            label:item.name
+            value: item.id,
+            label: item.name
           })
         })
         // this.value = this.parkList[0].name;
@@ -195,45 +152,44 @@ export default {
     getParkItem(value) {
       for (let i = 0; i < this.parkList.length; i++) {
         if (value === this.parkList[i].name) {
-          this.value = this.parkList[i].name;
-          this.dataForm.parkId = this.parkList[i].id;
+          this.value = this.parkList[i].name
+          this.dataForm.parkId = this.parkList[i].id
         }
       }
     },
     handleSearch() {
-      if(this.dataForm.parkId == ''){
+      if (this.dataForm.parkId === '') {
         return this.$message.error('请选择所属片区')
       }
-      //参数对象属性为空时，删除这个属性
-      for(let key in this.dataForm){
-          if(this.dataForm[key] === ''){
-              delete this.dataForm[key]
-          }
+      // 参数对象属性为空时，删除这个属性
+      for (const key in this.dataForm) {
+        if (this.dataForm[key] === '') {
+          delete this.dataForm[key]
+        }
       }
 
       console.log(this.dataForm)
       getOfflineOrderList(this.dataForm).then(res => {
-        if (res.data.code != 200) {
+        if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
-        this.orderList = res.data.data;
-      });
+        this.orderList = res.data.data
+      })
     },
     handleRowClick(row, column, event) {
       getOfflineOrderDetail(this.dataForm.parkId, row.billno).then(res => {
-        if (res.data.code != 200) {
+        if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
         }
-        this.orderDetail = res.data.data;
-      });
+        this.orderDetail = res.data.data
+      })
     },
-    handleCurrentChange(val){
-      this.currentRow = val;
+    handleCurrentChange(val) {
+      this.currentRow = val
     }
   }
-};
+}
 </script>
-
 
 <style scoped lang='scss'>
 #orderContainer {

@@ -1,8 +1,7 @@
 <template>
   <div id="showContainer">
-    <div class="filter">
-      <div class="park">
-        <span class="title">演出片区：</span>
+    <el-form :inline="true"  class="demo-form-inline">
+      <el-form-item  label="演出片区" >
         <el-select
           v-model="value"
           placeholder="演出片区"
@@ -13,9 +12,8 @@
         >
           <el-option v-for="item in parkList" :key="item.id" :value="item.name" />
         </el-select>
-      </div>
-      <div class="block">
-        <span class="title">日期选择：</span>
+      </el-form-item>
+      <el-form-item label="日期选择">
         <el-date-picker
           v-model="dateArr"
           type="daterange"
@@ -27,9 +25,8 @@
           @change="getDateRange"
           :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
-      </div>
-    </div>
-
+      </el-form-item>
+    </el-form>
     <div class="tableContainer">
       <el-table :data="perFormTable" style="width: 100%" border empty-text="暂无数据">
         <el-table-column prop="performName" label="演出名称" align="center"></el-table-column>
@@ -164,25 +161,6 @@ export default {
 <style scoped lang="scss">
 #showContainer {
   padding: 30px;
-  .filter {
-    display: flex;
-    flex-wrap: wrap;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #dcdfe6;
-    .title {
-      line-height: 40px;
-    }
-    .el-select {
-      margin-right: 50px;
-    }
-    .block {
-      .el-date-editor {
-        .el-range-separator {
-          width: 7%;
-        }
-      }
-    }
-  }
   .tableContainer {
     margin-top: 30px;
   }

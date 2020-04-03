@@ -1,8 +1,7 @@
 <template>
     <div id="seatContainer">
-        <div class="filter">
-            <div class="park">
-                <span class="title">所属片区：</span>
+        <el-form :inline="true"  class="demo-form-inline">
+            <el-form-item  label="所属片区">
                 <el-select
                     v-model="dataForm.id"
                     placeholder="请选择所属片区"
@@ -10,20 +9,21 @@
                     class="filter-item"
                     style="width: 220px"
                 >
-                <el-option 
-                    v-for="item in parkList" 
+                <el-option
+                    v-for="item in parkList"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                 />
                 </el-select>
-            </div>
-            <div class="orderInput">
-                <span class="title">订单号：</span>
+            </el-form-item>
+            <el-form-item  label="订单号">
                 <el-input placeholder="请输入宋城旅游订单号" v-model="dataForm.billNo" clearable ></el-input>
-            </div>
-            <el-button type="primary" @click="searchSeat">查询</el-button>
-        </div>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="searchSeat">查询</el-button>
+            </el-form-item>
+        </el-form>
 
         <div class="seatDetail"  v-if = "showSeatDetail">
             <el-card class="box-card">
@@ -55,57 +55,57 @@
 </template>
 
 <script>
-import { getParkList,getOfflineOrderSeat } from "../../api/query";
+import { getParkList, getOfflineOrderSeat } from '../../api/query'
 export default {
-    data(){
-        return {
-            value:'',
-            parkList:[],
-            dataForm:{
-               id:"",  //景区ID
-               billNo:""   //订单号
-            },
-            seatDetail:{},
-            showSeatDetail:false,
-            loading:true
-        }
-    },
-    created(){
-        this.init();
-    },
-    methods:{
-        init() {
-            let data  ={"theater":true}
-            getParkList(data).then(res => {
-                if (res.data.code != 200) {
-                    return this.$message.error(res.data.msg)
-                }
-                let data = res.data.data
-                data.forEach( item => {
-                    this.parkList.push({
-                        value:item.id,
-                        label:item.name
-                    })
-                })
-            })
-        },
-        searchSeat(){
-            if(this.dataForm.id === ''){
-                return this.$message.error('请选择所属片区')
-            }
-            if(this.dataForm.billNo === ''){
-                return this.$message.error('请输入订单号')
-            }
-            getOfflineOrderSeat(this.dataForm).then(res=>{
-                this.loading = false;
-                if (res.data.code != 200) {
-                    return this.$message.error(res.data.error)
-                }
-                this.showSeatDetail = true;
-                this.seatDetail = res.data.data;
-            })
-        }
+  data() {
+    return {
+      value: '',
+      parkList: [],
+      dataForm: {
+        id: '', // 景区ID
+        billNo: '' // 订单号
+      },
+      seatDetail: {},
+      showSeatDetail: false,
+      loading: true
     }
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    init() {
+      const data = { 'theater': true }
+      getParkList(data).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.msg)
+        }
+        const data = res.data.data
+        data.forEach(item => {
+          this.parkList.push({
+            value: item.id,
+            label: item.name
+          })
+        })
+      })
+    },
+    searchSeat() {
+      if (this.dataForm.id === '') {
+        return this.$message.error('请选择所属片区')
+      }
+      if (this.dataForm.billNo === '') {
+        return this.$message.error('请输入订单号')
+      }
+      getOfflineOrderSeat(this.dataForm).then(res => {
+        this.loading = false
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.showSeatDetail = true
+        this.seatDetail = res.data.data
+      })
+    }
+  }
 }
 </script>
 
@@ -116,28 +116,6 @@ export default {
       list-style: none;
       padding:0;
       margin:0;
-  }
-  .filter {
-    display: flex;
-    flex-wrap: wrap;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #dcdfe6;
-    .park {
-      margin-right: 50px;
-      .title {
-        line-height: 40px;
-      }
-    }
-    .orderInput{
-      margin-right: 50px;
-      display: flex;
-      .el-input {
-        width: 240px;
-      }
-      .title {
-        line-height: 40px;
-      }
-    }
   }
   .seatDetail{
       margin-top:30px;
