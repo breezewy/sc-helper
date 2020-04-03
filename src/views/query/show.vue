@@ -26,6 +26,9 @@
           :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchShow">查询</el-button>
+      </el-form-item>
     </el-form>
     <div class="tableContainer">
       <el-table :data="perFormTable" style="width: 100%" border empty-text="暂无数据">
@@ -152,6 +155,8 @@ export default {
     getDateRange(date) {
       this.perFormTable = null
       this.dateArr = date
+    },
+    searchShow() {
       this.getPerForm()
     }
   }
