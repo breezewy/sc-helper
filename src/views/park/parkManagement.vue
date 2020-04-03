@@ -1,13 +1,19 @@
 <template>
     <div class="park">
         <el-form :inline="true"  class="demo-form-inline">
-            <el-form-item label="景区ID">
-              <el-input
-                  class="park-input"
-                  placeholder="请输入景区ID"
-                  v-model="parkId"
-                  suffix-icon="el-icon-edit"
-              ></el-input>
+            <el-form-item label="是否包含剧院">
+              <el-select v-model="theater" placeholder="请选择" clearable @clear="handleClear">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item  label="景区名称" >
+                    <el-input v-model.trim="name" placeholder="请输入景区名称" clearable @clear="handleClear"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button @click="search">查询</el-button>
@@ -71,12 +77,22 @@ export default {
   name: 'Park',
   data() {
     return {
-      parkId: '',
       parkList: [],
       parkInfo: {},
       rowIdList: [],
       showAppendForm: false,
-      showUpdateForm: false
+      showUpdateForm: false,
+      theater: '',
+      name: '',
+      options: [
+        {
+          value: true,
+          label: '是'
+        }, {
+          value: false,
+          label: '否'
+        }
+      ]
     }
   },
   components: {
@@ -90,7 +106,13 @@ export default {
     // 获取景区列表
     getParkList() {
       const data = {
-        'theater': ''
+        theater: this.theater,
+        name: this.name
+      }
+      for (const key in data) {
+        if (data[key] === '' || data[key] === null) {
+          delete data[key]
+        }
       }
       getParkList(data).then(res => {
         if (res.data.code !== 200) {
@@ -101,17 +123,7 @@ export default {
     },
     // 点击搜索执行
     search() {
-      if (this.parkId === '') {
-        return this.$message.error('请输入景区ID')
-      }
-      getParkById(parseInt(this.parkId)).then(res => {
-        this.parkList = []
-        if (res.data.code !== 200) {
-          return this.$message.error(res.data.error)
-        }
-        this.parkInfo = res.data.data
-        this.parkList.push(this.parkInfo)
-      })
+      this.getParkList()
     },
     // 点击新增按钮
     appendPark() {
@@ -186,6 +198,9 @@ export default {
         this.$message.success('删除成功')
         this.refresh()
       })
+    },
+    handleClear() {
+      this.getParkList()
     }
   }
 }

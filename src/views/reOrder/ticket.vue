@@ -376,15 +376,23 @@ export default {
         })
         return
       }
-      deleteTicket(this.rowIdList).then(res => {
-        if (res.data.code !== 200) {
-          return this.$message.error(res.data.error)
-        }
-        _this.getTicketList(this.paramForm)
-        this.$message({
-          message: '操作成功',
-          type: 'success'
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteTicket(this.rowIdList).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          _this.getTicketList(this.paramForm)
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
         })
+      }).catch(() => {
+        return
       })
     },
     // 列表全选按钮
@@ -397,15 +405,23 @@ export default {
     // 每行的删除按钮
     handleDeleteSingle(id) {
       const _this = this
-      deleteTicket([id]).then(res => {
-        if (res.data.code !== 200) {
-          return this.$message.error(res.data.error)
-        }
-        _this.getTicketList(this.paramForm)
-        this.$message({
-          message: '操作成功',
-          type: 'success'
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteTicket([id]).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          _this.getTicketList(this.paramForm)
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
         })
+      }).catch(() => {
+        return
       })
     },
     // 每行的修改按钮

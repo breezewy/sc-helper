@@ -154,9 +154,9 @@ import {
   deleteUser,
   getUserInfo,
   updateUser
-} from "../../api/management";
+} from '../../api/management'
 
-import { isEmail, isMobile } from "@/utils/validate";
+import { isEmail, isMobile } from '@/utils/validate'
 export default {
   data() {
     // var validateEmail = (rule, value, callback) => {
@@ -172,51 +172,51 @@ export default {
     //   callback();
     // };
     var validateConfirmPassword = (rule, value, callback) => {
-      if (this.userForm.password != value) {
-        return callback(new Error("两次密码输入不一致"));
+      if (this.userForm.password !== value) {
+        return callback(new Error('两次密码输入不一致'))
       }
-      callback();
-    };
+      callback()
+    }
     var validateUpdatePassword = (rule, value, callback) => {
-      if (this.updateUserForm.password != value) {
-        return callback(new Error("两次密码输入不一致"));
+      if (this.updateUserForm.password !== value) {
+        return callback(new Error('两次密码输入不一致'))
       }
-      callback();
-    };
+      callback()
+    }
     return {
-      userList: [], //用户列表
-      username: "", //用户名
-      mobile: "", //手机号
+      userList: [], // 用户列表
+      username: '', // 用户名
+      mobile: '', // 手机号
       page: {
-        //分页参数
+        // 分页参数
         pageNum: 0,
         pageSize: 10
       },
-      dialogFormVisible: false, //新增或编辑弹框
+      dialogFormVisible: false, // 新增或编辑弹框
       userForm: {
         // email: "",
         gender: 0,
-        headUrl: "",
+        headUrl: '',
         // mobile: "",
-        password: "",
-        confirmPassword: "",
-        realName: "",
+        password: '',
+        confirmPassword: '',
+        realName: '',
         roleIdList: [],
         status: 1,
         superAdmin: 1,
-        username: ""
+        username: ''
       },
       updateUserForm: {
-        id: "",
+        id: '',
         // email: "",
         gender: 0,
         // mobile: "",
-        password: "",
-        confirmPassword: "",
-        realName: "",
+        password: '',
+        confirmPassword: '',
+        realName: '',
         roleIdList: [],
         status: 1,
-        username: ""
+        username: ''
       },
       userFormRules: {
         // email: [
@@ -228,17 +228,17 @@ export default {
         //   { validator: validateMobile, trigger: "blur" }
         // ],
         password: [
-          { required: true, message: "必填项不能为空", trigger: "blur" }
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         confirmPassword: [
-          { required: true, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateConfirmPassword, trigger: "blur" }
+          { required: true, message: '必填项不能为空', trigger: 'blur' },
+          { validator: validateConfirmPassword, trigger: 'blur' }
         ],
         realName: [
-          { required: true, message: "必填项不能为空", trigger: "blur" }
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         username: [
-          { required: true, message: "必填项不能为空", trigger: "blur" }
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
         ]
       },
       updateUserFormRules: {
@@ -248,66 +248,66 @@ export default {
         // ],
         // mobile: [{ validator: validateMobile, trigger: "blur" }],
         password: [
-          { required: false, message: "必填项不能为空", trigger: "blur" }
+          { required: false, message: '必填项不能为空', trigger: 'blur' }
         ],
         confirmPassword: [
-          { required: false, message: "必填项不能为空", trigger: "blur" },
-          { validator: validateUpdatePassword, trigger: "blur" }
-        ],
+          { required: false, message: '必填项不能为空', trigger: 'blur' },
+          { validator: validateUpdatePassword, trigger: 'blur' }
+        ]
       },
       roleList: [],
       rowIdList: [],
       updateVisible: false
-    };
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
-      let dataFrom = {
+      const dataFrom = {
         username: this.username,
         mobile: this.mobile,
         page: this.page
-      };
+      }
       getUserList(dataFrom).then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.error)
         }
-        this.userList = res.data.data.data;
-      });
-      //初始化角色列表
-      this.roleList = [];
+        this.userList = res.data.data.data
+      })
+      // 初始化角色列表
+      this.roleList = []
       getRole().then(res => {
-        if (res.data.code != 200) {
-          return this.$message.error(res.data.error);
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
-        let data = res.data.data;
+        const data = res.data.data
         data.forEach(item => {
-          let role = {
+          const role = {
             value: item.id,
-            label:item.name
+            label: item.name
           }
           this.roleList.push(role)
         })
-      });
+      })
     },
-    //点击新增按钮
+    // 点击新增按钮
     addUser() {
-      this.dialogFormVisible = true;
+      this.dialogFormVisible = true
       this.userForm = {
-        email: "",
+        email: '',
         gender: 0,
-        headUrl: "",
-        mobile: "",
-        password: "",
-        confirmPassword: "",
-        realName: "",
+        headUrl: '',
+        mobile: '',
+        password: '',
+        confirmPassword: '',
+        realName: '',
         roleIdList: [],
         status: 1,
         superAdmin: 1,
-        username: ""
-      };
+        username: ''
+      }
       // getRole().then(res => {
       //   if (res.data.code != 200) {
       //     return this.$message.error(res.data.error);
@@ -322,139 +322,139 @@ export default {
       //   })
       // });
     },
-    //新增用户确定按钮
+    // 新增用户确定按钮
     onSubmit() {
       this.$refs.addUserForm.validate(valid => {
         if (valid) {
-          let _this = this;
+          const _this = this
           addNewUser(this.userForm).then(res => {
-            if (res.data.code != 200) {
-              return this.$message.error(res.data.error);
+            if (res.data.code !== 200) {
+              return this.$message.error(res.data.error)
             }
-            _this.init();
-            this.dialogFormVisible = false;
+            _this.init()
+            this.dialogFormVisible = false
             this.$message({
-              message: "操作成功",
-              type: "success"
-            });
-          });
+              message: '操作成功',
+              type: 'success'
+            })
+          })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    //取消
+    // 取消
     onCancel() {
-      this.dialogFormVisible = false;
+      this.dialogFormVisible = false
     },
-    //table表格全选点击
+    // table表格全选点击
     handleSelectionChange(selection) {
-      this.rowIdList = [];
+      this.rowIdList = []
       for (let i = 0; i < selection.length; i++) {
-        this.rowIdList.push(selection[i].id);
+        this.rowIdList.push(selection[i].id)
       }
     },
-    //头部删除按钮
+    // 头部删除按钮
     handleDeleteMore() {
-      let _this = this;
+      const _this = this
       if (this.rowIdList.length === 0) {
         this.$message({
-          message: "请选择删除项",
-          type: "warning"
-        });
-        return;
+          message: '请选择删除项',
+          type: 'warning'
+        })
+        return
       }
-       this.$confirm('确定要删除所选角色?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-            deleteUser(this.rowIdList).then(res => {
-              if (res.data.code != 200) {
-                return this.$message.error(res.data.error);
-              }
-              _this.init();
-              this.$message({
-                message: "操作成功",
-                type: "success"
-              });
-            });
-        }).catch(() => {
+      this.$confirm('确定要删除所选角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteUser(this.rowIdList).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          _this.init()
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+            message: '操作成功',
+            type: 'success'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
-    //单行删除
+    // 单行删除
     handleDeleteSingle(id) {
-      let _this = this;
-       this.$confirm('确定要删除该角色?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteUser([id]).then(res => {
-            if (res.data.code != 200) {
-              return this.$message.error(res.data.error);
-            }
-            _this.init();
-            this.$message({
-              message: "操作成功",
-              type: "success"
-            });
-          });
-        }).catch(() => {
+      const _this = this
+      this.$confirm('确定要删除该角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteUser([id]).then(res => {
+          if (res.data.code != 200) {
+            return this.$message.error(res.data.error)
+          }
+          _this.init()
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+            message: '操作成功',
+            type: 'success'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
-    //点击修改按钮
+    // 点击修改按钮
     handleUpdate(id) {
-      this.updateVisible = true;
+      this.updateVisible = true
       getUserInfo(id)
         .then(res => {
           if (res.data.code != 200) {
-            return this.$message.error(res.data.error);
+            return this.$message.error(res.data.error)
           }
-          this.updateUserForm = res.data.data;
-          this.updateUserForm.id = res.data.data.id;
+          this.updateUserForm = res.data.data
+          this.updateUserForm.id = res.data.data.id
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
-    //修改区域确定按钮
+    // 修改区域确定按钮
     handleSubmit() {
       this.$refs.updateUserForm.validate(valid => {
         if (valid) {
-          let _this = this;
+          const _this = this
           updateUser(this.updateUserForm).then(res => {
             if (res.data.code != 200) {
-              return this.$message.error(res.data.error);
+              return this.$message.error(res.data.error)
             }
-            _this.init();
-            this.updateVisible = false;
+            _this.init()
+            this.updateVisible = false
             this.$message({
-              message: "操作成功",
-              type: "success"
-            });
-          });
+              message: '操作成功',
+              type: 'success'
+            })
+          })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    //修改区域取消按钮
+    // 修改区域取消按钮
     handleCancel() {
-      this.updateVisible = false;
+      this.updateVisible = false
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
