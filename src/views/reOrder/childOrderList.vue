@@ -102,6 +102,7 @@
           <el-table-column prop="code" label="票型编码" align="center" width="200"></el-table-column>
           <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
           <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
+          <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
           <el-table-column prop="buyerName" label="购买人" align="center" width="100"></el-table-column>
           <el-table-column prop="linkName" label="游客姓名" align="center" width="100"></el-table-column>
           <el-table-column prop="mobile" label="游客手机号" align="center" width="150"></el-table-column>
