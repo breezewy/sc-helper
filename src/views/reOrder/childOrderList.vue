@@ -256,6 +256,8 @@ export default {
     },
     // 查询
     search() {
+      this.paramData.page.pageNum = 0
+      this.paramData.page.pageSize = 10
       this.getChildOrder(this.paramData)
     },
     // 清空查询框

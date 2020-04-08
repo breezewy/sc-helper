@@ -184,6 +184,8 @@ export default {
       if (this.form.name === '') {
         delete this.form.name
       }
+      this.form.page.pageNum = 0
+      this.form.page.pageSize = 10
       searchTheater(this.form).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)

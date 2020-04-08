@@ -2,10 +2,10 @@
   <div id="roleContainer">
     <el-form :inline="true">
       <el-form-item>
-        <el-input v-model="roleDate.name" placeholder="名称" clearable></el-input>
+        <el-input v-model="roleDate.name" placeholder="名称" clearable @clear="handleClear"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="init">查询</el-button>
+        <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addRole">新增</el-button>
@@ -179,14 +179,20 @@ export default {
   },
   methods: {
     init() {
-      if (this.roleDate.name.length === 0) {
-        delete this.roleDate.name
-      }
       this.getRoleList()
       this.getMenuSelect()
     },
+    // 查询
+    search() {
+      this.roleDate.page.pageNum = 0
+      this.roleDate.page.pageSize = 10
+      this.getRoleList()
+    },
     // 获取角色列表
     getRoleList() {
+      if (this.roleDate.name === '' || this.roleDate.name === null) {
+        delete this.roleDate.name
+      }
       getRoleList(this.roleDate)
         .then(res => {
           if (res.data.code !== 200) {
@@ -399,6 +405,10 @@ export default {
       this.currentPage = val
       this.roleDate.page.pageNum = this.currentPage - 1
       this.getRoleList(this.roleDate)
+    },
+    // 清空查询框
+    handleClear() {
+      this.getRoleList()
     }
   }
 }

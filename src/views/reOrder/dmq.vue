@@ -309,6 +309,8 @@ export default {
     },
     // 查询
     search() {
+      this.paramData.page.pageNum = 0
+      this.paramData.page.pageSize = 10
       this.getTicketList(this.paramForm)
     },
     // 头部删除按钮

@@ -154,7 +154,8 @@ export default {
       if (this.form.theaterId === '') {
         return this.$message.error('请选择剧院')
       }
-
+      this.form.page.pageNum = 0
+      this.form.page.pageSize = 10
       searchSeat(this.form).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)

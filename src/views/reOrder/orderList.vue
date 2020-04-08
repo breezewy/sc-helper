@@ -283,6 +283,8 @@ export default {
       })
     },
     search() {
+      this.paramData.page.pageNum = 0
+      this.paramData.page.pageSize = 10
       this.getOrderList(this.paramData)
     },
     // 选择列表不同页面
