@@ -221,7 +221,7 @@ export default {
     const checkPrice = (rule, value, callback) => {
       if (!value) {
         callback(new Error('必填项不能为空'))
-      } else if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+      } else if (!(/^(0|[1-9][0-9]*)$/.test(value))) {
         callback(new Error('请输入正整数'))
       } else {
         callback()
