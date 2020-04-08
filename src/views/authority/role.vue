@@ -1,15 +1,19 @@
 <template>
   <div id="roleContainer">
-    <div class="toolbar">
-      <div class="inputBox">
+    <el-form :inline="true">
+      <el-form-item>
         <el-input v-model="roleDate.name" placeholder="名称" clearable></el-input>
-      </div>
-      <div class="btn">
+      </el-form-item>
+      <el-form-item>
         <el-button @click="init">查询</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="primary" @click="addRole">新增</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="danger" @click="handleDeleteMore">删除</el-button>
-      </div>
-    </div>
+      </el-form-item>
+    </el-form>
     <el-table
       class="roleTable"
       ref="multipleTable"
@@ -19,9 +23,8 @@
       border
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column prop="name" label="名称" align="center"></el-table-column>
-      <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
       <el-table-column prop="remark" label="备注" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column
         prop="createTime"
@@ -37,11 +40,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 50, 100]"
+      :page-size="10"
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
 
-    <!-- 
+    <!--
       点击新增后出现的编辑模块
     -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dislog" :close-on-click-modal="false">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" class="dialog" :close-on-click-modal="false" @close="closeAddDialog">
       <el-form ref="roleForm" :model="roleForm" :rules="roleFormRules" label-width="80px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="roleForm.name" autocomplete="off"></el-input>
@@ -68,10 +81,10 @@
       </el-form>
     </el-dialog>
 
-    <!-- 
-      点击修改后出现的编辑模块 
+    <!--
+      点击修改后出现的编辑模块
     -->
-    <el-dialog title="修改" :visible.sync="updateVisible" class="dislog" :close-on-click-modal="false">
+    <el-dialog title="修改" :visible.sync="updateVisible" class="dialog" :close-on-click-modal="false" @close="closeUpdateDialog">
       <el-form
         ref="updateRoleForm"
         :model="updateRoleForm"
@@ -89,8 +102,8 @@
           <el-tree
             :data="menuList"
             node-key="id"
-            :default-checked-keys="checkedList"
             :props="defaultProps"
+            :default-checked-keys="this.checkedList"
             show-checkbox
             accordion
             ref="listTree"
@@ -113,245 +126,308 @@ import {
   deleteRole,
   updateRole,
   getRoleInfo
-} from "../../api/management";
-import { getMenuSelect } from "../../api/nav";
+} from '../../api/management'
+import { getMenuSelect } from '../../api/nav'
 export default {
   data() {
     return {
       // 查询角色的参数
       roleDate: {
-        name: "",
+        name: '',
         page: {
           pageNum: 0,
           pageSize: 10
         }
       },
-      //新增角色的参数
+      // 新增角色的参数
       roleForm: {
-        name: "",
-        remark: "",
+        name: '',
+        remark: '',
         menuIdList: []
       },
       roleFormRules: {
-        name: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-        remark: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
+        name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+        remark: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
       },
-      //修改角色的参数
+      // 修改角色的参数
       updateRoleForm: {
-        id: "",
-        name: "",
-        remark: "",
+        id: '',
+        name: '',
+        remark: '',
         menuIdList: []
       },
       updateRoleFormRules: {
-        name: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-        remark: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
+        name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+        remark: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
       },
       dialogFormVisible: false,
       updateVisible: false,
       menuList: [],
       roleList: [],
       rowIdList: [],
-      checkedList:[],
+      checkedList: [],
       defaultProps: {
-        children: "children",
-        label: "name"
-      }
-    };
+        children: 'children',
+        label: 'name'
+      },
+      total: 0,
+      currentPage: 1
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
-      if (this.roleDate.name.length == 0) {
-        delete this.roleDate.name;
+      if (this.roleDate.name.length === 0) {
+        delete this.roleDate.name
       }
-      this.getRoleList();
-      this.getMenuSelect();
+      this.getRoleList()
+      this.getMenuSelect()
     },
+    // 获取角色列表
     getRoleList() {
       getRoleList(this.roleDate)
         .then(res => {
-          if (res.data.code != 200) {
-            return this.$message.error(res.error);
+          if (res.data.code !== 200) {
+            return this.$message.error(res.error)
           }
-          this.roleList = res.data.data.data;
+          this.roleList = res.data.data.data
+          this.total = res.data.data.totalCount
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
+    // 获取菜单列表
     getMenuSelect() {
       getMenuSelect().then(res => {
-        this.menuList = res.data.data;
-      });
+        this.menuList = res.data.data
+      })
     },
+    // 点击新增按钮
     addRole() {
-      this.dialogFormVisible = true;
+      this.dialogFormVisible = true
       this.roleForm = {
-        name: "",
-        remark: "",
+        name: '',
+        remark: '',
         menuIdList: []
-      };
+      }
     },
+    // 新增框里的确定按钮
     onSubmit() {
       this.$refs.roleForm.validate(valid => {
         if (valid) {
-          this.roleForm.menuIdList = this.$refs.menuListTree.getCheckedKeys();
-          let _this = this;
-          //点击确认后，发起新增请求
+          const parentArr = this.$refs.menuListTree.getHalfCheckedKeys()
+          const childeArr = this.$refs.menuListTree.getCheckedKeys()
+          const arr = childeArr.concat(parentArr)
+          this.roleForm.menuIdList = arr
+          const _this = this
+          // 点击确认后，发起新增请求
           addRole(this.roleForm)
             .then(res => {
-              if (res.data.code != 200) {
-                return this.$message.error(res.error);
+              if (res.data.code !== 200) {
+                return this.$message.error(res.error)
               }
-              this.dialogFormVisible = false;
-              _this.getRoleList();
+              this.dialogFormVisible = false
+              _this.getRoleList()
               this.$message({
-                message: "操作成功",
-                type: "success"
-              });
+                message: '操作成功',
+                type: 'success'
+              })
             })
             .catch(err => {
-              console.log(err);
-            });
+              console.log(err)
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    //修改
+    // 修改框里的确定按钮
     handleSubmit() {
       this.$refs.updateRoleForm.validate(valid => {
         if (valid) {
-          this.updateRoleForm.menuIdList = this.$refs.listTree.getCheckedKeys();
-          let _this = this;
+          const _this = this
+          const parentArr = _this.$refs.listTree.getHalfCheckedKeys()
+          const childeArr = _this.$refs.listTree.getCheckedKeys()
+          const arr = childeArr.concat(parentArr)
+          _this.updateRoleForm.menuIdList = arr
           updateRole(this.updateRoleForm).then(res => {
-            if (res.data.code != 200) {
-              return this.$message.error(res.data.error);
+            if (res.data.code !== 200) {
+              return this.$message.error(res.data.error)
             }
-            _this.getRoleList();
-            this.updateVisible = false;
+            _this.getRoleList()
+            this.updateVisible = false
             this.$message({
-              message: "操作成功",
-              type: "success"
-            });
-          });
+              message: '操作成功',
+              type: 'success'
+            })
+          })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
+    // 新增弹框的取消
     onCancel() {
-      this.dialogFormVisible = false;
+      this.dialogFormVisible = false
     },
+    // 修改弹框的取消
     HandleCancel() {
-      this.updateVisible = false;
+      this.updateVisible = false
     },
+    // 点击修改时
     handleUpdate(id) {
-      this.updateVisible = true;
+      this.updateVisible = true
+      var that = this
       getRoleInfo(id)
         .then(res => {
-          if (res.data.code != 200) {
-            return this.$message.error(res.data.error);
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
           }
-          this.updateRoleForm = res.data.data;
-          this.checkedList = res.data.data.menuIdList
+          that.updateRoleForm = res.data.data
+          that.checkedList = res.data.data.menuIdList
+          const newArr = []
+          if (this.checkedList && this.checkedList.length !== 0) {
+            this.checkedList.forEach(item => {
+              this.checked(item, this.menuList, newArr)
+            })
+            this.checkedList = newArr
+          }
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
-    //单行删除
+    // 单行删除
     handleDeleteSingle(id) {
-       let _this = this;
-       this.$confirm('确定要删除该角色?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteRole([id]).then(res => {
-            if (res.data.code!= 200) {
-              return this.$message.error(res.data.error);
-            }
-            _this.getRoleList();
-            this.$message({
-              message: "操作成功",
-              type: "success"
-            });
-          });
-        }).catch(() => {
+      const _this = this
+      this.$confirm('确定要删除该角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRole([id]).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          _this.getRoleList()
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+            message: '操作成功',
+            type: 'success'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     // 多选删除
     handleDeleteMore() {
-      let _this = this;
+      const _this = this
       if (this.rowIdList.length === 0) {
         this.$message({
-          message: "请选择删除项",
-          type: "warning"
-        });
-        return;
-      }
-        this.$confirm('确定要删除所选角色?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          message: '请选择删除项',
           type: 'warning'
-        }).then(() => {
-            deleteRole(this.rowIdList).then(res => {
-              if (res.data.code!= 200) {
-                return this.$message.error(res.error);
-              }
-              _this.getRoleList();
-              this.$message({
-                message: "操作成功",
-                type: "success"
-              });
-            });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
-    },
-    handleSelectionChange(selection) {
-      this.rowIdList = [];
-      for (let i = 0; i < selection.length; i++) {
-        this.rowIdList.push(selection[i].id);
+        })
+        return
       }
+      this.$confirm('确定要删除所选角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRole(this.rowIdList).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.error)
+          }
+          _this.getRoleList()
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // 角色列表头部勾选
+    handleSelectionChange(selection) {
+      this.rowIdList = []
+      for (let i = 0; i < selection.length; i++) {
+        this.rowIdList.push(selection[i].id)
+      }
+    },
+    // 递归筛选
+    checked(id, data, newArr) {
+      data.forEach(item => {
+        if (item.id === id) {
+          if (item.children.length === 0) {
+            newArr.push(item.id)
+          }
+        } else {
+          if (item.children.length !== 0) {
+            this.checked(id, item.children, newArr)
+          }
+        }
+      })
+    },
+    // 关闭修改弹框
+    closeUpdateDialog() {
+      // 当弹框关闭时，修改默认勾选的节点数组
+      this.$refs.listTree.setCheckedKeys([])
+    },
+    // 关闭新增弹框
+    closeAddDialog() {
+      this.$refs.menuListTree.setCheckedKeys([])
+    },
+    // 选择列表不同页面
+    handleSizeChange(val) {
+      this.roleDate.page.pageSize = val
+      this.getRoleList(this.roleDate)
+    },
+    // 选择列表每页多少条数据
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.roleDate.page.pageNum = this.currentPage - 1
+      this.getRoleList(this.roleDate)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 #roleContainer {
   padding: 30px;
-  .toolbar {
-    display: flex;
-    .inputBox {
-      width: 400px;
-      display: flex;
-      .el-input {
-        margin-right: 30px;
-      }
-    }
-    .btn {
-      margin-left: 30px;
-    }
+  .el-pagination {
+      padding: 20px 50px;
+      text-align: right;
   }
+  // .toolbar {
+  //   display: flex;
+  //   .inputBox {
+  //     width: 400px;
+  //     display: flex;
+  //     .el-input {
+  //       margin-right: 30px;
+  //     }
+  //   }
+  //   .btn {
+  //     margin-left: 30px;
+  //   }
+  // }
   .roleTable {
     margin-top: 30px;
   }
-  .dislog {
+  .dialog {
     width: 90%;
     margin: 0 auto;
   }

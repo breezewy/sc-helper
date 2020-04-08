@@ -1,17 +1,22 @@
 <template>
   <div id="userContainer">
-    <div class="toolbar">
-      <div class="inputBox">
+    <el-form :inline="true">
+      <el-form-item>
         <el-input v-model="username" placeholder="用户名" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-input v-model="mobile" placeholder="手机号" clearable></el-input>
-      </div>
-      <div class="btn">
+      </el-form-item>
+      <el-form-item>
         <el-button @click="init">查询</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="primary" @click="addUser">新增</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="danger" @click="handleDeleteMore">删除</el-button>
-      </div>
-    </div>
-
+      </el-form-item>
+    </el-form>
     <div class="tableContainer">
       <template>
         <el-table
@@ -122,12 +127,6 @@
           <el-radio v-model="updateUserForm.gender" :label="1">女</el-radio>
           <el-radio v-model="updateUserForm.gender" :label="2">保密</el-radio>
         </el-form-item>
-        <!-- <el-form-item label="邮箱" prop="email">
-          <el-input v-model="updateUserForm.email" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="updateUserForm.mobile" autocomplete="off"></el-input>
-        </el-form-item> -->
         <el-form-item label="角色配置" class="role-list">
           <el-select v-model="updateUserForm.roleIdList" placeholder="角色配置" multiple>
             <el-option v-for="role in roleList" :key="role.id" :label="role.label" :value="role.value"></el-option>
@@ -396,7 +395,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteUser([id]).then(res => {
-          if (res.data.code != 200) {
+          if (res.data.code !== 200) {
             return this.$message.error(res.data.error)
           }
           _this.init()
@@ -417,7 +416,7 @@ export default {
       this.updateVisible = true
       getUserInfo(id)
         .then(res => {
-          if (res.data.code != 200) {
+          if (res.data.code !== 200) {
             return this.$message.error(res.data.error)
           }
           this.updateUserForm = res.data.data
@@ -433,7 +432,7 @@ export default {
         if (valid) {
           const _this = this
           updateUser(this.updateUserForm).then(res => {
-            if (res.data.code != 200) {
+            if (res.data.code !== 200) {
               return this.$message.error(res.data.error)
             }
             _this.init()
@@ -460,19 +459,6 @@ export default {
 <style lang="scss" scoped>
 #userContainer {
   padding: 30px;
-  .toolbar {
-    display: flex;
-    .inputBox {
-      width: 400px;
-      display: flex;
-      .el-input {
-        margin-right: 30px;
-      }
-    }
-    .btn {
-      margin-left: 30px;
-    }
-  }
   .tableContainer {
     margin-top: 30px;
   }
