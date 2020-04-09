@@ -47,6 +47,7 @@
           <el-table-column prop="city" label="城市" align="center"></el-table-column>
           <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
           <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
+          <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
           <el-table-column prop="buyToday" label="当天是否可预约" align="center" width="150">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.buyToday== true" type="success" size="mini">是</el-tag>
@@ -102,6 +103,9 @@
         </el-form-item>
          <el-form-item label="城市" prop="city">
           <el-input v-model="ticketForm.city" type="text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="供应商" prop="supplyName">
+          <el-input v-model="ticketForm.supplyName" type="text" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="采购价" prop="purchasePrice">
           <el-input v-model="ticketForm.purchasePrice" type="text" autocomplete="off"></el-input>
@@ -162,6 +166,9 @@
         </el-form-item>
         <el-form-item label="城市" prop="city">
           <el-input v-model="ticketDetial.city" type="text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="供应商" prop="supplyName">
+          <el-input v-model="ticketDetial.supplyName" type="text" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="采购价" prop="purchasePrice">
           <el-input v-model="ticketDetial.purchasePrice" type="text" autocomplete="off"></el-input>
@@ -238,17 +245,21 @@ export default {
         city: '',
         buyToday: true,
         containShow: true,
-        // updateLinkInfo: true,  
+        // updateLinkInfo: true
         useStartDate: '',
         useEndDate: '',
         purchasePrice: '',
-        finalSum: ''
+        finalSum: '',
+        supplyName: ''
       },
       ticketFormRules: {
         code: [
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         name: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        supplyName: [
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         city: [
@@ -276,6 +287,9 @@ export default {
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         city: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        supplyName: [
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         useStartDate: [
