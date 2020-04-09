@@ -4,7 +4,7 @@
       <el-form-item>
         <el-input
             placeholder="请输入票型编码"
-            v-model="paramData.code"
+            v-model.trim="paramData.code"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
@@ -14,7 +14,7 @@
       <el-form-item>
         <el-input
             placeholder="宋城旅游订单号"
-            v-model="paramData.dmqOrderId"
+            v-model.trim="paramData.dmqOrderId"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
@@ -22,9 +22,19 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
+          <el-input
+            placeholder="请输入供应商名称"
+            v-model.trim="paramData.supplyName"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+            @clear="handleClear"
+          ></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-input
             placeholder="请输入票型名称"
-            v-model="paramData.name"
+            v-model.trim="paramData.name"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
@@ -34,7 +44,7 @@
       <el-form-item>
           <el-input
           placeholder="请输入购买人"
-          v-model="paramData.buyerName"
+          v-model.trim="paramData.buyerName"
           class="inputArea"
           suffix-icon="el-icon-edit"
           clearable
@@ -165,6 +175,7 @@ export default {
         code: '',
         dmqOrderId: '',
         name: '',
+        supplyName: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -262,6 +273,9 @@ export default {
     },
     // 清空查询框
     handleClear() {
+      this.paramData.page.pageNum = 0
+      this.paramData.page.pageSize = 10
+      this.currentPage = 1
       this.getChildOrder(this.paramData)
     },
     // 清空游玩日期选择器时执行

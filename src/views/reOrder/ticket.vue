@@ -20,6 +20,16 @@
         ></el-autocomplete>
       </el-form-item>
       <el-form-item>
+        <el-input
+        placeholder="请输入供应商名称"
+        v-model="paramForm.supplyName"
+        class="inputArea"
+        suffix-icon="el-icon-edit"
+        clearable
+        @clear="handleClear"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
@@ -307,6 +317,8 @@ export default {
       },
       paramForm: {
         code: '',
+        name: '',
+        supplyName: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -343,6 +355,9 @@ export default {
       if (data.name === '') {
         delete data.name
       }
+      if (data.supplyName === '') {
+        delete data.supplyName
+      }
       getTicketList(data).then(res => {
         this.ticketList = res.data.data.data
         this.total = res.data.data.totalCount
@@ -378,8 +393,8 @@ export default {
     },
     // 查询
     search() {
-      this.paramData.page.pageNum = 0
-      this.paramData.page.pageSize = 10
+      this.paramForm.page.pageNum = 0
+      this.paramForm.page.pageSize = 10
       this.getTicketList(this.paramForm)
     },
     // 头部删除按钮
@@ -488,6 +503,9 @@ export default {
     },
     // 清空搜索框
     handleClear() {
+      this.paramForm.page.pageNum = 0
+      this.paramForm.page.pageSize = 10
+      this.currentPage = 1
       this.getTicketList(this.paramForm)
     },
     // 模糊查询

@@ -4,7 +4,17 @@
       <el-form-item>
           <el-input
             placeholder="请输入宋城旅游订单号"
-            v-model="paramData.orderNo"
+            v-model.trim="paramData.orderNo"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+            @clear="handleClear"
+          ></el-input>
+      </el-form-item>
+      <el-form-item>
+          <el-input
+            placeholder="请输入供应商名称"
+            v-model.trim="paramData.supplyName"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
@@ -14,7 +24,7 @@
       <el-form-item>
          <el-input
             placeholder="请输入证件号"
-            v-model="paramData.idCard"
+            v-model.trim="paramData.idCard"
             class="inputArea"
             suffix-icon="el-icon-edit"
             clearable
@@ -24,7 +34,7 @@
       <el-form-item>
         <el-input
           placeholder="请输入手机号"
-          v-model="paramData.mobile"
+          v-model.trim="paramData.mobile"
           class="inputArea"
           suffix-icon="el-icon-edit"
           clearable
@@ -34,7 +44,7 @@
       <el-form-item>
         <el-input
           placeholder="请输入姓名"
-          v-model="paramData.name"
+          v-model.trim="paramData.name"
           class="inputArea"
           suffix-icon="el-icon-edit"
           clearable
@@ -44,7 +54,7 @@
       <el-form-item>
           <el-input
           placeholder="请输入购买人"
-          v-model="paramData.buyerName"
+          v-model.trim="paramData.buyerName"
           class="inputArea"
           suffix-icon="el-icon-edit"
           clearable
@@ -206,6 +216,7 @@ export default {
         mobile: '',
         name: '',
         orderNo: '',
+        supplyName: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -318,6 +329,9 @@ export default {
       })
     },
     handleClear() {
+      this.paramData.page.pageNum = 0
+      this.paramData.page.pageSize = 10
+      this.currentPage = 1
       this.getOrderList(this.paramData)
     },
     // 清空付款日期选择器时执行
