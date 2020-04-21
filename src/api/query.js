@@ -52,3 +52,11 @@ export function getOfflineOrderSeat(data) {
   })
 }
 
+// 线下库存查询接口
+export function getSeat(id, code) {
+  return request({
+    url: `/performPlan/getSeat/${id}/${code}`,
+    method: 'get'
+  })
+}
+

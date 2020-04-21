@@ -31,7 +31,13 @@
       </el-form-item>
     </el-form>
     <div class="tableContainer">
-      <el-table :data="perFormTable" style="width: 100%" border empty-text="暂无数据">
+      <el-table
+        :data="perFormTable"
+        style="width: 100%"
+        border
+        empty-text="暂无数据"
+        @row-dblclick="handleDbClick"
+      >
         <el-table-column prop="performName" label="演出名称" align="center"></el-table-column>
         <el-table-column prop="performTime" label="演出场次" align="center"></el-table-column>
         <el-table-column prop="performDate" label="演出日期" align="center"></el-table-column>
@@ -46,12 +52,13 @@
         <el-table-column prop="sceneId" label="场次ID" align="center"></el-table-column>
       </el-table>
     </div>
+    <Seat v-if="showSeat" :show="showSeat" :id="this.parkId" :code="performCode" @close="closeSeatDialog"></Seat>
   </div>
 </template>
 
 <script>
 import { getParkList, getPerformList } from '../../api/query'
-
+import Seat from './components/seat'
 // 获取新的时间(2019.4.12）
 const date = new Date()
 // 获取当前时间的年份转为字符串
@@ -68,6 +75,8 @@ export default {
     return {
       parkList: [], // 景区列表
       value: '', // 选中的景区
+      performCode: '', // 场次编码
+      showSeat: false, // 显示线下库存查询弹窗
       parkId: '', // 景区ID,
       dateArr: [start, end], // 日期选择数组
       startStr: '', // 起始时间字符串
@@ -110,6 +119,9 @@ export default {
   },
   created() {
     this.init()
+  },
+  components: {
+    Seat
   },
   methods: {
     init() {
@@ -158,6 +170,15 @@ export default {
     },
     searchShow() {
       this.getPerForm()
+    },
+    // 双击表格某一行
+    handleDbClick(row, column, event) {
+      this.performCode = row.performCode
+      this.showSeat = true
+    },
+    // 关闭弹窗
+    closeSeatDialog() {
+      this.showSeat = false
     }
   }
 }
