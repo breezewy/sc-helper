@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     init() {
-      const data = { 'theater': '' }
+      const data = { 'theater': true }
       getParkList(data).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
