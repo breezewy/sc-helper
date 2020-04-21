@@ -46,7 +46,7 @@
         <el-table-column prop="auditFlag" label="审核标志" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.auditFlag == 1" type="success" size="mini">已审核</el-tag>
-            <el-tag v-if="scope.row.auditFlag == 2" type="danger" size="mini">未审核</el-tag>
+            <el-tag v-else type="danger" size="mini">未审核</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="sceneId" label="场次ID" align="center"></el-table-column>

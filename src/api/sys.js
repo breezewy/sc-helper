@@ -44,7 +44,7 @@ export function getIconList() {
   return res
 }
 
-// 获取信息
+// 获取菜单信息
 export function getMenuByID(id) {
   return request({
     url: `/menu/${id}`,
@@ -52,8 +52,7 @@ export function getMenuByID(id) {
   })
 }
 
-// 删除
-
+// 删除菜单
 export function deleteMenu(id) {
   return request({
     url: `/menu/${id}`,
@@ -61,3 +60,73 @@ export function deleteMenu(id) {
   })
 }
 
+// 获取定时任务列表
+export function getJobList(data) {
+  return request({
+    url: '/job/list',
+    method: 'post',
+    data
+  })
+}
+
+// 新增定时任务
+export function addJob(data) {
+  return request({
+    url: '/job',
+    method: 'post',
+    data
+  })
+}
+
+// 修改定时任务
+export function updateJob(data) {
+  return request({
+    url: '/job',
+    method: 'put',
+    data
+  })
+}
+
+// 根据ID获取定时任务信息
+export function getJobByID(id) {
+  return request({
+    url: `/job/${id}`,
+    method: 'get'
+  })
+}
+
+// 删除定时任务
+export function deleteJob(data) {
+  return request({
+    url: '/job',
+    method: 'delete',
+    data
+  })
+}
+
+// 暂停定时任务
+export function pauseJob(data) {
+  return request({
+    url: '/job/pause',
+    method: 'put',
+    data
+  })
+}
+
+// 恢复定时任务
+export function resumeJob(data) {
+  return request({
+    url: '/job/resume',
+    method: 'put',
+    data
+  })
+}
+
+// 立即执行定时任务
+export function runJob(data) {
+  return request({
+    url: '/job/run',
+    method: 'put',
+    data
+  })
+}
