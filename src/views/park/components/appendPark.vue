@@ -1,13 +1,13 @@
 <template>
     <div class="appendPark">
-        <el-dialog 
-            title="新增景区" 
+        <el-dialog
+            title="新增景区"
             :visible.sync="dialogFormVisible"
             @close="closeDialog"
             :close-on-click-modal="false"
             >
-            <el-form 
-                :model="form" 
+            <el-form
+                :model="form"
                 :rules="formRules"
                 ref="appendForm"
                 >
@@ -33,70 +33,69 @@
 </template>
 
 <script>
-import {appendPark} from '@/api/park'
+import { appendPark } from '@/api/park'
 export default {
-    name:"AppendPark",
-    props:{
-        show:Boolean
-    },
-    created(){
-        this.dialogFormVisible = this.show
-    },
-    watch:{
-        show(newVal,oldVal){
-            this.dialogFormVisible = newVal
-            this.form= {
-                    name:"",
-                    url:"",
-                    theater:true
-            }
-        }
-    },
-    data(){
-        return {
-            form:{
-                name:"",
-                url:"",
-                theater:true
-            },
-            formRules: {
-                name: [
-                { required: true, message: "必填项不能为空", trigger: "blur" },
-                ],
-                url: [
-                { required: true, message: "必填项不能为空", trigger: "blur" },
-                ]
-            },
-            formLabelWidth:"120px",
-            dialogFormVisible:false
-        }
-    },
-    methods:{
-        closeDialog(){
-            this.$emit('changeAppendShow')
-        },
-        handleSubmit(){
-            this.$refs.appendForm.validate(valid=>{
-                if(valid){
-                    appendPark(this.form).then(res=>{
-                    if(res.data.code != 200){
-                        return this.$message.error(res.data.error);
-                    }
-                        this.$message.success('操作成功');
-                        this.$emit('handleAppendSuccess')
-                        this.dialogFormVisible = false
-                    })
-                }else{
-                    console.log("error submit!!");
-                    return false;
-                }
-            })
-            
-        }
+  name: 'AppendPark',
+  props: {
+    show: Boolean
+  },
+  created() {
+    this.dialogFormVisible = this.show
+  },
+  watch: {
+    show(newVal, oldVal) {
+      this.dialogFormVisible = newVal
+      this.form = {
+        name: '',
+        url: '',
+        theater: true
+      }
     }
+  },
+  data() {
+    return {
+      form: {
+        name: '',
+        url: '',
+        theater: true
+      },
+      formRules: {
+        name: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        url: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ]
+      },
+      formLabelWidth: '120px',
+      dialogFormVisible: false
+    }
+  },
+  methods: {
+    closeDialog() {
+      this.$emit('changeAppendShow')
+    },
+    handleSubmit() {
+      this.$refs.appendForm.validate(valid => {
+        if (valid) {
+          appendPark(this.form).then(res => {
+            if (res.data.code !== 200) {
+              return this.$message.error(res.data.error)
+            }
+            this.$message.success('操作成功')
+            this.$emit('handleAppendSuccess')
+            this.dialogFormVisible = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
- 
+
 </style>

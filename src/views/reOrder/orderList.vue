@@ -281,7 +281,7 @@ export default {
       const newData = {}
       Object.assign(newData, timeRange, data)
       for (const key in newData) {
-        if (newData[key] === '') {
+        if (newData[key] === '' || newData[key] === null) {
           delete newData[key]
         }
       }
