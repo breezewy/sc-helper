@@ -2,9 +2,19 @@
     <div class="smsController">
         <el-form :inline="true"  class="demo-form-inline">
             <el-form-item  label="景区名称" >
-              <el-select v-model="form.parkId" placeholder="请选择">
+              <el-select v-model="form.parkId" placeholder="请选择" clearable @clear="handleClear">
                   <el-option
                   v-for="item in parkList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                  </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item  label="发送状态" >
+              <el-select v-model="form.status" placeholder="请选择" clearable @clear="handleClear">
+                  <el-option
+                  v-for="item in smsStatus"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -82,9 +92,9 @@
             label="发送状态"
             align="center">
               <template slot-scope="scope">
-                <el-tag type="success" v-if="scope.row.status === 0">发送成功</el-tag>
-                <el-tag type="danger" v-if="scope.row.status === 1">发送失败</el-tag>
-                <el-tag type="info" v-if="scope.row.status === 2">待发送</el-tag>
+                <el-tag type="success" size="mini" v-if="scope.row.status === 0">发送成功</el-tag>
+                <el-tag type="danger" size="mini" v-if="scope.row.status === 1">发送失败</el-tag>
+                <el-tag type="info" size="mini" v-if="scope.row.status === 2">待发送</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -139,6 +149,16 @@ export default {
   data() {
     return {
       parkList: [], // 景区列表
+      smsStatus: [{
+        label: '发送成功',
+        value: 0
+      }, {
+        label: '发送失败',
+        value: 1
+      }, {
+        label: '待发送',
+        value: 2
+      }],
       smsList: [], // 短信发送列表
       rowIdList: [], // table列表行ID数组，批量操作时用
       sendTime: '', // 时间选择器
@@ -150,6 +170,7 @@ export default {
         endDate: '',
         mobile: '',
         parkId: '',
+        status: '',
         page: {
           pageNum: 0,
           pageSize: 10
