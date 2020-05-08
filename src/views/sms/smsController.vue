@@ -82,8 +82,9 @@
             label="发送状态"
             align="center">
               <template slot-scope="scope">
-                <el-tag type="success" v-if="scope.row.status">发送成功</el-tag>
-                <el-tag type="danger" v-else>发送失败</el-tag>
+                <el-tag type="success" v-if="scope.row.status === 0">发送成功</el-tag>
+                <el-tag type="danger" v-if="scope.row.status === 1">发送失败</el-tag>
+                <el-tag type="info" v-if="scope.row.status === 2">待发送</el-tag>
               </template>
             </el-table-column>
             <el-table-column
