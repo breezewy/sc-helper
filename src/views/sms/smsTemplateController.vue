@@ -28,7 +28,7 @@
               <el-button type="primary" @click="addSms">新增</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="danger" @click="deleteSms">删除</el-button>
+              <el-button type="danger" @click="deleteSmsMore">删除</el-button>
             </el-form-item>
         </el-form>
         <!-- 短信发送模板列表 -->
@@ -86,7 +86,7 @@
             >
             <template slot-scope="scope">
                 <el-button  type="text" size="small" @click="updateSms(scope.row.id)">修改</el-button>
-                <el-button  type="text" size="small" @click="deleteSms(scope.row.id)">删除</el-button>
+                <el-button  type="text" size="small" @click="deleteSmsSingle(scope.row.id)">删除</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -196,38 +196,31 @@ export default {
       this.showEditDialog = true
       this.smsId = id
     },
-    // 删除
-    deleteSms(id) {
-      const _this = this
+    // 单行的删除
+    deleteSmsSingle(id) {
+      this.deleteSms([id])
+    },
+    // 批量删除
+    deleteSmsMore() {
+      this.deleteSms(this.rowIdList)
+    },
+    // 删除方法
+    deleteSms(data) {
       this.$confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (this.rowIdList.length === 0) {
-          this.rowIdList.push(id)
-          deleteSms(_this.rowIdList).then(res => {
-            if (res.data.code !== 200) {
-              return this.$message.error(res.data.error)
-            }
-            _this.getSmsTemplateList(this.form)
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
+        deleteSms(data).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          this.getSmsTemplateList(this.form)
+          this.$message({
+            message: '操作成功',
+            type: 'success'
           })
-        } else {
-          deleteSms(_this.rowIdList).then(res => {
-            if (res.data.code !== 200) {
-              return this.$message.error(res.data.error)
-            }
-            _this.getSmsTemplateList(this.form)
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
-          })
-        }
+        })
       }).catch(() => {
         return
       })
