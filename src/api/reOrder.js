@@ -109,6 +109,14 @@ export function updateInventory(data) {
   })
 }
 
+// 批量修改票型使用日期
+export function batchUpdateTicket(data) {
+  return request({
+    url: '/reTicket/batchUpdateTicket',
+    method: 'post',
+    data
+  })
+}
 // 修改后台票型
 export function updateTicket(data) {
   return request({

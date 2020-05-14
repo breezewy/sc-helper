@@ -41,6 +41,9 @@
       <el-form-item>
         <el-button type="success" @click="updateInventoryMore">更新库存</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary"  @click="showDatePicker">修改使用日期</el-button>
+      </el-form-item>
     </el-form>
     <div class="tableContainer">
       <template>
@@ -242,6 +245,27 @@
               </template>
           </el-calendar>
     </el-dialog>
+
+    <!-- 日期选择 -->
+    <el-dialog title="修改使用日期" :visible.sync="datePickerVisible" :close-on-click-modal="false">
+        <el-date-picker
+          v-model="dataPickerValue"
+          type="daterange"
+          align="right"
+          unlink-panels
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="pickerOptions"
+          value-format="yyyy-MM-dd"
+          @change="clickDatePicker"
+          >
+        </el-date-picker>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="datePickerVisible = false">取 消</el-button>
+          <el-button type="primary" @click="batchUpdateTicket">确 定</el-button>
+        </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -253,7 +277,8 @@ import {
   getTicketDetail,
   updateTicket,
   getByCodeTicketCalendar,
-  updateInventory
+  updateInventory,
+  batchUpdateTicket
 } from '../../api/reOrder'
 export default {
   data() {
@@ -270,6 +295,7 @@ export default {
       dialogFormVisible: false,
       updatedialogFormVisible: false,
       calendarVisible: false,
+      datePickerVisible: false,
       ticketList: [],
       restaurants: [],
       calendarDate: [],
@@ -350,7 +376,37 @@ export default {
       },
       rowIdList: [],
       total: 0,
-      currentPage: 1
+      currentPage: 1,
+      useStartDate: '',
+      useEndDate: '',
+      dataPickerValue: '',
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      }
     }
   },
   created() {
@@ -574,11 +630,42 @@ export default {
     },
     // 批量更新库存
     updateInventoryMore() {
+      if (this.rowIdList.length === 0) {
+        return this.$message.error('请先选择要更新的选项！')
+      }
       updateInventory(this.rowIdList).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.error)
         }
         this.$message.success('更新库存成功')
+      })
+    },
+    // 显示日期选择框
+    showDatePicker() {
+      if (this.rowIdList.length === 0) {
+        return this.$message.error('请先选择要更改的选项！')
+      }
+      this.datePickerVisible = true
+    },
+    // 日期选择器被点击时
+    clickDatePicker(value) {
+      this.useStartDate = value[0]
+      this.useEndDate = value[1]
+    },
+    // 批量更改使用时间
+    batchUpdateTicket() {
+      const data = {
+        ids: this.rowIdList,
+        useEndDate: this.useEndDate,
+        useStartDate: this.useStartDate
+      }
+      batchUpdateTicket(data).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.error)
+        }
+        this.$message.success('修改成功')
+        this.datePickerVisible = false
+        this.getTicketList(this.paramForm)
       })
     }
   }
