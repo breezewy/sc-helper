@@ -92,6 +92,14 @@ export function getTicketDetail(id) {
   })
 }
 
+// 价格日历
+export function getByCodeTicketCalendar(code) {
+  return request({
+    url: `/reTicket/getByCodeTicketCalendar/${code}`,
+    method: 'get'
+  })
+}
+
 // 修改后台票型
 export function updateTicket(data) {
   return request({

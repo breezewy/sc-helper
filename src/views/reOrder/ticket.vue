@@ -82,6 +82,7 @@
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
               <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+              <el-button type="text" size="small" @click="priceDate(scope.row.code)">价格日历</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -222,6 +223,21 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <!-- 价格日历 -->
+    <el-dialog title="价格日历" :visible.sync="calendarVisible" :close-on-click-modal="false">
+          <el-calendar>
+              <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
+              <template
+                slot="dateCell"
+                slot-scope="{date, data}">
+                <p :class="checkTime(data.day) ? 'is-selected' : ''">
+                  {{ data.day.split('-').slice(1).join('-') }}
+                  {{checkTime(data.day) ? '✔️' : ''}}
+                </p>
+              </template>
+          </el-calendar>
+    </el-dialog>
   </div>
 </template>
 
@@ -231,7 +247,8 @@ import {
   getTicketList,
   deleteTicket,
   getTicketDetail,
-  updateTicket
+  updateTicket,
+  getByCodeTicketCalendar
 } from '../../api/reOrder'
 export default {
   data() {
@@ -247,8 +264,10 @@ export default {
     return {
       dialogFormVisible: false,
       updatedialogFormVisible: false,
+      calendarVisible: false,
       ticketList: [],
       restaurants: [],
+      calendarDate: [],
       ticketForm: {
         code: '',
         name: '',
@@ -518,6 +537,26 @@ export default {
       return (state) => {
         return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
+    },
+    // 根据code获取日历
+    priceDate(code) {
+      this.calendarVisible = true
+      getByCodeTicketCalendar(code).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.error)
+        }
+        this.calendarDate = res.data.data
+      })
+    },
+    // 遍历返回的日期数据，跟日历匹配的返回true
+    checkTime(data) {
+      for (const i in this.calendarDate) {
+        if (data === this.calendarDate[i]) {
+          return true
+        } else {
+          continue
+        }
+      }
     }
   }
 }
@@ -532,6 +571,9 @@ export default {
       padding: 20px 50px;
       text-align: right;
     }
+  }
+  .is-selected {
+    color: red
   }
   .detailTable {
     margin-top: 30px;
