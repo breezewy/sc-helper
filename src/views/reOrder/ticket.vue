@@ -38,6 +38,9 @@
       <el-form-item>
         <el-button type="danger" @click="handleDeleteMore">删除</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="updateInventoryMore">更新库存</el-button>
+      </el-form-item>
     </el-form>
     <div class="tableContainer">
       <template>
@@ -78,11 +81,12 @@
           </el-table-column> -->
           <el-table-column prop="useStartDate" label="使用开始时间" align="center"></el-table-column>
           <el-table-column prop="useEndDate" label="使用结束时间" align="center"></el-table-column>
-          <el-table-column label="操作" align="center" width="300" fix="right">
+          <el-table-column label="操作" align="center"  fix="right">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
               <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
               <el-button type="text" size="small" @click="priceDate(scope.row.code)">价格日历</el-button>
+              <el-button type="text" size="small" @click="updateInventorySingle(scope.row.id)">更新库存</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -248,7 +252,8 @@ import {
   deleteTicket,
   getTicketDetail,
   updateTicket,
-  getByCodeTicketCalendar
+  getByCodeTicketCalendar,
+  updateInventory
 } from '../../api/reOrder'
 export default {
   data() {
@@ -557,6 +562,24 @@ export default {
           continue
         }
       }
+    },
+    // 单行更新库存
+    updateInventorySingle(id) {
+      updateInventory([id]).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.error)
+        }
+        this.$message.success('更新库存成功')
+      })
+    },
+    // 批量更新库存
+    updateInventoryMore() {
+      updateInventory(this.rowIdList).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.error)
+        }
+        this.$message.success('更新库存成功')
+      })
     }
   }
 }

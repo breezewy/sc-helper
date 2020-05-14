@@ -100,6 +100,15 @@ export function getByCodeTicketCalendar(code) {
   })
 }
 
+// 更新库存
+export function updateInventory(data) {
+  return request({
+    url: '/reTicket/syncTicket',
+    method: 'post',
+    data
+  })
+}
+
 // 修改后台票型
 export function updateTicket(data) {
   return request({
