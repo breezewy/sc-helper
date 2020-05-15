@@ -247,23 +247,57 @@
     </el-dialog>
 
     <!-- 日期选择 -->
-    <el-dialog title="修改使用日期" :visible.sync="datePickerVisible" :close-on-click-modal="false">
-        <el-date-picker
-          v-model="dataPickerValue"
-          type="daterange"
-          align="right"
-          unlink-panels
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions"
-          value-format="yyyy-MM-dd"
-          @change="clickDatePicker"
-          >
-        </el-date-picker>
+    <el-dialog
+      title="修改使用日期"
+      :visible.sync="datePickerVisible"
+      :close-on-click-modal="false"
+      @close="closeDatePickerDialog">
+      <el-form  :mode="selectForm"  ref="selectForm"  label-width="80px">
+        <el-form-item label="开始时间">
+            <el-date-picker
+              v-model="selectForm.useStartDate"
+              align="right"
+              type="date"
+              placeholder="请选择"
+              value-format="yyyy-MM-dd"
+              :picker-options="pickerOptions"
+              >
+            </el-date-picker>
+        </el-form-item>
+          <el-form-item label="结束时间" prop="useEndDate">
+              <el-date-picker
+                v-model="selectForm.useEndDate"
+                align="right"
+                type="date"
+                placeholder="请选择"
+                value-format="yyyy-MM-dd"
+                :picker-options="pickerOptions">
+              </el-date-picker>
+          </el-form-item>
+          <el-form-item label="票型名称">
+              <el-select
+                v-model="selectForm.selectValue"
+                multiple
+                filterable
+                remote
+                :reserve-keyword="false"
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+                style="width:60%"
+                >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="datePickerVisible = false">取 消</el-button>
-          <el-button type="primary" @click="batchUpdateTicket">确 定</el-button>
+          <el-button type="primary" @click="pickerSubmit">确 定</el-button>
         </div>
     </el-dialog>
   </div>
@@ -377,36 +411,46 @@ export default {
       rowIdList: [],
       total: 0,
       currentPage: 1,
-      useStartDate: '',
-      useEndDate: '',
       dataPickerValue: '',
       pickerOptions: {
         shortcuts: [{
-          text: '最近一周',
+          text: '今天',
           onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+            picker.$emit('pick', new Date())
           }
         }, {
-          text: '最近一个月',
+          text: '昨天',
           onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
           }
         }, {
-          text: '最近三个月',
+          text: '一周前',
           onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
           }
         }]
-      }
+      },
+      selectForm: {
+        useStartDate: new Date(),
+        useEndDate: '',
+        selectValue: []
+      },
+      // selectFormRules: {
+      //   name: [
+      //     { required: true, message: '请输入活动名称', trigger: 'blur' },
+      //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+      //   ],
+      //   useEndDate: [
+      //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+      //   ]
+      // },
+      options: {},
+      loading: false,
+      list: []
     }
   },
   created() {
@@ -640,24 +684,24 @@ export default {
         this.$message.success('更新库存成功')
       })
     },
-    // 显示日期选择框
-    showDatePicker() {
-      if (this.rowIdList.length === 0) {
-        return this.$message.error('请先选择要更改的选项！')
-      }
-      this.datePickerVisible = true
-    },
-    // 日期选择器被点击时
-    clickDatePicker(value) {
-      this.useStartDate = value[0]
-      this.useEndDate = value[1]
-    },
-    // 批量更改使用时间
-    batchUpdateTicket() {
+    // 批量更改使用时间弹框的确认提交
+    pickerSubmit() {
       const data = {
-        ids: this.rowIdList,
-        useEndDate: this.useEndDate,
-        useStartDate: this.useStartDate
+        ids: this.selectForm.selectValue,
+        useEndDate: this.selectForm.useEndDate,
+        useStartDate: this.selectForm.useStartDate
+      }
+      if (data.useEndDate === '') {
+        return this.$message.error('请选择结束日期')
+      }
+      if (data.ids.length === 0) {
+        return this.$message.error('请选择票型名称')
+      }
+      if (typeof (data.useStartDate) === 'object') {
+        const year = data.useStartDate.getFullYear()
+        const month = (data.useStartDate.getMonth() + 1) > 9 ? (data.useStartDate.getMonth() + 1) : '0' + (data.useStartDate.getMonth() + 1)
+        const day = data.useStartDate.getDate() > 9 ? data.useStartDate.getDate() : '0' + data.useStartDate.getDate()
+        data.useStartDate = year + '-' + month + '-' + day
       }
       batchUpdateTicket(data).then(res => {
         if (res.data.code !== 200) {
@@ -667,6 +711,43 @@ export default {
         this.datePickerVisible = false
         this.getTicketList(this.paramForm)
       })
+    },
+    // 显示日期选择框
+    showDatePicker() {
+      this.datePickerVisible = true
+      const data = {
+        page: {
+          pageNum: 0,
+          pageSize: 1000
+        }
+      }
+      getTicketList(data).then(res => {
+        const data = res.data.data.data
+        this.list = data.map(item => {
+          return { value: item.id, label: item.name }
+        })
+      })
+    },
+    // 远程搜索
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.options = this.list.filter(item => {
+            return item.label.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 200)
+      } else {
+        this.options = []
+      }
+    },
+    // 关闭 修改使用日期弹框后，初始化数据
+    closeDatePickerDialog() {
+      this.selectForm.selectValue = []
+      this.selectForm.useStartDate = new Date()
+      this.selectForm.useEndDate = ''
     }
   }
 }
