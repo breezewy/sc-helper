@@ -76,8 +76,16 @@
               <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="useType" label="时间类型" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.useType== true" >绝对时间</span>
+              <span v-if="scope.row.useType== false" >相对时间</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="useStartDate" label="使用开始时间" align="center"></el-table-column>
           <el-table-column prop="useEndDate" label="使用结束时间" align="center"></el-table-column>
+          <el-table-column prop="beforeUseDay" label="提前使用天数" align="center"></el-table-column>
+          <el-table-column prop="afterUseDay" label="延迟使用天数" align="center"></el-table-column>
           <el-table-column label="操作" align="center"  fix="right">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
