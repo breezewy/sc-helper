@@ -35,7 +35,7 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
-  },
+  }
 ]
 
 const createRouter = () => new Router({
@@ -50,7 +50,5 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
-
-
 
 export default router

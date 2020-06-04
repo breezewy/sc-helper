@@ -33,7 +33,6 @@ service.interceptors.response.use(
   response => {
     const res = response
     const status = res.status
-    // console.log(res)
     if (res.request.responseURL.indexOf('auth/captcha') != -1) {
       return response
     } else if (res.request.responseURL.indexOf('gatherPark/creatQrCode') != -1) {

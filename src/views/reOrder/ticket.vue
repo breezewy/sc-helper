@@ -76,12 +76,6 @@
               <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="updateLinkInfo" label="是否限制下单信息" align="center">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.updateLinkInfo== true" type="success" size="mini">是</el-tag>
-              <el-tag v-if="scope.row.updateLinkInfo== false" type="danger" size="mini">否</el-tag>
-            </template>
-          </el-table-column> -->
           <el-table-column prop="useStartDate" label="使用开始时间" align="center"></el-table-column>
           <el-table-column prop="useEndDate" label="使用结束时间" align="center"></el-table-column>
           <el-table-column label="操作" align="center"  fix="right">
@@ -139,11 +133,13 @@
           <el-radio v-model="ticketForm.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.containShow" :label="false">否</el-radio>
         </el-form-item>
-        <!-- <el-form-item label="是否限制下单信息" prop="containShow">
-          <el-radio v-model="ticketForm.updateLinkInfo" :label="true">是</el-radio>
-          <el-radio v-model="ticketForm.updateLinkInfo" :label="false">否</el-radio>
-        </el-form-item> -->
-        <el-form-item label="使用开始时间" prop="useStartDate">
+        <el-form-item label="使用时间类型" prop="useType">
+          <el-radio-group v-model="ticketForm.useType" @change="radioChange">
+            <el-radio  :label="true">绝对使用时间</el-radio>
+            <el-radio  :label="false">相对使用时间</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="使用开始时间" prop="useStartDate" v-if="ticketForm.useType === true">
           <el-date-picker
             v-model="ticketForm.useStartDate"
             type="date"
@@ -152,7 +148,7 @@
             value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="使用结束时间" prop="useEndDate">
+        <el-form-item label="使用结束时间" prop="useEndDate" v-if="ticketForm.useType === true">
           <el-date-picker
             v-model="ticketForm.useEndDate"
             type="date"
@@ -160,6 +156,12 @@
             format="yyyy 年 MM 月 dd 日"
             value-format="yyyy-MM-dd"
           ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="提前使用天数" prop="beforeUseDay" v-if="ticketForm.useType === false">
+          <el-input-number v-model="ticketForm.beforeUseDay"></el-input-number><span style="margin-left:10px">天</span>
+        </el-form-item>
+        <el-form-item label="延迟使用天数" prop="afterUseDay" v-if="ticketForm.useType === false">
+          <el-input-number v-model="ticketForm.afterUseDay" ></el-input-number><span style="margin-left:10px">天</span>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSubmit">确定</el-button>
@@ -202,11 +204,13 @@
           <el-radio v-model="ticketDetial.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketDetial.containShow" :label="false">否</el-radio>
         </el-form-item>
-        <!-- <el-form-item label="是否限制下单信息" prop="containShow">
-          <el-radio v-model="ticketDetial.updateLinkInfo" :label="true">是</el-radio>
-          <el-radio v-model="ticketDetial.updateLinkInfo" :label="false">否</el-radio>
-        </el-form-item> -->
-        <el-form-item label="使用开始时间" prop="useStartDate">
+        <el-form-item label="使用时间类型" prop="useType">
+          <el-radio-group v-model="ticketDetial.useType" @change="radioChange">
+              <el-radio  :label="true">绝对使用时间</el-radio>
+              <el-radio  :label="false">相对使用时间</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="使用开始时间" prop="useStartDate" v-if="ticketDetial.useType === true">
           <el-date-picker
             v-model="ticketDetial.useStartDate"
             type="date"
@@ -215,7 +219,7 @@
             value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="使用结束时间" prop="useEndDate">
+        <el-form-item label="使用结束时间" prop="useEndDate" v-if="ticketDetial.useType === true">
           <el-date-picker
             v-model="ticketDetial.useEndDate"
             type="date"
@@ -223,6 +227,12 @@
             format="yyyy 年 MM 月 dd 日"
             value-format="yyyy-MM-dd"
           ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="提前使用天数" prop="beforeUseDay" v-if="ticketDetial.useType === false">
+          <el-input-number v-model="ticketDetial.beforeUseDay"></el-input-number><span style="margin-left:10px">天</span>
+        </el-form-item>
+        <el-form-item label="延迟使用天数" prop="afterUseDay" v-if="ticketDetial.useType === false">
+          <el-input-number v-model="ticketDetial.afterUseDay" ></el-input-number><span style="margin-left:10px">天</span>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleUpdateSubmit">确定</el-button>
@@ -339,7 +349,9 @@ export default {
         city: '',
         buyToday: true,
         containShow: true,
-        // updateLinkInfo: true
+        useType: true,
+        beforeUseDay: 0,
+        afterUseDay: 0,
         useStartDate: '',
         useEndDate: '',
         purchasePrice: '',
@@ -363,6 +375,12 @@ export default {
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         useEndDate: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        beforeUseDay: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        afterUseDay: [
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         purchasePrice: [
@@ -390,6 +408,12 @@ export default {
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         useEndDate: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        beforeUseDay: [
+          { required: true, message: '必填项不能为空', trigger: 'blur' }
+        ],
+        afterUseDay: [
           { required: true, message: '必填项不能为空', trigger: 'blur' }
         ],
         purchasePrice: [
@@ -439,15 +463,6 @@ export default {
         useEndDate: '',
         selectValue: []
       },
-      // selectFormRules: {
-      //   name: [
-      //     { required: true, message: '请输入活动名称', trigger: 'blur' },
-      //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-      //   ],
-      //   useEndDate: [
-      //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-      //   ]
-      // },
       options: {},
       loading: false,
       list: []
@@ -465,7 +480,9 @@ export default {
         name: '',
         buyToday: true,
         containShow: true,
-        // updateLinkInfo: true,
+        useType: true,
+        beforeUseDay: 0,
+        afterUseDay: 0,
         useStartDate: '',
         useEndDate: ''
       }
@@ -497,6 +514,10 @@ export default {
       const _this = this
       this.$refs.addTicketForm.validate(valid => {
         if (valid) {
+          if (this.ticketForm.useType === false) {
+            delete this.ticketForm.useStartDate
+            delete this.ticketForm.useEndDate
+          }
           addReTicket(this.ticketForm).then(res => {
             if (res.data.code !== 200) {
               return this.$message.error(res.data.error)
@@ -604,6 +625,10 @@ export default {
     handleUpdateSubmit() {
       this.$refs.updateTicketForm.validate(valid => {
         if (valid) {
+          if (this.ticketDetial.useType === false) {
+            delete this.ticketDetial.useStartDate
+            delete this.ticketDetial.useEndDate
+          }
           updateTicket(this.ticketDetial).then(res => {
             if (res.data.code !== 200) {
               return this.$message.error(res.error)
@@ -748,6 +773,20 @@ export default {
       this.selectForm.selectValue = []
       this.selectForm.useStartDate = new Date()
       this.selectForm.useEndDate = ''
+    },
+    // 使用时间类型改变时执行
+    radioChange(value) {
+      if (value) {
+        this.ticketForm.beforeUseDay = 0
+        this.ticketForm.afterUseDay = 0
+        this.ticketDetial.beforeUseDay = 0
+        this.ticketDetial.afterUseDay = 0
+      } else {
+        this.ticketForm.useStartDate = ''
+        this.ticketForm.useEndDate = ''
+        this.ticketDetial.useStartDate = ''
+        this.ticketDetial.useEndDate = ''
+      }
     }
   }
 }

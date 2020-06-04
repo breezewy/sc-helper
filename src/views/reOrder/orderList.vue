@@ -137,7 +137,8 @@
                 <span v-if="scope.row.dmqOrderStatus === 9 ">已退单</span>
               </template>
             </el-table-column>
-            <el-table-column prop="payTime" label="付款时间" align="center" width="180"></el-table-column>
+            <el-table-column prop="payTime" label="付款时间" align="center" width="180"></el-table-column>playDate
+            <el-table-column prop="playDate" label="游玩日期" align="center" width="180"></el-table-column>
             <el-table-column prop="idCard" label="证件号" align="center" width="180"></el-table-column>
             <el-table-column prop="certificateType" label="证件类型" align="center">
               <template slot-scope="scope">
