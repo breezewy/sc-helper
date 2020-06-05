@@ -54,7 +54,17 @@
       <el-form-item>
         <el-select v-model="paramData.orderStatus" clearable placeholder="请选择订单状态">
           <el-option
-            v-for="item in options"
+            v-for="item in orderStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="paramData.dmqOrderStatus" clearable placeholder="请选择消费状态">
+          <el-option
+            v-for="item in dmqOrderStatusOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -146,11 +156,11 @@
           <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
           <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
           <el-table-column prop="payTime" label="付款时间" align="center" width="180"></el-table-column>
-          <el-table-column prop="orderStatus" label="消费状态" align="center" width="100">
+          <el-table-column prop="dmqOrderStatus" label="消费状态" align="center" width="100">
              <template slot-scope="scope">
-              <span v-if="scope.row.orderStatus === 5 ">待消费</span>
-              <span v-if="scope.row.orderStatus === 7 ">消费中</span>
-              <span v-if="scope.row.orderStatus === 8 ">已消费</span>
+              <span v-if="scope.row.dmqOrderStatus === 5 ">待消费</span>
+              <span v-if="scope.row.dmqOrderStatus === 7 ">消费中</span>
+              <span v-if="scope.row.dmqOrderStatus === 8 ">已消费</span>
             </template>
           </el-table-column>
           <el-table-column prop="checkTime" label="检票时间" align="center" width="180"></el-table-column>
@@ -185,6 +195,7 @@ export default {
         dmqOrderId: '',
         name: '',
         supplyName: '',
+        dmqOrderStatus: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -197,7 +208,7 @@ export default {
       payTime: '', // 日期选择器绑定的付款日期
       startPayTime: '', // 传参的付款时间
       endPayTime: '', // 传参的付款时间
-      options: [{
+      orderStatusOptions: [{
         value: 0,
         label: '未预约'
       }, {
@@ -209,6 +220,16 @@ export default {
       }, {
         value: 3,
         label: '已退单'
+      }],
+      dmqOrderStatusOptions: [{
+        value: 5,
+        label: '待消费'
+      }, {
+        value: 7,
+        label: '消费中'
+      }, {
+        value: 8,
+        label: '已消费'
       }]
     }
   },
