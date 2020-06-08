@@ -18,7 +18,7 @@
       <el-table-column type="index" width="50" align="center"></el-table-column>
       <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
       <el-table-column prop="name" width="200" label="票型名称" align="center" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="buyToday" label="是否可当天购买" align="center" width="150">
+      <el-table-column prop="buyToday" label="是否当天预约" align="center" width="150">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.buyToday== true" type="success">是</el-tag>
           <el-tag v-if="scope.row.buyToday== false" type="danger">否</el-tag>
@@ -58,7 +58,7 @@
         <el-table-column type="index" width="50" align="center"></el-table-column>
         <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
         <el-table-column prop="name" label="票型名称"  align="center" width="300" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="buyToday" label="是否可当天购买" align="center">
+        <el-table-column prop="buyToday" label="是否当天预约" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.buyToday== true" type="success">是</el-tag>
             <el-tag v-if="scope.row.buyToday== false" type="danger">否</el-tag>

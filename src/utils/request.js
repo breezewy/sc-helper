@@ -1,9 +1,10 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
+
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
@@ -33,9 +34,9 @@ service.interceptors.response.use(
   response => {
     const res = response
     const status = res.status
-    if (res.request.responseURL.indexOf('auth/captcha') != -1) {
+    if (res.request.responseURL.indexOf('auth/captcha') !== -1) {
       return response
-    } else if (res.request.responseURL.indexOf('gatherPark/creatQrCode') != -1) {
+    } else if (res.request.responseURL.indexOf('gatherPark/creatQrCode') !== -1) {
       return response
     }
 
@@ -55,7 +56,7 @@ service.interceptors.response.use(
       }
       if (res.data.code && res.data.code === 401) {
         store.dispatch('user/resetToken')
-        next(`/login?redirect=${to.path}`)
+        // next(`/login?redirect=${to.path}`)
       }
       return response
     }

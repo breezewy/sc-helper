@@ -133,7 +133,7 @@
         <el-form-item label="结算金额" prop="finalSum">
           <el-input v-model="ticketForm.finalSum" type="text" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="是否可当天购买" prop="buyToday">
+        <el-form-item label="是否当天预约" prop="buyToday">
           <el-radio v-model="ticketForm.buyToday" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.buyToday" :label="false">否</el-radio>
         </el-form-item>
@@ -204,7 +204,7 @@
         <el-form-item label="结算金额" prop="finalSum">
           <el-input v-model="ticketDetial.finalSum" type="text" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="是否可当天购买" prop="buyToday">
+        <el-form-item label="是否当天预约" prop="buyToday">
           <el-radio v-model="ticketDetial.buyToday" :label="true">是</el-radio>
           <el-radio v-model="ticketDetial.buyToday" :label="false">否</el-radio>
         </el-form-item>
