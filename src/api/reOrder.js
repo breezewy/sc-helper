@@ -219,3 +219,11 @@ export function handleReChildOrderExport(data) {
     responseType: 'blob'
   })
 }
+
+// 去预约，显示二维码
+export function makeAppointment(id) {
+  return request({
+    url: `/reOrder/getCode/${id}`,
+    method: 'get'
+  })
+}

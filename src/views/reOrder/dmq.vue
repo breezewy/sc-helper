@@ -67,7 +67,7 @@
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
                 <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
-                <el-button type="text" size="small" @click="handleController(scope.row.id)">关联预约票</el-button>
+                <el-button type="text" size="small" @click="handleController(scope.row)">关联预约票</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -169,6 +169,7 @@
       v-if="showDialog"
       :show="showDialog"
       :id="dmqId"
+      :name="name"
       @close="closeDialog"
     ></Controller>
   </div>
@@ -222,6 +223,7 @@ export default {
       total: 0,
       currentPage: 1,
       dmqId: '',
+      name: '',
       showNumber: false,
       dmqFormRules: {
         code: [
@@ -417,9 +419,10 @@ export default {
       this.updatedialogFormVisible = false
     },
     // 根据独木桥票型获取管理票型
-    handleController(id) {
-      this.dmqId = id
+    handleController(row) {
+      this.dmqId = row.id
       this.showDialog = true
+      this.name = row.name
     },
     change(value) {
       if (value !== 2) {

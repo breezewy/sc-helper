@@ -151,6 +151,7 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="200">
               <template slot-scope="scope">
+                <el-button type="text" size="small" @click="makeAppointment(scope.row.id)">去预约</el-button>
                 <el-button type="text" size="small" @click="showOrderDetail(scope.row.id)">订单详情</el-button>
                 <el-button type="text" size="small" @click="getReChildOrder(scope.row.id)">显示预约单</el-button>
               </template>
@@ -197,13 +198,23 @@
         <el-table-column prop="number" label="剩余数量" align="center" v-else  width="100"></el-table-column>
       </el-table>
     </el-dialog>
+
+    <!-- 点击去预约显示二维码区域 -->
+    <el-dialog title="去预约" :visible.sync="qrcodeVisible"  class="qrcodeDialog" @opened="showQrCode" :close-on-click-modal="false">
+          <div class="page"><iframe :src="qrcodePath" style="width:300px;height:400px;"></iframe></div><div id="qrcode"></div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="qrcodeVisible = false">取 消</el-button>
+            <el-button type="primary" @click="qrcodeVisible = false">确 定</el-button>
+          </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getOrderList, getTicket, handleReOrderExport } from '../../api/reOrder'
+import { getOrderList, getTicket, handleReOrderExport, makeAppointment } from '../../api/reOrder'
 import ChildOrder from './components/childOrder'
 import { handleExport } from '../../utils/handleExport'
+import QRCode from 'qrcodejs2'
 export default {
   data() {
     return {
@@ -230,6 +241,7 @@ export default {
       reOrderId: '',
       dbData: {},
       dialogVisible: false,
+      qrcodeVisible: false, // 去预约二维码
       options: [{
         value: 0,
         label: '未预约'
@@ -242,7 +254,8 @@ export default {
       }, {
         value: 3,
         label: '已退单'
-      }]
+      }],
+      qrcodePath: ''
     }
   },
   components: {
@@ -342,12 +355,29 @@ export default {
         this.endPayTime = ''
         this.getOrderList(this.paramData)
       }
+    },
+    makeAppointment(id) {
+      this.qrcodeVisible = true
+      makeAppointment(id).then(res => {
+        const code = res.data.data
+        // this.qrcodePath = 'http://localhost:8082' + '/home/' + code
+        this.qrcodePath = 'https://reserve.dmqwl.com' + '/home/' + code
+        this.showQrCode()
+      })
+    },
+    showQrCode() {
+      document.getElementById('qrcode').innerHTML = ''
+      new QRCode('qrcode', {
+        width: 250,
+        height: 250,
+        text: this.qrcodePath
+      })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #listContainer {
   padding: 30px;
   .toolbar {
@@ -368,6 +398,18 @@ export default {
     font-size: 16px;
     .title{
       margin-right:10px;
+    }
+  }
+  .qrcodeDialog{
+    .el-dialog{
+      .el-dialog__body{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .page{
+          // margin-right:50px;
+        }
+      }
     }
   }
 }

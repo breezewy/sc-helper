@@ -3,6 +3,7 @@
     <el-row>
       <el-button type="primary" @click="addNew">新增</el-button>
       <el-button type="danger" @click="handleDeleteMore">删除</el-button>
+      <span class="name" style="marginLeft:30px">{{name}}</span>
     </el-row>
     <el-table
       class="tableContainer"
@@ -17,7 +18,7 @@
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column type="index" width="50" align="center"></el-table-column>
       <el-table-column prop="code" label="票型编码" align="center"></el-table-column>
-      <el-table-column prop="name" width="200" label="票型名称" align="center" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="name" width="200" label="票型名称" align="center"></el-table-column>
       <el-table-column prop="buyToday" label="是否当天预约" align="center" width="150">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.buyToday== true" type="success">是</el-tag>
@@ -104,7 +105,7 @@ import {
 } from '../../../api/reOrder'
 export default {
   name: 'Controller',
-  props: ['show', 'id'],
+  props: ['show', 'id', 'name'],
   data() {
     return {
       tableList: [], // 关联票列表
