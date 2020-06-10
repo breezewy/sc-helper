@@ -151,7 +151,7 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="200">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="makeAppointment(scope.row.id)">去预约</el-button>
+                <el-button type="text" size="small" @click="makeAppointment(scope.row.dmqOrderId)">去预约</el-button>
                 <el-button type="text" size="small" @click="showOrderDetail(scope.row.id)">订单详情</el-button>
                 <el-button type="text" size="small" @click="getReChildOrder(scope.row.id)">显示预约单</el-button>
               </template>
