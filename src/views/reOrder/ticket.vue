@@ -76,6 +76,12 @@
               <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="bookingDay" label="当天购买是否预订当天" align="center">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.bookingDay== true" type="success" size="mini">是</el-tag>
+              <el-tag v-if="scope.row.bookingDay== false" type="danger" size="mini">否</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="useType" label="时间类型" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.useType== true" >绝对时间</span>
@@ -114,7 +120,7 @@
       class="dislog"
       :close-on-click-modal="false"
     >
-      <el-form ref="addTicketForm" :model="ticketForm" :rules="ticketFormRules" label-width="150px">
+      <el-form ref="addTicketForm" :model="ticketForm" :rules="ticketFormRules" label-width="180px">
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketForm.code" type="text" autocomplete="off"></el-input>
         </el-form-item>
@@ -140,6 +146,10 @@
         <el-form-item label="是否包含演出票" prop="containShow">
           <el-radio v-model="ticketForm.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.containShow" :label="false">否</el-radio>
+        </el-form-item>
+        <el-form-item label="当天购买是否预订当天" prop="bookingDay">
+          <el-radio v-model="ticketForm.bookingDay" :label="true">是</el-radio>
+          <el-radio v-model="ticketForm.bookingDay" :label="false">否</el-radio>
         </el-form-item>
         <el-form-item label="使用时间类型" prop="useType">
           <el-radio-group v-model="ticketForm.useType" @change="radioChange">
@@ -185,7 +195,7 @@
       class="dislog"
       :close-on-click-modal="false"
     >
-      <el-form ref="updateTicketForm" :model="ticketDetial" :rules="ticketDetialRules" label-width="150px">
+      <el-form ref="updateTicketForm" :model="ticketDetial" :rules="ticketDetialRules" label-width="180px">
         <el-form-item label="票型编码" prop="code">
           <el-input v-model="ticketDetial.code" type="text" autocomplete="off"></el-input>
         </el-form-item>
@@ -211,6 +221,10 @@
         <el-form-item label="是否包含演出票" prop="containShow">
           <el-radio v-model="ticketDetial.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketDetial.containShow" :label="false">否</el-radio>
+        </el-form-item>
+        <el-form-item label="当天购买是否预订当天" prop="bookingDay">
+          <el-radio v-model="ticketDetial.bookingDay" :label="true">是</el-radio>
+          <el-radio v-model="ticketDetial.bookingDay" :label="false">否</el-radio>
         </el-form-item>
         <el-form-item label="使用时间类型" prop="useType">
           <el-radio-group v-model="ticketDetial.useType" @change="radioChange">
@@ -357,6 +371,7 @@ export default {
         city: '',
         buyToday: true,
         containShow: true,
+        bookingDay: true,
         useType: true,
         beforeUseDay: 0,
         afterUseDay: 0,
@@ -489,6 +504,7 @@ export default {
         buyToday: true,
         containShow: true,
         useType: true,
+        bookingDay: true,
         beforeUseDay: 0,
         afterUseDay: 0,
         useStartDate: '',
