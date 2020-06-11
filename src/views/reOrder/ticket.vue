@@ -76,7 +76,7 @@
               <el-tag v-if="scope.row.containShow== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="bookingDay" label="当天购买是否预订当天" align="center">
+          <el-table-column prop="bookingDay" label="可预约当天购票日期" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.bookingDay== true" type="success" size="mini">是</el-tag>
               <el-tag v-if="scope.row.bookingDay== false" type="danger" size="mini">否</el-tag>
@@ -147,7 +147,7 @@
           <el-radio v-model="ticketForm.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.containShow" :label="false">否</el-radio>
         </el-form-item>
-        <el-form-item label="当天购买是否预订当天" prop="bookingDay">
+        <el-form-item label="可预约当天购票日期" prop="bookingDay">
           <el-radio v-model="ticketForm.bookingDay" :label="true">是</el-radio>
           <el-radio v-model="ticketForm.bookingDay" :label="false">否</el-radio>
         </el-form-item>
@@ -222,7 +222,7 @@
           <el-radio v-model="ticketDetial.containShow" :label="true">是</el-radio>
           <el-radio v-model="ticketDetial.containShow" :label="false">否</el-radio>
         </el-form-item>
-        <el-form-item label="当天购买是否预订当天" prop="bookingDay">
+        <el-form-item label="可预约当天购票日期" prop="bookingDay">
           <el-radio v-model="ticketDetial.bookingDay" :label="true">是</el-radio>
           <el-radio v-model="ticketDetial.bookingDay" :label="false">否</el-radio>
         </el-form-item>
