@@ -201,7 +201,11 @@
 
     <!-- 点击去预约显示二维码区域 -->
     <el-dialog title="去预约" :visible.sync="qrcodeVisible"  class="qrcodeDialog" @opened="showQrCode" :close-on-click-modal="false">
-          <div class="page"><iframe :src="qrcodePath" style="width:300px;height:400px;"></iframe></div><div id="qrcode"></div>
+          <div class="page"><iframe :src="qrcodePath" style="width:300px;height:500px;"></iframe></div>
+          <div class="qrcodeArea">
+            <div id="qrcode"></div>
+            <div class="path">{{qrcodePath}}</div>
+          </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="qrcodeVisible = false">取 消</el-button>
             <el-button type="primary" @click="qrcodeVisible = false">确 定</el-button>
@@ -406,9 +410,17 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-around;
-        .page{
-          // margin-right:50px;
+        .qrcodeArea{
+          #qrcode{
+            img{
+              margin:0 auto
+            }
+          }
+          .path{
+            margin-top:50px;
+          }
         }
+
       }
     }
   }

@@ -121,12 +121,12 @@ export default {
     this.getParkList()
   },
   methods: {
-    // 选择列表不同页面
+    // 选择列表每页多少条数据
     handleSizeChange(val) {
       this.form.page.pageSize = val
       this.getTheaterList(this.form)
     },
-    // 选择列表每页多少条数据
+    // 选择列表不同页面
     handleCurrentChange(val) {
       this.currentPage = val
       this.form.page.pageNum = this.currentPage - 1
