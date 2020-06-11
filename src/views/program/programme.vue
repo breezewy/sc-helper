@@ -28,8 +28,8 @@
             align="center"
             >
             <template slot-scope="scope">
-                <span v-if="scope.row.state">启用</span>
-                <span v-else>禁用</span>
+              <el-tag v-if="scope.row.state== true" type="success">启用</el-tag>
+              <el-tag v-if="scope.row.state== false" type="danger">禁用</el-tag>
             </template>
             </el-table-column>
             <el-table-column

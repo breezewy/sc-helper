@@ -171,26 +171,6 @@ export default {
       this.dataForm.page.pageNum = this.currentPage - 1
       this.getTicketList(this.dataForm)
     },
-    handleAddSubmit() {
-      const data = {
-        dmqTicketId: this.dmqId,
-        ticketId: this.addIdList
-      }
-      addReTicketDmq(data).then(res => {
-        if (res.data.code !== 200) {
-          return this.$message.error(res.error)
-        }
-        this.innerVisible = false
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        this.init(this.dmqId)
-      })
-    },
-    handleAddCancel() {
-      this.innerVisible = false
-    },
     handleClose() {
       this.$emit('close')
     },
