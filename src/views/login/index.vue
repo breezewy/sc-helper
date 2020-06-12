@@ -83,115 +83,115 @@
 
 <script>
 // import { validUsername } from "@/utils/validate";
-import { getUUID } from "@/utils/index";
-import { getCaptcha } from "@/api/user";
+import { getUUID } from '@/utils/index'
+import { getCaptcha } from '@/api/user'
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!value.length > 0) {
-        callback(new Error("请输入用户名"));
+        callback(new Error('请输入用户名'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (!value.length > 0) {
-        callback(new Error("请输入密码"));
+        callback(new Error('请输入密码'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validateCaptcha = (rule, value, callback) => {
       if (!value.length > 0) {
-        callback(new Error("请输入验证码"));
+        callback(new Error('请输入验证码'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "",
-        password: "",
-        captcha: "", //验证码
-        userType: "admin", //用户类型
-        loginType: "username", //登录方式
-        uuid: "" //唯一标识
+        username: '',
+        password: '',
+        captcha: '', // 验证码
+        userType: 'admin', // 用户类型
+        loginType: 'username', // 登录方式
+        uuid: '' // 唯一标识
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername }
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+          { required: true, trigger: 'blur', validator: validatePassword }
         ],
         captcha: [
-          { required: true, trigger: "blur", validator: validateCaptcha }
+          { required: true, trigger: 'blur', validator: validateCaptcha }
         ]
       },
       loading: false,
-      passwordType: "password",
+      passwordType: 'password',
       redirect: undefined,
-      captchaPath: ""
-    };
+      captchaPath: ''
+    }
   },
   created() {
-    this.getCaptcha();
+    this.getCaptcha()
   },
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
+        this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   methods: {
-    //显示密码
+    // 显示密码
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.$store
-            .dispatch("user/login", this.loginForm)
-            .then(() => {
-              this.$router.push("/");
-              this.loading = false;
+            .dispatch('user/login', this.loginForm)
+            .then((res) => {
+              this.$router.push('/')
+              this.loading = false
             })
             .catch((error) => {
-              this.getCaptcha();
-              this.loading = false;
-            });
+              this.getCaptcha()
+              this.loading = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     getCaptcha() {
-      this.loginForm.uuid = getUUID();
-      getCaptcha(this.loginForm.uuid).then(res=>{
-        var binaryData = [];
-        binaryData.push(res.data);
-        this.captchaPath=  window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+      this.loginForm.uuid = getUUID()
+      getCaptcha(this.loginForm.uuid).then(res => {
+        var binaryData = []
+        binaryData.push(res.data)
+        this.captchaPath = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/zip' }))
       })
-      .catch(err=>{
-        console.log(err)
-      })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

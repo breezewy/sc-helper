@@ -140,8 +140,8 @@ export default {
         registerPark: '', // 景区名字
         gatherParkId: '', // 景区
         visitorPhone: '', // 游客手机
-        startTime: '', // 起始时间
-        endTime: '' // 结束时间
+        startVisitorTime: '', // 起始时间
+        endVisitorTime: '' // 结束时间
       },
       currentPage: 1, // 当前页
       total: 0, // 总条数
@@ -242,13 +242,13 @@ export default {
     // 选择或清空日期时执行
     timeChange(value) {
       if (value == null) {
-        this.form.startTime = ''
-        this.form.endTime = ''
+        this.form.startVisitorTime = ''
+        this.form.endVisitorTime = ''
         this.getVisitorList()
       } else {
         this.dataRange = value
-        this.form.startTime = this.dataRange[0]
-        this.form.endTime = this.dataRange[1]
+        this.form.startVisitorTime = this.dataRange[0]
+        this.form.endVisitorTime = this.dataRange[1]
       }
     }
   }
