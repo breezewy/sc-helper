@@ -1,11 +1,19 @@
 import request from '@/utils/request'
 
-// 获取模板列表
+// 获取模板列表带分页
 export function getSmsTemplateList(data) {
   return request({
     url: '/sms/template/list',
     method: 'post',
     data
+  })
+}
+
+// 获取模板列表带分页
+export function getSmsTemplateListAll() {
+  return request({
+    url: '/sms/template/listAll',
+    method: 'get'
   })
 }
 

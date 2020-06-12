@@ -11,6 +11,16 @@
                   </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item  label="短信模板" >
+              <el-select v-model="form.templateId" placeholder="请选择" clearable @clear="handleClear">
+                  <el-option
+                  v-for="item in smsTemplateList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                  </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item  label="发送状态" >
               <el-select v-model="form.status" placeholder="请选择" clearable @clear="handleClear">
                   <el-option
@@ -138,7 +148,7 @@
 
 <script>
 import { getParkList } from '@/api/query'
-import { getSmsList, resendSms } from '@/api/sms'
+import { getSmsList, getSmsTemplateListAll, resendSms } from '@/api/sms'
 export default {
   data() {
     return {
@@ -154,6 +164,7 @@ export default {
         value: 2
       }],
       smsList: [], // 短信发送列表
+      smsTemplateList: [], // 短信模板列表
       rowIdList: [], // table列表行ID数组，批量操作时用
       sendTime: '', // 时间选择器
       loading: true, // table加载动画
@@ -165,6 +176,7 @@ export default {
         mobile: '',
         parkId: '',
         status: '',
+        templateId: '',
         page: {
           pageNum: 0,
           pageSize: 10
@@ -176,6 +188,7 @@ export default {
   created() {
     this.getParkList()
     this.getSmsList(this.form)
+    this.getSmsTemplateListAll()
   },
   methods: {
     // 列表全选按钮
@@ -275,6 +288,21 @@ export default {
           })
         })
       }
+    },
+    // 获取短信模板列表
+    getSmsTemplateListAll() {
+      getSmsTemplateListAll().then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        const data = res.data.data
+        data.forEach(item => {
+          this.smsTemplateList.push({
+            value: item.id,
+            label: item.name
+          })
+        })
+      })
     }
   }
 }

@@ -90,7 +90,7 @@
         </el-table-column>
         <el-table-column
           prop="childNum"
-          label="携带小孩数量"
+          label="携带小孩人数"
           align="center">
         </el-table-column>
         <el-table-column
