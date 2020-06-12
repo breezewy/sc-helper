@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { getParkList, getOfflineOrderSeat } from '../../api/query'
+import { getParkList, getOfflineOrderSeat } from '@/api/query'
 export default {
   data() {
     return {

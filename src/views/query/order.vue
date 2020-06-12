@@ -78,6 +78,11 @@
         <el-table-column prop="telno" label="联系电话" align="center" width="150"></el-table-column>
         <el-table-column prop="certno" label="证件号码" align="center" width="200"></el-table-column>
         <el-table-column prop="billno" label="线下订单号" align="center" width="230"></el-table-column>
+        <el-table-column label="操作" align="center" width="120">
+          <template slot-scope="scope">
+              <el-button type="text" size="small" v-if="scope.row.seatflag == 1" @click="showSeatDetail(scope.row)">座位详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -102,16 +107,14 @@
         <el-table-column prop="leftcount" label="剩余数" align="center"></el-table-column>
       </el-table>
     </div>
+
+    <seat-detail v-if="searDetailVisible" :show="searDetailVisible" :item="item" :parkId="dataForm.parkId" @close="closeSeatDetail"></seat-detail>
   </div>
 </template>
 
 <script>
-import {
-  getParkList,
-  getOfflineOrderList,
-  getOfflineOrderDetail
-} from '../../api/query'
-
+import { getParkList, getOfflineOrderList, getOfflineOrderDetail } from '@/api/query'
+import seatDetail from './components/seatDetail'
 export default {
   data() {
     return {
@@ -125,11 +128,16 @@ export default {
       },
       orderList: [],
       orderDetail: [],
-      currentRow: null
+      currentRow: null,
+      searDetailVisible: false,
+      item: {}
     }
   },
   created() {
     this.init()
+  },
+  components: {
+    seatDetail
   },
   methods: {
     init() {
@@ -167,8 +175,6 @@ export default {
           delete this.dataForm[key]
         }
       }
-
-      console.log(this.dataForm)
       getOfflineOrderList(this.dataForm).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
@@ -186,6 +192,13 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentRow = val
+    },
+    showSeatDetail(item) {
+      this.searDetailVisible = true
+      this.item = item
+    },
+    closeSeatDetail() {
+      this.searDetailVisible = false
     }
   }
 }
@@ -197,30 +210,6 @@ export default {
   .el-button{
     margin-left:20px;
   }
-  // .filter {
-  //   display: flex;
-  //   flex-wrap: wrap;
-  //   padding-bottom: 30px;
-  //   border-bottom: 1px solid #dcdfe6;
-  //   .park {
-  //     margin-right: 50px;
-  //     .title {
-  //       line-height: 40px;
-  //     }
-  //   }
-  //   .orderInput,
-  //   .phoneInput,
-  //   .idCardInput {
-  //     margin-right: 50px;
-  //     display: flex;
-  //     .el-input {
-  //       width: 200px;
-  //     }
-  //     .title {
-  //       line-height: 40px;
-  //     }
-  //   }
-  // }
   .orderTable {
     margin-top: 30px;
   }
