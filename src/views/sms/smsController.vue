@@ -79,7 +79,6 @@
             label="短信内容"
             align="center"
             width="300"
-            :show-overflow-tooltip="true"
             >
             </el-table-column>
             <el-table-column
