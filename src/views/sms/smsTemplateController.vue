@@ -1,9 +1,9 @@
 <template>
     <div class="sendSms">
         <el-form :inline="true"  class="demo-form-inline">
-            <el-form-item label="接收人">
+            <el-form-item label="模板名称">
                 <el-input
-                placeholder="请输入接收人姓名"
+                placeholder="请输入模板名称"
                 v-model="form.name"
                 class="inputArea"
                 suffix-icon="el-icon-edit"
@@ -11,7 +11,7 @@
                 @clear="handleClear"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="ID">
+            <el-form-item label="模板ID">
                 <el-input
                 placeholder="请输入id"
                 v-model="form.id"
@@ -50,12 +50,12 @@
           </el-table-column>
             <el-table-column
             prop="id"
-            label="ID"
+            label="模板ID"
             align="center">
             </el-table-column>
             <el-table-column
             prop="name"
-            label="接收人"
+            label="模板名称"
             align="center">
             </el-table-column>
             <el-table-column
