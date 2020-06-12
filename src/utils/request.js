@@ -47,13 +47,6 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
     } else {
-      if (res.data.code && res.data.code !== 200) {
-        Message({
-          message: res.data.error || 'Error',
-          type: 'error',
-          duration: 5 * 1000
-        })
-      }
       if (res.data.code && res.data.code === 401) {
         store.dispatch('user/resetToken')
         // next(`/login?redirect=${to.path}`)
