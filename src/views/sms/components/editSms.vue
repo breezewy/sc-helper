@@ -4,13 +4,14 @@
         :visible.sync="dialogFormVisible"
         :close-on-click-modal="false"
         @close="close"
+        width="50%"
         >
         <el-form :model="form" :rules="rules" ref="smsForm" label-width="120px">
             <el-form-item label="短信模板名称"  prop="name">
                 <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="短信模板内容"  prop="content">
-                <el-input v-model="form.content" autocomplete="off"></el-input>
+                <el-input  type="textarea" autosize v-model="form.content" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="是否包含参数">
                 <el-radio-group v-model="form.variable">
@@ -139,7 +140,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-input {
+.el-input, .el-textarea {
   width:70%;
   margin-right: 10px;
 }
