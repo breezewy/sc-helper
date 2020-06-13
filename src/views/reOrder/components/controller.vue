@@ -46,7 +46,25 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="新增" :visible.sync="innerVisible" class="dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog
+      title="新增"
+      class="dialog"
+      append-to-body
+      :close-on-click-modal="false"
+      :visible.sync="innerVisible"
+      @close="innerDialogClose"
+      >
+      <el-form :inline="true" :model="paramForm" class="demo-form-inline" ref="paramForm">
+        <el-form-item label="票型编码" prop="code">
+          <el-input v-model="paramForm.code" placeholder="请输入票型编码" clearable @clear="innerClear"></el-input>
+        </el-form-item>
+        <el-form-item label="票型名称" prop="name">
+          <el-input v-model="paramForm.name" placeholder="请输入票型名称" clearable @clear="innerClear"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="innerSubmit">查询</el-button>
+        </el-form-item>
+      </el-form>
       <el-table
         ref="multipleTable"
         :data="ticketList"
@@ -119,6 +137,8 @@ export default {
       total: 0,
       paramForm: {
         id: this.id,
+        code: '', // 票型编码
+        name: '', // 票型名称
         page: {
           pageNum: 0,
           pageSize: 10
@@ -189,6 +209,11 @@ export default {
       this.getTicketList(this.paramForm)
     },
     getTicketList(data) {
+      for (const key in data) {
+        if (data[key] === '' || data[key] === null) {
+          delete data[key]
+        }
+      }
       getControlTicketList(data).then(res => {
         if (res.data.code !== 200) {
           return this.$message.error(res.data.error)
@@ -230,6 +255,15 @@ export default {
     },
     handleClose() {
       this.$emit('close')
+    },
+    innerSubmit() {
+      this.getTicketList(this.paramForm)
+    },
+    innerClear() {
+      this.getTicketList(this.paramForm)
+    },
+    innerDialogClose() {
+      this.$refs.paramForm.resetFields()
     }
   }
 }
