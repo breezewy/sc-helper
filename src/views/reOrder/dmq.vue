@@ -46,7 +46,7 @@
           >
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column type="index" width="50" align="center"></el-table-column>
-            <el-table-column prop="type" label="票型类型" align="center" width="150">
+            <el-table-column prop="type" label="票型类型" align="center" width="100">
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.type==1" size="mini">单选票</el-tag>
                 <el-tag v-if="scope.row.type==2" type="warning" size="mini">多选票</el-tag>
@@ -55,15 +55,15 @@
             </el-table-column>
             <el-table-column prop="code" label="票型编码" align="center"  width="300"></el-table-column>
             <el-table-column prop="name" label="票型名称" align="center" ></el-table-column>
-            <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
-            <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
-            <el-table-column prop="updateLinkInfo" label="是否限制下单信息" align="center">
+            <el-table-column prop="purchasePrice" label="采购价" align="center" width="100"></el-table-column>
+            <el-table-column prop="finalSum" label="结算金额" align="center"  width="100"></el-table-column>
+            <el-table-column prop="updateLinkInfo" label="是否限制下单信息" align="center"  width="150">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.updateLinkInfo== true" type="success" size="mini">是</el-tag>
               <el-tag v-if="scope.row.updateLinkInfo== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
-            <el-table-column label="操作" align="center" width="300" fix="right">
+            <el-table-column label="操作" align="center" width="200" fix="right">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
                 <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>

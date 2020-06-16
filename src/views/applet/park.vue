@@ -21,7 +21,7 @@
             <el-table-column
                 prop="state"
                 label="景区状态"
-                width="180"
+                width="100"
                 align="center"
             >
                 <template slot-scope="scope">
@@ -33,7 +33,7 @@
                 prop="sort"
                 label="景区排序"
                 align="center"
-                :show-overflow-tooltip="true"
+                width="100"
             >
             </el-table-column>
             <el-table-column

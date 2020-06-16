@@ -13,7 +13,17 @@
       </el-form-item>
       <el-form-item>
         <el-input
-            placeholder="宋城旅游订单号"
+            placeholder="请输入虚拟票订单号"
+            v-model.trim="paramData.mainDmqOrderId"
+            class="inputArea"
+            suffix-icon="el-icon-edit"
+            clearable
+            @clear="handleClear"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input
+            placeholder="请输入预约订单号"
             v-model.trim="paramData.dmqOrderId"
             class="inputArea"
             suffix-icon="el-icon-edit"
@@ -117,12 +127,12 @@
           border
         >
           <el-table-column type="index" width="50" align="center"></el-table-column>
-          <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
-          <el-table-column prop="mainDmqOrderId" label="主订单号" align="center" width="240"></el-table-column>
-          <el-table-column prop="dmqOrderId" label="宋城旅游订单号" align="center" width="240"></el-table-column>
-          <el-table-column prop="name" label="票型名称" align="center" width="300"></el-table-column>
+          <el-table-column prop="supplyName" width="180" label="供应商" align="center" ></el-table-column>
+          <el-table-column prop="mainDmqOrderId" label="虚拟票订单号" align="center" width="240"></el-table-column>
+          <el-table-column prop="dmqOrderId" label="预约订单号" align="center" width="240"></el-table-column>
+          <el-table-column prop="name" label="票型名称" align="center" width="200"></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center" width="200"></el-table-column>
-          <el-table-column prop="orderStatus" label="预约票状态" align="center" >
+          <el-table-column prop="orderStatus" label="预约票状态" align="center" width="100">
               <template slot-scope="scope">
                 <span v-if="scope.row.orderStatus==0" >未预约</span>
                 <span v-if="scope.row.orderStatus==1" >已预约</span>
@@ -130,7 +140,7 @@
                 <span v-if="scope.row.orderStatus==3" >已退单</span>
               </template>
           </el-table-column>
-          <el-table-column prop="dmqOrderStatus" label="虚拟票状态" align="center" width="150">
+          <el-table-column prop="dmqOrderStatus" label="虚拟票状态" align="center" width="100">
             <template slot-scope="scope">
               <span v-if="scope.row.dmqOrderStatus === 0 ">初始化</span>
               <span v-if="scope.row.dmqOrderStatus === 1 || scope.row.dmqOrderStatus === 2">订单失败</span>

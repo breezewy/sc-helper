@@ -33,18 +33,21 @@
         <el-table-column
           prop="parkCode"
           label="景区码"
-          align="center">
+          align="center"
+          width="150"
+          >
         </el-table-column>
         <el-table-column
           prop="parkAdders"
           label="景区地址"
           align="center"
-          >
+        >
         </el-table-column>
         <el-table-column
           prop="region"
           label="区域管理"
           align="center"
+          width="150"
           >
         </el-table-column>
         <el-table-column

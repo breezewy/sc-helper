@@ -3,7 +3,7 @@
     <el-form :inline="true"  class="demo-form-inline">
       <el-form-item>
           <el-input
-            placeholder="请输入宋城旅游订单号"
+            placeholder="请输入虚拟票订单号"
             v-model.trim="paramData.orderNo"
             class="inputArea"
             suffix-icon="el-icon-edit"
@@ -104,7 +104,7 @@
             border
           >
             <el-table-column type="index" width="50" align="center"></el-table-column>
-            <el-table-column prop="dmqOrderId" label="宋城旅游订单号" align="center" width="200"></el-table-column>
+            <el-table-column prop="dmqOrderId" label="虚拟票订单号" align="center" width="200"></el-table-column>
             <el-table-column prop="productType" label="票型类型" align="center">
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.productType==1" size="mini">单选票</el-tag>
@@ -116,7 +116,7 @@
             <el-table-column prop="productName" label="票型名称" align="center" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
             <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
-            <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
+            <el-table-column prop="supplyName" label="供应商" align="center" width="200"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center" width="100"></el-table-column>
             <el-table-column prop="buyerName" label="购买人" align="center" width="100"></el-table-column>
             <el-table-column prop="mobile" label="手机号" align="center" width="120"></el-table-column>
