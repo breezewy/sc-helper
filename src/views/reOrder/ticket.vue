@@ -60,10 +60,8 @@
           <el-table-column type="index" width="50" align="center"></el-table-column>
           <el-table-column prop="code" label="票型编码" align="center" width="200"></el-table-column>
           <el-table-column prop="name" label="票型名称" align="center" width="200"></el-table-column>
-          <el-table-column prop="city" label="城市" align="center"></el-table-column>
           <el-table-column prop="purchasePrice" label="采购价" align="center" ></el-table-column>
-          <el-table-column prop="finalSum" label="结算金额" align="center" ></el-table-column>
-          <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
+          <el-table-column prop="finalSum" label="结算价" align="center" ></el-table-column>
           <el-table-column prop="buyToday" label="当天是否可预约" align="center" width="150">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.buyToday== true" type="success" size="mini">是</el-tag>
@@ -82,17 +80,19 @@
               <el-tag v-if="scope.row.bookingDay== false" type="danger" size="mini">否</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="useStartDate" label="使用开始时间" align="center"  width="150"></el-table-column>
+          <el-table-column prop="useEndDate" label="使用结束时间" align="center" width="150"></el-table-column>
+          <el-table-column prop="beforeUseDay" label="提前使用天数" align="center"></el-table-column>
+          <el-table-column prop="afterUseDay" label="延迟使用天数" align="center"></el-table-column>
           <el-table-column prop="useType" label="时间类型" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.useType== true" >绝对时间</span>
               <span v-if="scope.row.useType== false" >相对时间</span>
             </template>
           </el-table-column>
-          <el-table-column prop="useStartDate" label="使用开始时间" align="center"  width="150"></el-table-column>
-          <el-table-column prop="useEndDate" label="使用结束时间" align="center" width="150"></el-table-column>
-          <el-table-column prop="beforeUseDay" label="提前使用天数" align="center"></el-table-column>
-          <el-table-column prop="afterUseDay" label="延迟使用天数" align="center"></el-table-column>
-          <el-table-column label="操作" align="center"  fix="right"  width="200">
+          <el-table-column prop="city" label="城市" align="center"></el-table-column>
+          <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
+          <el-table-column fixed="right"  width="200"  label="操作" align="center"  >
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
               <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>

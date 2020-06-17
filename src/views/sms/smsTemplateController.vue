@@ -51,30 +51,35 @@
             <el-table-column
             prop="id"
             label="模板ID"
-            align="center">
+            align="center"
+            width="240"
+            >
             </el-table-column>
             <el-table-column
             prop="name"
             label="模板名称"
-            align="center">
+            align="center"
+            width="300"
+            >
             </el-table-column>
             <el-table-column
             prop="content"
             label="短信内容"
             align="center"
-            width="300"
             >
             </el-table-column>
             <el-table-column
             prop="createTime"
             label="创建时间"
             align="center"
+            width="200"
             >
             </el-table-column>
             <el-table-column
             prop="updateTime"
             label="更新时间"
             align="center"
+            width="200"
             >
             </el-table-column>
             <el-table-column
