@@ -78,7 +78,7 @@
         <el-table-column prop="telno" label="联系电话" align="center" width="150"></el-table-column>
         <el-table-column prop="certno" label="证件号码" align="center" width="200"></el-table-column>
         <el-table-column prop="billno" label="线下订单号" align="center" width="230"></el-table-column>
-        <el-table-column label="操作" align="center" width="120">
+        <el-table-column label="操作" align="center" width="120" fixed="right">
           <template slot-scope="scope">
               <el-button type="text" size="small" v-if="scope.row.seatflag == 1" @click="showSeatDetail(scope.row)">座位详情</el-button>
           </template>

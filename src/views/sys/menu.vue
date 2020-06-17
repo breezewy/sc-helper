@@ -63,18 +63,18 @@
                 </el-table-column>
             </el-table>
         </div>
-        <append-menu 
+        <append-menu
             v-if="showAppend"
-            :show="showAppend" 
-            @changeShow="changeShowAppend" 
-            @refresh="refresh" 
+            :show="showAppend"
+            @changeShow="changeShowAppend"
+            @refresh="refresh"
         >
         </append-menu>
-        <update-menu 
+        <update-menu
             v-if="show"
-            :show="showUpdate" 
-            :id="id"  
-            @changeShow="changeShowUpdate" 
+            :show="showUpdate"
+            :id="id"
+            @changeShow="changeShowUpdate"
             @refresh="refresh"
         >
         </update-menu>
@@ -84,64 +84,64 @@
 <script>
 import AppendMenu from './components/AppendMenu'
 import UpdateMenu from './components/updateMenu'
-import {getMenuList,deleteMenu,getMenuByID} from '@/api/sys'
+import { getMenuList, deleteMenu, getMenuByID } from '@/api/sys'
 
 export default {
-    name:'Menu',
-    data(){
-        return {
-            showAppend:false,
-            showUpdate:false,
-            show:false,
-            menuList:[],
-            id:""
-        }
-    },
-    components:{
-        AppendMenu,
-        UpdateMenu
-    },
-    created(){
-        this.getMenuList();
-    },
-    methods:{
-        getMenuList(){
-           getMenuList().then(res=>{
-               if(res.data.code != 200){
-                   return this.$message.error(res.data.error);
-               }
-               this.menuList = res.data.data
-           }) 
-        },
-        appendMenu(){
-            this.showAppend = true
-        },
-        changeShowAppend(){
-            this.showAppend = false
-        },
-        changeShowUpdate(){
-            this.showUpdate = false
-            this.show = false
-        },
-        handleUpdate(id){
-            this.showUpdate = true
-            this.show = true
-            this.id  = id 
-        },
-        handleDeleteSingle(id){
-            deleteMenu(id).then(res=>{
-                if(res.data.code != 200){
-                   return this.$message.error(res.data.error);
-                }
-                this.$message.success('操作成功')
-                this.refresh();
-            })
-        },
-        refresh(){
-            this.getMenuList();
-        }
-       
+  name: 'Menu',
+  data() {
+    return {
+      showAppend: false,
+      showUpdate: false,
+      show: false,
+      menuList: [],
+      id: ''
     }
+  },
+  components: {
+    AppendMenu,
+    UpdateMenu
+  },
+  created() {
+    this.getMenuList()
+  },
+  methods: {
+    getMenuList() {
+      getMenuList().then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.menuList = res.data.data
+      })
+    },
+    appendMenu() {
+      this.showAppend = true
+    },
+    changeShowAppend() {
+      this.showAppend = false
+    },
+    changeShowUpdate() {
+      this.showUpdate = false
+      this.show = false
+    },
+    handleUpdate(id) {
+      this.showUpdate = true
+      this.show = true
+      this.id = id
+    },
+    handleDeleteSingle(id) {
+      deleteMenu(id).then(res => {
+        if (res.data.code != 200) {
+          return this.$message.error(res.data.error)
+        }
+        this.$message.success('操作成功')
+        this.refresh()
+      })
+    },
+    refresh() {
+      this.getMenuList()
+    }
+
+  }
 }
 </script>
 

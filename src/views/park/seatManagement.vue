@@ -57,7 +57,7 @@
                     <el-table-column prop="code" label="席位编码" align="center"></el-table-column>
                     <el-table-column prop="theaterName" label="剧院名称" align="center"></el-table-column>
                     <el-table-column prop="theaterCode" label="剧院编码" align="center"></el-table-column>
-                    <el-table-column label="操作" align="center" width="300">
+                    <el-table-column label="操作" align="center" width="300" fixed="right">
                         <template slot-scope="scope">
                             <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
                             <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>

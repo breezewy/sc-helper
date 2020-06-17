@@ -27,13 +27,15 @@
 import { addProgram, getProgramInfo, updateProgram } from '@/api/program'
 export default {
   name: 'EditProgram',
-  props: ['show', 'id'],
+  props: ['show', 'id', 'parentId'],
   data() {
     return {
       title: '',
       dialogFormVisible: this.show,
       formLabelWidth: '120px',
       form: {
+        level: 1,
+        pid: 0,
         name: '',
         sort: 0,
         state: true
@@ -62,6 +64,10 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (!this.id) {
+            if (typeof this.parentId === 'string') {
+              this.form.pid = this.parentId
+              this.form.level = 2
+            }
             addProgram(this.form).then(res => {
               if (res.data.code !== 200) {
                 return this.$message.error(res.data.error)
@@ -70,8 +76,8 @@ export default {
               this.handleClose()
             })
           } else {
-            const { id, name, sort, state } = this.form
-            this.form = { id, name, sort, state }
+            const { id, name, sort, state, pid } = this.form
+            this.form = { id, name, sort, state, pid }
             updateProgram(this.form).then(res => {
               if (res.data.code !== 200) {
                 return this.$message.error(res.data.error)
