@@ -82,7 +82,9 @@
             <el-table-column
             prop="mobile"
             label="手机号"
-            align="center">
+            align="center"
+            width="150"
+            >
             </el-table-column>
             <el-table-column
             prop="content"
@@ -94,7 +96,9 @@
             <el-table-column
             prop="status"
             label="发送状态"
-            align="center">
+            align="center"
+            width="100"
+            >
               <template slot-scope="scope">
                 <el-tag type="success" size="mini" v-if="scope.row.status === 0">发送成功</el-tag>
                 <el-tag type="danger" size="mini" v-if="scope.row.status === 1">发送失败</el-tag>
@@ -114,12 +118,16 @@
             <el-table-column
             prop="createTime"
             label="创建时间"
-            align="center">
+            align="center"
+            width="200"
+            >
             </el-table-column>
             <el-table-column
             prop="createTime"
             label="更新时间"
-            align="center">
+            align="center"
+            width="200"
+            >
             </el-table-column>
             <el-table-column
             fixed="right"
