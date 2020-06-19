@@ -2,7 +2,7 @@
 <template>
     <div class="menu">
         <div class="toolbar">
-             <el-button type="primary" @click="appendMenu">新增</el-button>
+             <el-button type="primary" v-if="$store.getters.button.includes('sys:menu:save')" @click="appendMenu">新增</el-button>
         </div>
         <div class="menuTable">
             <el-table
@@ -57,8 +57,8 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="300">
                         <template slot-scope="scope">
-                            <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
-                            <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+                            <el-button type="text" v-if="$store.getters.button.includes('sys:menu:update')" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
+                            <el-button type="text" v-if="$store.getters.button.includes('sys:menu:delete')" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
                         </template>
                 </el-table-column>
             </el-table>

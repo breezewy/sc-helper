@@ -13,19 +13,19 @@
                 <el-button  @click="query">查询</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button  type="primary" @click="addJob">新增</el-button>
+                <el-button  v-if="$store.getters.button.includes('sys:jobController:save')" type="primary" @click="addJob">新增</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button  type="danger" @click="deleteMoreJob">删除</el-button>
+                <el-button  v-if="$store.getters.button.includes('sys:jobController:delete')" type="danger" @click="deleteMoreJob">删除</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button  type="warning" @click="pauseJob">暂停</el-button>
+                <el-button  v-if="$store.getters.button.includes('sys:jobController:pause')" type="warning" @click="pauseJob">暂停</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button  type="success" @click="resumeJob">恢复</el-button>
+                <el-button  v-if="$store.getters.button.includes('sys:jobController:resume')" type="success" @click="resumeJob">恢复</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button @click="runJob">立即执行</el-button>
+                <el-button v-if="$store.getters.button.includes('sys:jobController:run')" @click="runJob">立即执行</el-button>
             </el-form-item>
 
         </el-form>
@@ -78,11 +78,11 @@
             align="center"
             >
             <template slot-scope="scope">
-                <el-button @click="handleUpdateJob(scope.row.id)" type="text" size="small">修改</el-button>
-                <el-button @click="handleDeleteSingle(scope.row.id)" type="text" size="small">删除</el-button>
-                <el-button @click="pauseJobSingle(scope.row.id)" type="text" size="small">暂停</el-button>
-                <el-button @click="resumeJobSingle(scope.row.id)" type="text" size="small">恢复</el-button>
-                <el-button @click="runJobSingle(scope.row.id)" type="text" size="small">立即执行</el-button>
+                <el-button v-if="$store.getters.button.includes('sys:jobController:update')" @click="handleUpdateJob(scope.row.id)" type="text" size="small">修改</el-button>
+                <el-button v-if="$store.getters.button.includes('sys:jobController:delete')" @click="handleDeleteSingle(scope.row.id)" type="text" size="small">删除</el-button>
+                <el-button v-if="$store.getters.button.includes('sys:jobController:pause')" @click="pauseJobSingle(scope.row.id)" type="text" size="small">暂停</el-button>
+                <el-button v-if="$store.getters.button.includes('sys:jobController:resume')" @click="resumeJobSingle(scope.row.id)" type="text" size="small">恢复</el-button>
+                <el-button v-if="$store.getters.button.includes('sys:jobController:run')" @click="runJobSingle(scope.row.id)" type="text" size="small">立即执行</el-button>
             </template>
             </el-table-column>
         </el-table>

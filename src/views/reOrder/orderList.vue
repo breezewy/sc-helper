@@ -89,7 +89,7 @@
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="handleReOrderExport">导出</el-button>
+        <el-button type="success" v-if="$store.getters.button.includes('reOrder:orderList:export')" @click="handleReOrderExport">导出</el-button>
       </el-form-item>
     </el-form>
     <div class="list" v-if="hideChildOrder">
@@ -151,9 +151,9 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="200">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="makeAppointment(scope.row.dmqOrderId)">去预约</el-button>
-                <el-button type="text" size="small" @click="showOrderDetail(scope.row.id)">订单详情</el-button>
-                <el-button type="text" size="small" @click="getReChildOrder(scope.row.id)">显示预约单</el-button>
+                <el-button type="text" v-if="$store.getters.button.includes('reOrder:orderList:makeAppointment')" size="small" @click="makeAppointment(scope.row.dmqOrderId)">去预约</el-button>
+                <el-button type="text" v-if="$store.getters.button.includes('reOrder:orderList:orderDetail')" size="small" @click="showOrderDetail(scope.row.id)">订单详情</el-button>
+                <el-button type="text" v-if="$store.getters.button.includes('reOrder:orderList:showReChildOrder')" size="small" @click="getReChildOrder(scope.row.id)">显示预约单</el-button>
               </template>
             </el-table-column>
           </el-table>

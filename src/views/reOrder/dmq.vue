@@ -23,13 +23,13 @@
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addDmq">新增</el-button>
+        <el-button type="primary" v-if="$store.getters.button.includes('reOrder:dmq:save')" @click="addDmq">新增</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" @click="handleDeleteMore">删除</el-button>
+        <el-button type="danger" v-if="$store.getters.button.includes('reOrder:dmq:delete')" @click="handleDeleteMore">删除</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="handleReDmqExport">导出</el-button>
+        <el-button type="success" v-if="$store.getters.button.includes('reOrder:dmq:export')" @click="handleReDmqExport">导出</el-button>
       </el-form-item>
     </el-form>
     <div class="dmq">
@@ -65,9 +65,9 @@
           </el-table-column>
             <el-table-column label="操作" align="center" width="200" fix="right">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
-                <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
-                <el-button type="text" size="small" @click="handleController(scope.row)">关联预约票</el-button>
+                <el-button type="text" size="small" v-if="$store.getters.button.includes('reOrder:dmq:update')" @click="handleUpdate(scope.row.id)">修改</el-button>
+                <el-button type="text" size="small" v-if="$store.getters.button.includes('reOrder:dmq:delete')" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+                <el-button type="text" size="small" v-if="$store.getters.button.includes('reOrder:dmq:controller')" @click="handleController(scope.row)">关联预约票</el-button>
               </template>
             </el-table-column>
           </el-table>

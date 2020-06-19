@@ -80,7 +80,7 @@
         <el-table-column prop="billno" label="线下订单号" align="center" width="230"></el-table-column>
         <el-table-column label="操作" align="center" width="120" fixed="right">
           <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.seatflag == 1" @click="showSeatDetail(scope.row)">座位详情</el-button>
+              <el-button type="text" size="small"  v-if="(scope.row.seatflag == 1) && ($store.getters.button.includes('query:order:seatDetail'))" @click="showSeatDetail(scope.row)">座位详情</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -5,19 +5,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   data() {
     return {
       navs: [],
-      newrouterlist:[]
-    };
+      newrouterlist: []
+    }
   },
   computed: {
-    ...mapGetters(["name"])
+    ...mapGetters(['name'])
+  },
+  created() {
+    console.log(this.$store.getters.button)
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

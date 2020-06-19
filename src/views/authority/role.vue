@@ -8,10 +8,10 @@
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addRole">新增</el-button>
+        <el-button type="primary" v-if="$store.getters.button.includes('authority:role:save')" @click="addRole">新增</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" @click="handleDeleteMore">删除</el-button>
+        <el-button type="danger" v-if="$store.getters.button.includes('authority:role:delete')" @click="handleDeleteMore">删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -35,8 +35,8 @@
       ></el-table-column>
       <el-table-column prop="address" label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
-          <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+          <el-button type="text" v-if="$store.getters.button.includes('authority:role:update')" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
+          <el-button type="text" v-if="$store.getters.button.includes('authority:role:delete')" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

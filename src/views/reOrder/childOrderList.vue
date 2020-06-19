@@ -113,7 +113,7 @@
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="handleReChildOrderExport">导出</el-button>
+        <el-button type="success" v-if="$store.getters.button.includes('reOrder:childOrderList:export')" @click="handleReChildOrderExport">导出</el-button>
       </el-form-item>
     </el-form>
     <div class="tableContainer">

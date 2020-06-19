@@ -2,7 +2,7 @@
     <div class="program">
         <el-form :inline="true"  class="demo-form-inline">
             <el-form-item>
-              <el-button type="primary" @click="addProgram">新增</el-button>
+              <el-button type="primary" v-if="$store.getters.button.includes('program:programme:save')" @click="addProgram">新增</el-button>
             </el-form-item>
         </el-form>
         <el-table
@@ -56,9 +56,9 @@
             align="center"
             >
             <template slot-scope="scope">
-                <el-button type="text" size="small" @click="addProgram(scope.row.id)" v-if="scope.row.level === 1">新增</el-button>
-                <el-button type="text" size="small" @click="updateProgram(scope.row.id)">修改</el-button>
-                <el-button type="text" size="small" @click="deleteProgram(scope.row.id)">删除</el-button>
+                <el-button type="text" size="small" @click="addProgram(scope.row.id)" v-if="(scope.row.level === 1) && $store.getters.button.includes('program:childProgramme:save')">新增</el-button>
+                <el-button type="text" v-if="$store.getters.button.includes('program:programme:update')" size="small" @click="updateProgram(scope.row.id)">修改</el-button>
+                <el-button type="text" v-if="$store.getters.button.includes('program:programme:delete')" size="small" @click="deleteProgram(scope.row.id)">删除</el-button>
             </template>
             </el-table-column>
         </el-table>

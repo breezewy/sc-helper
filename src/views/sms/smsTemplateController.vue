@@ -25,10 +25,10 @@
                 <el-button @click="search">查询</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="addSms">新增</el-button>
+              <el-button type="primary" v-if="$store.getters.button.includes('sms:smsTemplateController:save')" @click="addSms">新增</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="danger" @click="deleteSmsMore">删除</el-button>
+              <el-button type="danger" v-if="$store.getters.button.includes('sms:smsTemplateController:delete')" @click="deleteSmsMore">删除</el-button>
             </el-form-item>
         </el-form>
         <!-- 短信发送模板列表 -->
@@ -89,8 +89,8 @@
             align="center"
             >
             <template slot-scope="scope">
-                <el-button  type="text" size="small" @click="updateSms(scope.row.id)">修改</el-button>
-                <el-button  type="text" size="small" @click="deleteSmsSingle(scope.row.id)">删除</el-button>
+                <el-button  type="text" v-if="$store.getters.button.includes('sms:smsTemplateController:update')" size="small" @click="updateSms(scope.row.id)">修改</el-button>
+                <el-button  type="text" v-if="$store.getters.button.includes('sms:smsTemplateController:delete')" size="small" @click="deleteSmsSingle(scope.row.id)">删除</el-button>
             </template>
             </el-table-column>
         </el-table>

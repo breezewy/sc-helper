@@ -11,10 +11,10 @@
         <el-button @click="init">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addUser">新增</el-button>
+        <el-button type="primary" v-if="$store.getters.button.includes('authority:role:save')" @click="addUser">新增</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" @click="handleDeleteMore">删除</el-button>
+        <el-button type="danger" v-if="$store.getters.button.includes('authority:role:delete')" @click="handleDeleteMore">删除</el-button>
       </el-form-item>
     </el-form>
     <div class="tableContainer">
@@ -45,8 +45,8 @@
           <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
           <el-table-column prop="name" label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
-              <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+              <el-button type="text" size="small" v-if="$store.getters.button.includes('authority:role:update')" @click="handleUpdate(scope.row.id)">修改</el-button>
+              <el-button type="text" size="small" v-if="$store.getters.button.includes('authority:role:delete')" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -155,7 +155,7 @@ import {
   updateUser
 } from '../../api/management'
 
-import { isEmail, isMobile } from '@/utils/validate'
+// import { isEmail, isMobile } from '@/utils/validate'
 export default {
   data() {
     // var validateEmail = (rule, value, callback) => {

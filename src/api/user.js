@@ -25,9 +25,9 @@ export function logout() {
 
 export function getCaptcha(id) {
   return request({
-      url: `/auth/captcha?uuid=${id}`,
-      method: 'get',
-      responseType: "arraybuffer"
+    url: `/auth/captcha?uuid=${id}`,
+    method: 'get',
+    responseType: 'arraybuffer'
   })
 }
 
@@ -36,5 +36,12 @@ export function changePwd(data) {
     url: `/user/updatePwd`,
     method: 'put',
     data
+  })
+}
+
+export function getPermissions() {
+  return request({
+    url: '/menu/permissions',
+    method: 'get'
   })
 }

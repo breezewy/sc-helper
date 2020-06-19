@@ -2,7 +2,7 @@
     <div class="file">
         <el-row>
             <el-col :span="24">
-                <el-button type="primary" @click="handleClick">新增</el-button>
+                <el-button type="primary" v-if="$store.getters.button.includes('applet:park:save')" @click="handleClick">新增</el-button>
             </el-col>
         </el-row>
 
@@ -58,12 +58,14 @@
                 >
                 <template slot-scope="scope">
                     <el-button
+                    v-if="$store.getters.button.includes('applet:park:update')"
                     @click.native.prevent="updateRow(scope.row.id)"
                     type="text"
                     size="small">
                     修改
                     </el-button>
                     <el-button
+                    v-if="$store.getters.button.includes('applet:park:delete')"
                     @click.native.prevent="deleteRow(scope.row.id)"
                     type="text"
                     size="small">

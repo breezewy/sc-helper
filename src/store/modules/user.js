@@ -1,11 +1,12 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, getPermissions } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
   name: '',
-  avatar: ''
+  avatar: '',
+  button: []
 }
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_BUTTON: (state, buttons) => {
+    state.button = buttons
   }
 }
 
@@ -86,6 +90,19 @@ const actions = {
       commit('SET_TOKEN', '')
       removeToken()
       resolve()
+    })
+  },
+
+  // 获取按钮权限
+  getPermissions({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getPermissions().then(response => {
+        const { data } = response
+        commit('SET_BUTTON', data.data)
+        resolve(data.data)
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }

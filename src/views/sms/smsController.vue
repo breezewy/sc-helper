@@ -83,14 +83,13 @@
             prop="mobile"
             label="手机号"
             align="center"
-            width="150"
+            width="120"
             >
             </el-table-column>
             <el-table-column
             prop="content"
             label="短信内容"
             align="center"
-            width="300"
             >
             </el-table-column>
             <el-table-column
@@ -108,25 +107,29 @@
             <el-table-column
             prop="parkName"
             label="景区名称"
-            align="center">
+            align="center"
+            width="180"
+            >
             </el-table-column>
             <el-table-column
             prop="templateName"
             label="模板名称"
-            align="center">
+            align="center"
+            width="180"
+            >
             </el-table-column>
             <el-table-column
             prop="createTime"
             label="创建时间"
             align="center"
-            width="200"
+            width="180"
             >
             </el-table-column>
             <el-table-column
             prop="createTime"
             label="更新时间"
             align="center"
-            width="200"
+            width="180"
             >
             </el-table-column>
             <el-table-column
@@ -136,7 +139,7 @@
             align="center"
             >
             <template slot-scope="scope">
-                <el-button  type="text" size="small" @click="resend(scope.row.id)">重新发送</el-button>
+                <el-button  type="text" v-if="$store.getters.button.includes('sms:smsController:resend')" size="small" @click="resend(scope.row.id)">重新发送</el-button>
             </template>
             </el-table-column>
         </el-table>

@@ -32,10 +32,10 @@
                     <el-button @click="search">查询</el-button>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="appendSeat">新增</el-button>
+                    <el-button type="primary" v-if="$store.getters.button.includes('park:seatManagement:save')" @click="appendSeat">新增</el-button>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="danger" @click="deleteAllSeat">删除</el-button>
+                    <el-button type="danger" v-if="$store.getters.button.includes('park:seatManagement:delete')" @click="deleteAllSeat">删除</el-button>
                   </el-form-item>
             </el-form>
         </div>
@@ -59,8 +59,8 @@
                     <el-table-column prop="theaterCode" label="剧院编码" align="center"></el-table-column>
                     <el-table-column label="操作" align="center" width="300" fixed="right">
                         <template slot-scope="scope">
-                            <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
-                            <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+                            <el-button type="text" v-if="$store.getters.button.includes('park:seatManagement:update')" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
+                            <el-button type="text" v-if="$store.getters.button.includes('park:seatManagement:delete')" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
                     </el-table>

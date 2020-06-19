@@ -33,16 +33,16 @@
         <el-button @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addTicket">新增</el-button>
+        <el-button type="primary" v-if="$store.getters.button.includes('reOrder:ticket:save')" @click="addTicket">新增</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" @click="handleDeleteMore">删除</el-button>
+        <el-button type="danger" v-if="$store.getters.button.includes('reOrder:ticket:delete')" @click="handleDeleteMore">删除</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="updateInventoryMore">更新库存</el-button>
+        <el-button type="success" v-if="$store.getters.button.includes('reOrder:ticket:updateInventory')" @click="updateInventoryMore">更新库存</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary"  @click="showDatePicker">修改使用日期</el-button>
+        <el-button type="primary"  v-if="$store.getters.button.includes('reOrder:ticket:updateUseDate')" @click="showDatePicker">修改使用日期</el-button>
       </el-form-item>
     </el-form>
     <div class="tableContainer">
@@ -94,10 +94,10 @@
           <el-table-column prop="supplyName" label="供应商" align="center" ></el-table-column>
           <el-table-column fixed="right"  width="200"  label="操作" align="center"  >
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
-              <el-button type="text" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
-              <el-button type="text" size="small" @click="priceDate(scope.row.code)">价格日历</el-button>
-              <el-button type="text" size="small" @click="updateInventorySingle(scope.row.id)">更新库存</el-button>
+              <el-button type="text" v-if="$store.getters.button.includes('reOrder:ticket:update')" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
+              <el-button type="text" v-if="$store.getters.button.includes('reOrder:ticket:delete')" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+              <el-button type="text" v-if="$store.getters.button.includes('reOrder:ticket:priceDate')" size="small" @click="priceDate(scope.row.code)">价格日历</el-button>
+              <el-button type="text" v-if="$store.getters.button.includes('reOrder:ticket:updateInventory')" size="small" @click="updateInventorySingle(scope.row.id)">更新库存</el-button>
             </template>
           </el-table-column>
         </el-table>
