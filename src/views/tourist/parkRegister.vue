@@ -13,7 +13,7 @@
         <el-button  @click="query">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button  type="primary" @click="addPark">新增</el-button>
+        <el-button  type="primary" v-if="$store.getters.button.includes('tourist:parkRegister:save')" @click="addPark">新增</el-button>
       </el-form-item>
     </el-form>
     <!-- 景区列表 -->
@@ -73,8 +73,8 @@
           align="center"
           >
           <template slot-scope="scope">
-            <el-button @click="updatePark(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="QRCode(scope.row)" type="text" size="small">二维码</el-button>
+            <el-button v-if="$store.getters.button.includes('tourist:parkRegister:update')" @click="updatePark(scope.row)" type="text" size="small">修改</el-button>
+            <el-button v-if="$store.getters.button.includes('tourist:parkRegister:QRcode')" @click="QRCode(scope.row)" type="text" size="small">二维码</el-button>
           </template>
         </el-table-column>
     </el-table>

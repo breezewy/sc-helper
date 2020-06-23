@@ -40,7 +40,7 @@
           <el-button  @click="onSubmit">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="success" @click="handleTouristExport">导出</el-button>
+          <el-button type="success" v-if="$store.getters.button.includes('tourist:touristRegister:export')" @click="handleTouristExport">导出</el-button>
         </el-form-item>
     </el-form>
     <!-- 游客列表 -->
@@ -104,7 +104,7 @@
           width="100"
           align="center">
           <template slot-scope="scope">
-            <el-button @click="handleShowDetail(scope.row.id)" type="text" size="small">查看详情</el-button>
+            <el-button v-if="$store.getters.button.includes('tourist:touristRegister:showDetail')" @click="handleShowDetail(scope.row.id)" type="text" size="small">查看详情</el-button>
           </template>
         </el-table-column>
     </el-table>

@@ -50,6 +50,7 @@
                         <template slot-scope="scope">
                             <el-button type="text" v-if="$store.getters.button.includes('park:parkManagement:update')" size="small" @click="handleUpdate(scope.row.id)">修改</el-button>
                             <el-button type="text" v-if="$store.getters.button.includes('park:parkManagement:delete')" size="small" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+                            <el-button type="text"  v-if="$store.getters.button.includes('park:parkManagement:QRCode')" size="small" @click="QRCode(scope.row.id)">景区座位二维码</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -65,6 +66,16 @@
             @handleUpdateSuccess="refresh"
             :parkInfo="parkInfo"
         ></update-park>
+        <!-- 二维码 -->
+        <el-dialog
+          title="二维码"
+          :visible.sync="QRCodeVisible"
+          :close-on-click-modal="false"
+          @close="closeQRCode"
+          @opened="showQRCode"
+          >
+            <div id="qrcode"></div>
+        </el-dialog>
     </div>
 </template>
 
@@ -73,6 +84,7 @@ import { getParkList, getParkById } from '@/api/query'
 import { deletePark } from '@/api/park'
 import AppendPark from './components/appendPark'
 import UpdatePark from './components/updatePark'
+import QRCode from 'qrcodejs2'
 export default {
   name: 'Park',
   data() {
@@ -82,8 +94,10 @@ export default {
       rowIdList: [],
       showAppendForm: false,
       showUpdateForm: false,
+      QRCodeVisible: false,
       theater: '',
       name: '',
+      parkId: '',
       options: [
         {
           value: true,
@@ -201,6 +215,21 @@ export default {
     },
     handleClear() {
       this.getParkList()
+    },
+    // 二维码
+    QRCode(id) {
+      this.QRCodeVisible = true
+      this.parkId = id
+    },
+    // 关闭二维码
+    closeQRCode() {
+      this.QRCodeVisible = false
+    },
+    showQRCode() {
+      document.getElementById('qrcode').innerHTML = ''
+      new QRCode('qrcode', {
+        text: `${process.env.VUE_APP_BASE_API}/parkOrder/${this.parkId}`
+      })
     }
   }
 }
@@ -215,6 +244,15 @@ export default {
     }
     .parkList-table{
         margin-top:30px;
+    }
+    .el-dialog__body{
+      #qrcode{
+        /deep/ img{
+          width:300px;
+          height:300px;
+          margin:0 auto;
+        }
+      }
     }
 }
 
