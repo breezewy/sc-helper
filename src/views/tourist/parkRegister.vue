@@ -142,6 +142,8 @@ export default {
   },
   methods: {
     query() {
+      this.page.pageNum = 0
+      this.page.pageSize = 10
       this.getParkList()
     },
     // 选择列表每页多少数据

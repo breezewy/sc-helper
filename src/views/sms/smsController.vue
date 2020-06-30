@@ -211,6 +211,8 @@ export default {
     },
     // 查询
     search() {
+      this.form.page.pageNum = 0
+      this.form.page.pageSize = 10
       this.getSmsList(this.form)
     },
     // 获取短信发送列表

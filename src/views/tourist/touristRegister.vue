@@ -206,6 +206,8 @@ export default {
     },
     // 查询
     onSubmit() {
+      this.form.page.pageNum = 0
+      this.form.page.pageSize = 10
       this.getVisitorList()
     },
     // 当清空选择器的时候，重新发起请求

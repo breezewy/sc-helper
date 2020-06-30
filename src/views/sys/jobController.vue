@@ -157,6 +157,8 @@ export default {
     },
     // 查询任务
     query() {
+      this.page.pageNum = 0
+      this.page.pageSize = 10
       this.getJobList()
     },
     // 新增任务

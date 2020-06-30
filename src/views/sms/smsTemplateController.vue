@@ -176,6 +176,8 @@ export default {
       this.getSmsTemplateList(this.form)
     },
     search() {
+      this.form.page.pageNum = 0
+      this.form.page.pageSize = 10
       this.getSmsTemplateList(this.form)
     },
     // 清空搜索框
