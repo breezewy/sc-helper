@@ -47,6 +47,7 @@
             <template slot-scope="scope">
               <el-button type="text" size="small" v-if="$store.getters.button.includes('authority:role:update')" @click="handleUpdate(scope.row.id)">修改</el-button>
               <el-button type="text" size="small" v-if="$store.getters.button.includes('authority:role:delete')" @click="handleDeleteSingle(scope.row.id)">删除</el-button>
+              <el-button type="text" size="small" v-if="$store.getters.button.includes('authority:role:resetPassword')"  @click="resetPassword(scope.row.id)">重置密码</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -152,7 +153,8 @@ import {
   addNewUser,
   deleteUser,
   getUserInfo,
-  updateUser
+  updateUser,
+  resetPassword
 } from '../../api/management'
 
 // import { isEmail, isMobile } from '@/utils/validate'
@@ -451,6 +453,29 @@ export default {
     // 修改区域取消按钮
     handleCancel() {
       this.updateVisible = false
+    },
+    // 重置密码id
+    resetPassword(id) {
+      this.$confirm('此操作将会把密码重置为888888, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        resetPassword(id).then(res => {
+          if (res.data.code !== 200) {
+            return this.$message.error(res.data.error)
+          }
+          this.$message({
+            type: 'success',
+            message: '重置密码成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消重置'
+        })
+      })
     }
   }
 }

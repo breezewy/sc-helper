@@ -1,6 +1,7 @@
 import { login, logout, getInfo, getPermissions } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import { Message } from 'element-ui';
 
 const state = {
   token: getToken(),
@@ -37,13 +38,14 @@ const actions = {
         loginType: loginType,
         uuid: uuid
       }).then(response => {
-        if (response.data.code !== 200) {
-          return this.$message.error(response.data.error)
-        }
         const { data } = response
-        commit('SET_TOKEN', data.data.token)
-        setToken(data.data.token)
-        resolve()
+        if (data.code !== 200) {
+          Message.error(data.error)
+        } else {
+          commit('SET_TOKEN', data.data.token)
+          setToken(data.data.token)
+        }
+        resolve(data)
       }).catch(error => {
         reject(error)
       })

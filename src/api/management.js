@@ -100,3 +100,11 @@ export function getRoleInfo(id) {
     method: 'get'
   })
 }
+
+// 重置密码
+export function resetPassword(id) {
+  return request({
+    url: `/user/resetPassword/${id}`,
+    method: 'get'
+  })
+}

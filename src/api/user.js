@@ -45,3 +45,10 @@ export function getPermissions() {
     method: 'get'
   })
 }
+
+export function resetPassword(id) {
+  return request({
+    url: `/user/resetPassword/${id}`,
+    method: 'get'
+  })
+}

@@ -49,7 +49,6 @@ service.interceptors.response.use(
     } else {
       if (res.data.code && res.data.code === 401) {
         store.dispatch('user/resetToken')
-        // next(`/login?redirect=${to.path}`)
       }
       return response
     }

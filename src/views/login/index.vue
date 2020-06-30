@@ -165,11 +165,12 @@ export default {
           this.loading = true
           this.$store
             .dispatch('user/login', this.loginForm)
-            .then((res) => {
-              this.$router.push('/')
+            .then((response) => {
               this.loading = false
+              this.$router.push('/')
             })
             .catch((error) => {
+              console.log(error)
               this.getCaptcha()
               this.loading = false
             })
