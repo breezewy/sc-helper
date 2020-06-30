@@ -116,6 +116,69 @@
         <el-button type="success" v-if="$store.getters.button.includes('reOrder:childOrderList:export')" @click="handleReChildOrderExport">导出</el-button>
       </el-form-item>
     </el-form>
+            <div
+          class="exportarea"
+          style="margin-left: 0px; display:inline-block;"
+          @mouseenter="visible()"
+          @mouseleave="invisible()"
+        >
+          <div class="export-lists-visiable">
+            <el-table
+              :data="exportLists"
+              size="medium"
+              align="center"
+              border
+              header-align="center"
+              style="width: auto"
+              ref="exportLists-visiable"
+            >
+              <el-table-column prop="createTime" label="申请时间" width="180" align="center"></el-table-column>
+              <el-table-column prop="fileName" label="文件名" width="180" align="center"></el-table-column>
+              <el-table-column prop="userName" label="操作员" width="100" align="center"></el-table-column>
+              <el-table-column prop="fileStatus" label="文件状态" width="80" align="center">
+                <template slot-scope="list">
+                  <span v-if="list.row.fileStatus==0">生成中</span>
+                  <span v-if="list.row.fileStatus==1">成功</span>
+                  <span v-if="list.row.fileStatus==2">失败</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="operation" label="操作" width="80" align="center">
+                <template slot-scope="list">
+                  <span v-if="list.row.fileStatus==2 || list.row.fileStatus==0">—</span>
+                  <a
+                    :href="list.row.fileUrl"
+                    v-if="list.row.fileStatus==1"
+                    style="text-decoration:none"
+                  >下载</a>
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <el-pagination
+              class="exportPagination"
+              @current-change="handleExportCurrentChange"
+              :current-page="exportCurrentPage"
+              layout="total, prev, pager, next, jumper"
+              :total="exportTotal"
+            ></el-pagination>
+          </div>
+
+          <!-- 暂存区按钮 -->
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="导出的文件请在暂存区下载！"
+            placement="right"
+            manual
+            v-model="isShow"
+          >
+            <el-button type="primary" ref="storageArea" class="exportButton" size="small">
+              <i class="el-icon-arrow-down"></i>
+              下载暂存区
+            </el-button>
+          </el-tooltip>
+        </div>
+
     <div class="tableContainer">
       <template>
         <el-table
@@ -191,8 +254,7 @@
 </template>
 
 <script>
-import { getReChildOrder, handleReChildOrderExport } from '../../api/reOrder'
-import { handleExport } from '../../utils/handleExport'
+import { getReChildOrder, handleReChildOrderExport, exportOrderList } from '../../api/reOrder'
 export default {
   name: 'ChildOrderList',
   data() {
@@ -240,7 +302,15 @@ export default {
       }, {
         value: 8,
         label: '已消费'
-      }]
+      }],
+      exportLists: [],
+      exportTotal: 0,
+      exportCurrentPage: 1,
+      isShow: false,
+      exportPage: {
+        pageNum: 0,
+        pageSize: 10
+      }
     }
   },
   created() {
@@ -262,9 +332,10 @@ export default {
         }
       }
       handleReChildOrderExport(data).then(res => {
-        if (res.data) {
-          handleExport(res.data)
+        if (res.data.code !== 200) {
+          return this.$message.error(res.data.error)
         }
+        this.$message.success('请到下载暂存区下载')
       })
     },
     getChildOrder(data) {
@@ -305,6 +376,10 @@ export default {
       this.paramData.page.pageNum = this.currentPage - 1
       this.getChildOrder(this.paramData)
     },
+    handleExportCurrentChange(currentPage) {
+      this.exportPage.pageNum = currentPage - 1
+      this.downStorage()
+    },
     // 查询
     search() {
       this.paramData.page.pageNum = 0
@@ -333,6 +408,30 @@ export default {
         this.endPayTime = ''
         this.getChildOrder(this.paramData)
       }
+    },
+    // 鼠标划入暂存按钮，显示暂存区
+    visible() {
+      var tab = document.querySelector('.export-lists-visiable')
+      tab.style.display = 'inline-block'
+      this.downStorage()
+    },
+    // 鼠标离开暂存按钮，隐藏暂存区
+    invisible() {
+      document.querySelector('.export-lists-visiable').style.display = 'none'
+    },
+    // hover的时候，获取到下载列表并渲染
+    downStorage() {
+      const data = {
+        fileType: 1,
+        page: {
+          pageNum: this.exportPage.pageNum,
+          pageSize: this.exportPage.pageSize
+        }
+      }
+      exportOrderList(data).then(res => {
+        this.exportLists = res.data.data.data
+        this.exportTotal = res.data.data.totalCount
+      })
     }
   }
 }
@@ -348,5 +447,36 @@ export default {
       text-align: right;
     }
   }
+    // 导出区相关样式
+.exportarea {
+  position: relative;
+  float: right;
+  margin-right: 103px;
+  .export-lists-visiable {
+    position: absolute;
+    top: 20px;
+    left: -500px;
+    z-index: 1000;
+    display: none;
+    border: 1px solid rgba($color: #6d6c6c, $alpha: 0.3);
+    // border-top:none;
+    box-shadow: 2px 2px 4px rgba($color: #292929, $alpha: 0.5);
+    .exportPagination.el-pagination {
+      width: 100%;
+      text-align: left;
+      padding: 0;
+      margin-top: 0;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-top: none;
+    }
+  }
+  .exportButton {
+    position: relative;
+    bottom:20px;
+    left:50px;
+  }
+}
 }
 </style>

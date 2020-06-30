@@ -205,8 +205,7 @@ export function handleReOrderExport(data) {
   return request({
     url: '/reOrder/export',
     method: 'post',
-    data,
-    responseType: 'blob'
+    data
   })
 }
 
@@ -215,8 +214,7 @@ export function handleReChildOrderExport(data) {
   return request({
     url: '/reChildOrder/export',
     method: 'post',
-    data,
-    responseType: 'blob'
+    data
   })
 }
 
@@ -225,5 +223,13 @@ export function makeAppointment(id) {
   return request({
     url: `/reOrder/getCode/${id}`,
     method: 'get'
+  })
+}
+
+export function exportOrderList(data) {
+  return request({
+    url: '/export/getList',
+    method: 'post',
+    data
   })
 }
