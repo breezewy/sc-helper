@@ -58,11 +58,17 @@
             <el-table-column prop="purchasePrice" label="采购价" align="center" width="100"></el-table-column>
             <el-table-column prop="finalSum" label="结算金额" align="center"  width="100"></el-table-column>
             <el-table-column prop="updateLinkInfo" label="是否限制下单信息" align="center"  width="150">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.updateLinkInfo== true" type="success" size="mini">是</el-tag>
-              <el-tag v-if="scope.row.updateLinkInfo== false" type="danger" size="mini">否</el-tag>
-            </template>
-          </el-table-column>
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.updateLinkInfo== true" type="success" size="mini">是</el-tag>
+                <el-tag v-if="scope.row.updateLinkInfo== false" type="danger" size="mini">否</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="buyAll" label="是否一次全部购买" align="center"  width="150">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.buyAll== true" type="success" size="mini">是</el-tag>
+                <el-tag v-if="scope.row.buyAll== false" type="danger" size="mini">否</el-tag>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="200" fix="right">
               <template slot-scope="scope">
                 <el-button type="text" size="small" v-if="$store.getters.button.includes('reOrder:dmq:update')" @click="handleUpdate(scope.row.id)">修改</el-button>
@@ -86,8 +92,8 @@
       <!-- 点击新增出现编辑区域 -->
       <el-dialog
         title="新增"
-        :visible.sync="dialogFormVisible"
         class="dislog"
+        :visible.sync="dialogFormVisible"
         :close-on-click-modal="false"
       >
         <el-form ref="addDmqForm" :model="dmqForm" :rules="dmqFormRules" label-width="150px" prop >
@@ -103,10 +109,14 @@
           <el-form-item label="结算金额" prop="finalSum">
             <el-input v-model="dmqForm.finalSum" type="text" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="是否限制下单信息" prop="containShow">
+          <el-form-item label="是否限制下单信息" prop="updateLinkInfo">
             <el-radio v-model="dmqForm.updateLinkInfo" :label="true">是</el-radio>
             <el-radio v-model="dmqForm.updateLinkInfo" :label="false">否</el-radio>
            </el-form-item>
+          <el-form-item label="是否一次全部购买" prop="buyAll">
+            <el-radio v-model="dmqForm.buyAll" :label="true">是</el-radio>
+            <el-radio v-model="dmqForm.buyAll" :label="false">否</el-radio>
+          </el-form-item>
           <el-form-item label="票型类型" prop="type">
             <el-radio-group v-model="dmqForm.type" @change="change">
               <el-radio :label="1">单选票</el-radio>
@@ -147,7 +157,11 @@
           <el-form-item label="是否限制下单信息" prop="containShow">
             <el-radio v-model="dmqTicketDetial.updateLinkInfo" :label="true">是</el-radio>
             <el-radio v-model="dmqTicketDetial.updateLinkInfo" :label="false">否</el-radio>
-           </el-form-item>
+          </el-form-item>
+          <el-form-item label="是否一次全部购买" prop="buyAll">
+            <el-radio v-model="dmqTicketDetial.buyAll" :label="true">是</el-radio>
+            <el-radio v-model="dmqTicketDetial.buyAll" :label="false">否</el-radio>
+          </el-form-item>
            <el-form-item label="票型类型" prop="type">
             <el-radio-group v-model="dmqTicketDetial.type">
               <el-radio :label="1">单票</el-radio>
@@ -209,7 +223,8 @@ export default {
         name: '',
         type: 1,
         number: 1,
-        updateLinkInfo: true
+        updateLinkInfo: true,
+        buyAll: true
       },
       dmqTicketDetial: {},
       paramForm: {
@@ -274,7 +289,8 @@ export default {
         name: '',
         number: 1,
         type: 1,
-        updateLinkInfo: true
+        updateLinkInfo: true,
+        buyAll: true
       }
     },
     // 获取票型列表
