@@ -264,7 +264,7 @@
 
     <!-- 点击去预约显示二维码区域 -->
     <el-dialog title="去预约" :visible.sync="qrcodeVisible"  class="qrcodeDialog" @opened="showQrCode" :close-on-click-modal="false">
-          <div class="page"><iframe :src="qrcodePath" style="width:300px;height:500px;"></iframe></div>
+          <div class="page"><iframe :src="qrcodePath" id="qrcodeIframe" name="refresh_name" style="width:300px;height:500px;" ></iframe></div>
           <div class="qrcodeArea">
             <div id="qrcode"></div>
             <div class="path">{{qrcodePath}}</div>
@@ -465,6 +465,8 @@ export default {
         height: 250,
         text: this.qrcodePath
       })
+      const iframe = document.getElementById('qrcodeIframe')
+      window.open(iframe.src, 'refresh_name', '')
     },
     // 鼠标划入暂存按钮，显示暂存区
     visible() {
